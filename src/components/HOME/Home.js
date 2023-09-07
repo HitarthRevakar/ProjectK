@@ -110,6 +110,9 @@ function Home() {
                     type="file"
                     name="user_photo"
                     {...register('user_photo', { required: true })}
+                    className={`form-control ${
+                      errors.user_photo ? 'error-input' : ''
+                    }`}
                   />
                 </td>
               </tr>
@@ -232,29 +235,46 @@ function Home() {
               <td>
                 <input
                   type="checkbox"
-                  name="english_read"
-                  {...register('english_read', { required: true })}
+                  value="english"
+                  name="language"
+                  {...register('language', { required: true })}
+                  className={` ${
+                      errors.language ? 'error-input' : ''
+                    }`}
                 />
               </td>
               <td>
                 <input
                   type="checkbox"
-                  name="hindi_read"
-                  {...register('hindi_read', { required: true })}
+                  name="language"
+                  value="hindi"
+
+                  {...register('language', { required: true })}
+                  className={` ${
+                      errors.language ? 'error-input' : ''
+                    }`}
                 />
               </td>
               <td>
                 <input
                   type="checkbox"
-                  name="gujarati_read"
-                  {...register('gujarati_read', { required: true })}
+                  value="gujarati"
+                  name="language"
+                  {...register('language', { required: true })}
+                  className={` ${
+                      errors.language ? 'error-input' : ''
+                    }`}
                 />
               </td>
               <td>
                 <input
                   type="checkbox"
-                  name="others_read"
-                  {...register('others_read', { required: true })}
+                  value="other"
+                  name="language"
+                  {...register('language', { required: true })}
+                  className={` ${
+                      errors.language ? 'error-input' : ''
+                    }`}
                 />
               </td>
             </tr>
@@ -277,6 +297,9 @@ function Home() {
                   type="text"
                   name="academic_qualification"
                   {...register('academic_qualification', { required: true })}
+                  className={`form-control ${
+                      errors.academic_qualification ? 'error-input' : ''
+                    }`}
                 />
               </td>
             </tr>
@@ -286,7 +309,8 @@ function Home() {
                 <input
                   type="text"
                   name="other_qualification"
-                  {...register('other_qualification', { required: true })}
+                  {...register('other_qualification')}
+                  
                 />
               </td>
             </tr>
@@ -311,6 +335,9 @@ function Home() {
                   type="text"
                   name="total_experience"
                   {...register('total_experience', { required: true })}
+                  className={`form-control ${
+                      errors.total_experience ? 'error-input' : ''
+                    }`}
                 />
               </td>
             </tr>
@@ -336,6 +363,7 @@ function Home() {
                     type="text"
                     name={`company_name_${index}`}
                     {...register(`company_name_${index}`)}
+                    
                   />
                 </td>
                 <td>
