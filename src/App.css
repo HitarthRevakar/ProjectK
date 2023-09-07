@@ -1,6 +1,4 @@
 
-
-
 .form_container {
   width: fit-content;
   height: fit-content;
@@ -18,7 +16,9 @@
   margin-bottom: 10px;
 }
 
-
+.form .input_field{
+  font-size: 16px !important;
+}
 
 .form{
   display: contents;
@@ -34,7 +34,7 @@
 
 .title {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 20px;
   font-weight: 700;
   color: #212121;
 }

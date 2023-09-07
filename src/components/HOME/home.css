@@ -10,14 +10,7 @@ img{
     border-radius: 15px;
 }
 
-#form-2 .navbar{
-    margin-left: -11px ;
-    margin-right: -11px ;
-    padding: 15px 15px 15px 20px !important;
-    margin-bottom: 30px;
-    background-color: rgb(251, 244, 236);
-    border-bottom: 1px solid #b0aaaa;
-}
+
 .form-container {
     max-width: 800px;
     margin: 0 auto;
@@ -46,9 +39,9 @@ th, td {
 }
 
 /* Style for form inputs */
-input[type="text"],
-input[type="email"],
-input[type="date"],
+#form-2 input[type="text"],
+#form-2 input[type="email"],
+#form-2 input[type="date"],
 select {
     width: 100%;
     padding: 5px;
