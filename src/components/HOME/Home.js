@@ -1,359 +1,391 @@
-import React, { useState } from 'react'
-import { useNavigate } from "react-router-dom";
-import { useUserAuth } from "../../context/UserAuthContext";
-import { firestore } from "../../firebase";
-import '.././HOME/home.css';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import './home.css'
+function Home() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-const Home = () => {
-  const { logOut, user } = useUserAuth();
-  const navigate = useNavigate();
+  const initialFormData = {
+    candidate_name: '',
+    user_photo: null,
+    id_number: '',
+    contact: '',
+    email: '',
+    nationality: '',
+    state: '',
+    marital_status: '',
+    dob: '',
+    english_read: false,
+    hindi_read: false,
+    gujarati_read: false,
+    others_read: false,
+    english_write: false,
+    hindi_write: false,
+    gujarati_write: false,
+    others_write: false,
+    english_speak: 'no',
+    hindi_speak: 'no',
+    gujarati_speak: 'no',
+    others_speak: 'no',
+    academic_qualification: '',
+    other_qualification: '',
+    total_experience: '',
+    company_name_1: '',
+    designation_1: '',
+    from_date_1: '',
+    till_date_1: '',
+    company_name_2: '',
+    designation_2: '',
+    from_date_2: '',
+    till_date_2: '',
+    company_name_3: '',
+    designation_3: '',
+    from_date_3: '',
+    till_date_3: '',
+    company_name_4: '',
+    designation_4: '',
+    from_date_4: '',
+    till_date_4: '',
+    company_name_5: '',
+    designation_5: '',
+    from_date_5: '',
+    till_date_5: '',
+    company_name_6: '',
+    designation_6: '',
+    from_date_6: '',
+    till_date_6: '',
+  };
 
-  const [formData, setFormData] = useState({
-    fullname: "",
-    idnumber: "",
-    nation:"",
-    dob:"",
-    email: "",
-    mobile: "",
-    state: "",
-  });
+  const [formData, setFormData] = useState(initialFormData);
+  const [formErrors, setFormErrors] = useState({});
+  const [isFormValid, setIsFormValid] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked, files } = e.target;
+    const newValue = type === 'checkbox' ? checked : type === 'file' ? files[0] : value;
+
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: newValue,
     }));
   };
 
-  const form2 = async (e) => {
-    e.preventDefault();
-
- try {
-      const response = await firestore.collection('FormData').add(formData);
-      window.alert(" Thank You! Best of Luck", response.id);
-      setFormData({
-        fullname: "",
-        idnumber: "",
-        nation:"",
-        dob:"",
-        email: "",
-        mobile: "",
-        state: "",
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  }
 
 
-  const handleLogout = async () => {
-    try {
-      await logOut();
-      navigate("/");
-    } catch (error) {
-      console.log(error.message);
-    }
+  const onSubmit = (data) => {
+    // Handle form submission
+    console.log(data);
   };
-
   return (
-    <>
-      <div className='form2 ' id='form-2'>
-       <div className='container-fluid'>
-          <div className='navbar  d-flex justify-content-between  py-2 px-3 '>
-            <span className='fs-5'>Welcome,&nbsp;<span className='text-success fw-bold text-decoration-underline'>{user && user.email}</span></span> 
-            <span><button className="btn btn-outline-danger px-3 rounded-0" onClick={handleLogout}>
-            <i class="bi bi-box-arrow-in-left "></i>&nbsp;Log Out
-        </button></span>
-          </div>
-          <div className='text-center'>
-          <img src={process.env.PUBLIC_URL + '/TCIPL.jpg'} className='img-fluid'  alt="Logo" />
-          </div>
-        <div className='my-2'>
-            {/* <div class="container ">
-              <form class="row g-3 my-5" onSubmit={form2} >
-                <div class="col-md-6">
-                  <h4>Candidate Information</h4>
-                  <table class="table">
-                    <tr>
-                      <td><label for="exampleInputName1" class="form-label">Candidate Name:</label></td>
-                      <td><input type="text" name='fullname' value={formData.fullname} onChange={(e) => { handleChange(e) }} class="form-control" placeholder="Full Name" id="exampleInputName1" required/></td>
-                    </tr>
-                    <tr>
-                      <td><label for="exampleInputId1" class="form-label">ID Number</label></td>
-                      <td><input type="number" name='idnumber' value={formData.idnumber} onChange={(e) => { handleChange(e) }} class="form-control" id="exampleInputId1" required/></td>
-                    </tr>
-                    <tr>
-                      <td><label for="exampleInputNation1" class="form-label">Nationality</label></td>
-                      <td><input type="text" name='nation'  value={formData.nation} onChange={(e) => { handleChange(e) }} class="form-control" placeholder="Your Country Name" id="exampleInputNation1" /></td>
-                    </tr>
-                    <tr>
-                      <td><label for="exampleInputDob1" class="form-label">Date Of Birth</label></td>
-                      <td><input type="date" name='dob'  value={formData.dob} onChange={(e) => { handleChange(e) }} class="form-control" id="exampleInputDob1" /></td>
-                    </tr>
-                  </table>
-                </div>
-                <div class="col-md-6">
-                  <h4>Contact Information</h4>
-                  <table class="table">
-                    <tr>
-                      <td><label for="exampleInputEmail1" class="form-label">Email Address</label></td>
-                      <td><input type="email" name='email' value={formData.email} onChange={(e) => { handleChange(e) }} class="form-control" placeholder="eg. name@mail.com" id="exampleInputEmail1" aria-describedby="emailHelp" /></td>
-                    </tr>
-                    <tr>
-                      <td><label for="exampleInputMobile1" class="form-label">Contact No.</label></td>
-                      <td><input type="text" name='mobile'  value={formData.mobile} onChange={(e) => { handleChange(e) }} class="form-control" placeholder="Your Mobile Number" id="exampleInputMobile1" /></td>
-                    </tr>
-                    <tr>
-                      <td><label for="exampleInputState1" class="form-label">State</label></td>
-                      <td><input type="text" name='state' value={formData.state} onChange={(e) => { handleChange(e) }} class="form-control" id="exampleInputState1" /></td>
-                    </tr>
-                  </table>
-                </div>
-                <div class="col-12 float-end">
-                  <button class="btn btn-outline-dark rounded-0" type="submit">Submit</button>
-                </div>
-              </form>
-            </div> */}
-            <div class="container my-5">
-<form>
-<div class="table-responsive">
-    <table class="table table-striped table-responsive">
-        <tr>
-            <td class="section-header" colspan="4">PERSONAL DETAILS:</td>
-        </tr>
-        <tr>
-            <td rowspan="1">CANDIDATE NAME:</td>
-            <td rowspan="1" className='align-items-center'>
-                <input class="form-control" name="candidate_name" type="text" value="" />
-                <br />
-                <br />
-                <img alt="Preview" id="preview" src="#" style={{maxWidth: "100px", maxHeight: "100px", display: "none"}} />
-            </td>
-            <td colSpan={1}>UPLOAD PASSPORT SIZE PHOTO:</td>
-            <td colSpan={1}><input accept="image/*" class="form-control" name="user_photo" onchange="previewImage(this);" type="file" /></td>
-        </tr>
-        <tr className=''>
-            <td>I.D NUMBER (GOVT APPROVED):</td>
-            <td><input class="form-control" name="id_number" type="text" value="" /></td>
-            <td>CONTACT NO: </td><td><input class="form-control" name="contact" type="text" value="" /></td>
-        </tr>
-        <tr>
-        <td>EMAIL ID:</td><td><input class="form-control" name="email" type="email" value="" /></td>
-            <td>NATIONALITY:</td><td><input class="form-control" name="nationality" type="text" value="" /></td>
-        </tr>
-        <tr>
-        <td>STATE: </td><td><input class="form-control" name="state" type="text" value="" /></td>
-            <td>MARITAL STATUS:</td>
-            <td>
-                <select class="form-select dropdown-toggle" name="marital_status">
-                <option value="">Select an option</option>
+    <div className="container my-5">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="table-responsive">
+          <table className="table table-striped table-responsive">
+            <tbody>
+              {/* PERSONAL DETAILS */}
+              <tr>
+                <td className="section-header" colSpan="4">
+                  PERSONAL DETAILS:
+                </td>
+              </tr>
+              <tr>
+                <td rowSpan="1">CANDIDATE NAME:</td>
+                <td rowSpan="1" className="align-items-center">
+                  <input
+                    type="text"
+                    name="candidate_name"
+                    {...register('candidate_name', { required: true })}
+                    className={`form-control ${
+                      errors.candidate_name ? 'error-input' : ''
+                    }`}
+                  />
+                </td>
+                <td colSpan={1}>UPLOAD PASSPORT SIZE PHOTO:</td>
+                <td colSpan={1}>
+                  <input
+                    accept="image/*"
+                    type="file"
+                    name="user_photo"
+                    {...register('user_photo', { required: true })}
+                  />
+                </td>
+              </tr>
+              {/* Add more PERSONAL DETAILS fields here */}
 
+              {/* CONTACT INFORMATION */}
+              <tr>
+                <td>I.D NUMBER (GOVT APPROVED):</td>
+                <td>
+                  <input
+                    type="text"
+                    name="id_number"
+                    {...register('id_number', { required: true })}
+                    className={`form-control ${
+                      errors.id_number ? 'error-input' : ''
+                    }`}
+                  />
+                </td>
+                <td>CONTACT NO:</td>
+                <td>
+                  <input
+                    type="text"
+                    name="contact"
+                    {...register('contact', { required: true })}
+                    className={`form-control ${
+                      errors.contact ? 'error-input' : ''
+                    }`}
+                  />
+                </td>
+              </tr>
+              {/* Add more CONTACT INFORMATION fields here */}
+
+              {/* EMAIL, NATIONALITY, STATE */}
+              <tr>
+                <td>EMAIL ID:</td>
+                <td>
+                  <input
+                    type="email"
+                    name="email"
+                    {...register('email', { required: true })}
+                    className={`form-control ${
+                      errors.email ? 'error-input' : ''
+                    }`}
+                  />
+                </td>
+                <td>NATIONALITY:</td>
+                <td>
+                  <input
+                    type="text"
+                    name="nationality"
+                    {...register('nationality', { required: true })}
+                    className={`form-control ${
+                      errors.nationality ? 'error-input' : ''
+                    }`}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>STATE:</td>
+                <td>
+                  <input
+                    type="text"
+                    name="state"
+                    {...register('state', { required: true })}
+                    className={`form-control ${
+                      errors.state ? 'error-input' : ''
+                    }`}
+                  />
+                </td>
+                <td>MARITAL STATUS:</td>
+                <td>
+                  <select
+                    name="marital_status"
+                    {...register('marital_status', { required: true })}
+                    className={`form-select ${
+                      errors.marital_status ? 'error-input' : ''
+                    }`}
+                  >
+                    <option value="">Select an option</option>
                     <option value="single">Single</option>
                     <option value="married">Married</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            
-            <td>DATE OF BIRTH:</td><td><input class="form-control" name="dob" type="date" value="" /></td>
-        </tr>
-    </table>
-</div>
-
-<table class="table table-bordered">
-    <thead>
-      <tr>
-        <th colspan="5">LANGUAGES KNOWN:</th>
-      </tr>
-      <tr>
-        <th></th>
-        <th>ENGLISH</th>
-        <th>HINDI</th>
-        <th>GUJARATI</th>
-        <th>OTHERS</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>READ</td>
-        <td><input class="form-check-input" type="checkbox" name="english_read" /></td>
-        <td><input class="form-check-input" type="checkbox" name="hindi_read" /></td>
-        <td><input class="form-check-input" type="checkbox" name="gujarati_read" /></td>
-        <td><input class="form-check-input" type="checkbox" name="others_read" /></td>
-      </tr>
-      <tr>
-        <td>WRITE</td>
-        <td><input class="form-check-input" type="checkbox" name="english_write" /></td>
-        <td><input class="form-check-input" type="checkbox" name="hindi_write" /></td>
-        <td><input class="form-check-input" type="checkbox" name="gujarati_write" /></td>
-        <td><input class="form-check-input" type="checkbox" name="others_write" /></td>
-      </tr>
-      <tr>
-        <td>SPEAK</td>
-        <td>
-          <select class="form-select" name="english_speak">
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-          </select>
-        </td>
-        <td>
-          <select class="form-select" name="hindi_speak">
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-          </select>
-        </td>
-        <td>
-          <select class="form-select" name="gujarati_speak">
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-          </select>
-        </td>
-        <td>
-          <select class="form-select" name="others_speak">
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-          </select>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-<table class="editable-table" colspan="">
-    <tr>
-        <td class="section-header" colspan="2">EDUCATIONAL QUALIFICATION:</td>
-    </tr>
-    <tr>
-        <td class="sub-header">ACADEMIC:<input class="form-control" name="candidate_name" type="text" value="" /></td>
-    </tr>
-    <tr>
-        <td>OTHERS:<input class="form-control" name="candidate_name" type="text" value="" /></td>
-    </tr>
-</table>
-
-<table class="editable-table">
-    <colgroup width="116"></colgroup>
-    <colgroup width="150"></colgroup>
-    <colgroup width="133"></colgroup>
-    <tr>
-        <td class="section-header" colspan="3">EXPERIENCE DETAILS:</td>
-    </tr>
-    <tr>
-        <td>TOTAL YEARS OF EXPERIENCE:</td>
-        <td colspan="2"><input class="form-control" name="candidate_name" type="text" value="" /></td>
-    </tr>
-    
-    <table class="GeneratedTable">
-        <thead>
-            <tr rowspan="">
-                <th>NAME OF THE COMPANY</th>
-                <th>DESIGNATION</th>
-                <th>FROM</th>
-                <th>TILL</th>
-            </tr>
-        </thead>
-        <tbody>
-
-<tr>
-    <td><input class="form-control" name="company_name_1" type="text" /></td>
-    <td><input class="form-control" name="designation_1" type="text" /></td>
-    <td>
-        <center><input class="form-control" name="from_date_1" type="date" /></center>
-    </td>
-    <td>
-        <center><input class="form-control" name="till_date_1" type="date" /></center>
-    </td>
-</tr>
-
-<tr>
-    <td><input class="form-control" name="company_name_2" type="text" /></td>
-    <td><input class="form-control" name="designation_2" type="text" /></td>
-    <td>
-        <center><input class="form-control" name="from_date_2" type="date" /></center>
-    </td>
-    <td>
-        <center><input class="form-control" name="till_date_2" type="date" /></center>
-    </td>
-</tr>
-
-<tr>
-    <td><input class="form-control" name="company_name_3" type="text" /></td>
-    <td><input class="form-control" name="designation_3" type="text" /></td>
-    <td>
-        <center><input class="form-control" name="from_date_3" type="date" /></center>
-    </td>
-    <td>
-        <center><input class="form-control" name="till_date_3" type="date" /></center>
-    </td>
-</tr>
-
-<tr>
-    <td><input class="form-control" name="company_name_4" type="text" /></td>
-    <td><input class="form-control" name="designation_4" type="text" /></td>
-    <td>
-        <center><input class="form-control" name="from_date_4" type="date" /></center>
-    </td>
-    <td>
-        <center><input class="form-control" name="till_date_4" type="date" /></center>
-    </td>
-</tr>
-
-<tr>
-    <td><input class="form-control" name="company_name_5" type="text" /></td>
-    <td><input class="form-control" name="designation_5" type="text" /></td>
-    <td>
-        <center><input class="form-control" name="from_date_5" type="date" /></center>
-    </td>
-    <td>
-        <center><input class="form-control" name="till_date_5" type="date" /></center>
-    </td>
-</tr>
-
-<tr>
-    <td><input class="form-control" name="company_name_6" type="text" /></td>
-    <td><input class="form-control" name="designation_6" type="text" /></td>
-    <td>
-        <center><input class="form-control" name="from_date_6" type="date" /></center>
-    </td>
-    <td>
-        <center><input class="form-control" name="till_date_6" type="date" /></center>
-    </td>
-</tr>
-<tr>
-    <td>FOR OFFICE USE: </td>
-    <td>CANDIDATE VERIFIED AND SCREENED BY: </td>
-</tr>
-</tbody>
-</table>
-</table>
-<button class="btn btn-outline-primary rounded-0" type="submit">Submit Form</button>
-</form>
-</div>
-
-<div class="container">
-    <h4>NOTE:</h4>
-    <ul>
-        <li>CANDIDATE SHOULD REPORT WITH BASIC PPE'S</li>
-        <li>ATTACH ALL RELEVANT EDUCATIONAL AND EXPERIENCE CERTIFICATES WITH THIS FORM</li>
-        <li>CANDIDATE ARE REQUESTED TO STAY WITHIN THE SITE PREMISES FOR THE WHOLE DAY</li>
-    </ul>
-</div>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>DATE OF BIRTH:</td>
+                <td>
+                  <input
+                    type="date"
+                    name="dob"
+                    {...register('dob', { required: true })}
+                    className={`form-control ${
+                      errors.dob ? 'error-input' : ''
+                    }`}
+                  />
+                </td>
+              </tr>
+              {/* Add more EMAIL, NATIONALITY, STATE fields here */}
+            </tbody>
+          </table>
         </div>
-       </div>
-      </div>
 
+        {/* LANGUAGES KNOWN */}
+        <table className="table table-bordered">
+          <thead>
+            <tr>
+              <th colSpan="5">LANGUAGES KNOWN:</th>
+            </tr>
+            <tr>
+              <th></th>
+              <th>ENGLISH</th>
+              <th>HINDI</th>
+              <th>GUJARATI</th>
+              <th>OTHERS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>READ</td>
+              <td>
+                <input
+                  type="checkbox"
+                  name="english_read"
+                  {...register('english_read', { required: true })}
+                />
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  name="hindi_read"
+                  {...register('hindi_read', { required: true })}
+                />
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  name="gujarati_read"
+                  {...register('gujarati_read', { required: true })}
+                />
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  name="others_read"
+                  {...register('others_read', { required: true })}
+                />
+              </td>
+            </tr>
+            {/* Add more LANGUAGES KNOWN fields here */}
+          </tbody>
+        </table>
 
+        {/* EDUCATIONAL QUALIFICATION */}
+        <table className="editable-table" colSpan="">
+          <tbody>
+            <tr>
+              <td className="section-header" colSpan="2">
+                EDUCATIONAL QUALIFICATION:
+              </td>
+            </tr>
+            <tr>
+              <td className="sub-header">ACADEMIC:</td>
+              <td>
+                <input
+                  type="text"
+                  name="academic_qualification"
+                  {...register('academic_qualification', { required: true })}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>OTHERS:</td>
+              <td>
+                <input
+                  type="text"
+                  name="other_qualification"
+                  {...register('other_qualification', { required: true })}
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
+        {/* EXPERIENCE DETAILS */}
+        <table className="editable-table">
+          <colgroup width="116"></colgroup>
+          <colgroup width="150"></colgroup>
+          <colgroup width="133"></colgroup>
+          <tbody>
+            <tr>
+              <td className="section-header" colSpan="3">
+                EXPERIENCE DETAILS:
+              </td>
+            </tr>
+            <tr>
+              <td>TOTAL YEARS OF EXPERIENCE:</td>
+              <td colSpan="2">
+                <input
+                  type="text"
+                  name="total_experience"
+                  {...register('total_experience', { required: true })}
+                />
+              </td>
+            </tr>
+            {/* Add more EXPERIENCE DETAILS fields here */}
+          </tbody>
+        </table>
 
+        {/* TABLE FOR COMPANY DETAILS */}
+        <table className="GeneratedTable">
+          <thead>
+            <tr>
+              <th>NAME OF THE COMPANY</th>
+              <th>DESIGNATION</th>
+              <th>FROM</th>
+              <th>TILL</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[1, 2, 3, 4, 5, 6].map((index) => (
+              <tr key={index}>
+                <td>
+                  <input
+                    type="text"
+                    name={`company_name_${index}`}
+                    {...register(`company_name_${index}`)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name={`designation_${index}`}
+                    {...register(`designation_${index}`)}
+                  />
+                </td>
+                <td>
+                  <center>
+                    <input
+                      type="date"
+                      name={`from_date_${index}`}
+                      {...register(`from_date_${index}`)}
+                    />
+                  </center>
+                </td>
+                <td>
+                  <center>
+                    <input
+                      type="date"
+                      name={`till_date_${index}`}
+                      {...register(`till_date_${index}`)}
+                    />
+                  </center>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
+        {/* FOR OFFICE USE */}
+        <table>
+          <tbody>
+            <tr>
+              <td>FOR OFFICE USE:</td>
+              <td>CANDIDATE VERIFIED AND SCREENED BY:</td>
+            </tr>
+          </tbody>
+        </table>
 
+        {/* SUBMIT BUTTON */}
+        <button type="submit" className="btn btn-outline-primary rounded-0">
+          Submit Form
+        </button>
+      </form>
+    </div>
 
-    
-      
-    </>
-  )
+  );
 }
 
 export default Home;
-
-

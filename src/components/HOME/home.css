@@ -2,7 +2,9 @@ body{
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 18px;
 }
-
+.error-input{
+    border-color: red;
+}
 img{
     padding: 10px;
     border: .5px solid #b9b3b3db;
