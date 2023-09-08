@@ -6,6 +6,7 @@ import {
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase";
 
@@ -15,11 +16,32 @@ export function UserAuthContextProvider({ children }) {
   const [user, setUser] = useState({});
 
   function logIn(email, password) {
-    return auth.signInWithEmailAndPassword(email, password);
+    return signInWithEmailAndPassword(auth, email, password);
   }
-  function signUp(email, password) {
-    return auth.createUserWithEmailAndPassword(email, password);
+
+  function signUp(fName, email, password) {
+    // Create a new user with email and password
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Once the user is created, update their display name
+        return updateProfile(userCredential.user, {
+          displayName: fName
+        })
+          .then(() => {
+            // Display name updated successfully
+            console.log('Display name updated successfully');
+          })
+          .catch((error) => {
+            // Handle errors updating display name
+            console.error('Error updating display name:', error);
+          });
+      })
+      .catch((error) => {
+        // Handle errors creating user
+        console.error('Error creating user:', error);
+      });
   }
+  
   function logOut() {
     return signOut(auth);
   }

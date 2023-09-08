@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import { useUserAuth } from "../../context/UserAuthContext";
 import { useForm } from 'react-hook-form';
-import './home.css'
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import './home.css' 
 function Home() {
+  const { logOut, user } = useUserAuth();
+  const [modal, setModal] = useState(false);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -62,6 +70,14 @@ function Home() {
   const [formData, setFormData] = useState(initialFormData);
   const [formErrors, setFormErrors] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      navigate("/");
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -72,15 +88,213 @@ function Home() {
       [name]: newValue,
     }));
   };
+  function shuffleArray(array) {
+    let newQuestions = []
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      newQuestions.push(array[j]);
+      if(newQuestions.length > 9){
+        return newQuestions
+      }
+    }
+  }
+  const handleGeneratePDF = () => {
+    
 
+   
+      const pdf = new jsPDF();
+  
+      let formattedText = '';
+      let questions = [
+        {
+          question: "What is the SI unit of electric current?",
+          a: "Ampere (A)",
+          b: "Volt (V)",
+          c: "Ohm (Ω)",
+          d: "Watt (W)",
+        },
+        {
+          question: "What is the term for the opposition to the flow of electric current in a circuit?",
+          a: "Resistance",
+          b: "Voltage",
+          c: "Current",
+          d: "Conductance",
+        },
+        {
+          question: "What is the unit of electrical resistance?",
+          a: "Ohm (Ω)",
+          b: "Farad (F)",
+          c: "Hertz (Hz)",
+          d: "Newton (N)",
+        },
+        {
+          question: "Which component is used to store electrical energy in a circuit?",
+          a: "Capacitor",
+          b: "Inductor",
+          c: "Resistor",
+          d: "Transistor",
+        },
+        {
+          question: "What does DC stand for in electrical terms?",
+          a: "Direct Current",
+          b: "Digital Circuit",
+          c: "Dynamic Capacitance",
+          d: "Dual Conductor",
+        },
+        {
+          question: "What is the formula for Ohm's Law?",
+          a: "V = IR",
+          b: "P = VI",
+          c: "R = VI",
+          d: "I = VR",
+        },
+        {
+          question: "Which type of motor is often used in household appliances like fans?",
+          a: "Induction Motor",
+          b: "Synchronous Motor",
+          c: "DC Motor",
+          d: "Stepper Motor",
+        },
+        {
+          question: "What is the primary function of a transformer?",
+          a: "To change voltage levels",
+          b: "To rectify AC to DC",
+          c: "To amplify electrical signals",
+          d: "To generate electricity",
+        },
+        {
+          question: "Which material is commonly used as an insulator in electrical wires?",
+          a: "Rubber",
+          b: "Copper",
+          c: "Aluminum",
+          d: "Silver",
+        },
+        {
+          question: "What is the standard voltage for residential electrical outlets in most countries?",
+          a: "110-120V",
+          b: "220-240V",
+          c: "12V",
+          d: "480V",
+        },
+        {
+          question: "Which semiconductor device is used for switching applications in electronic circuits?",
+          a: "Transistor",
+          b: "Resistor",
+          c: "Capacitor",
+          d: "Diode",
+        },
+        {
+          question: "What does AC stand for in electrical terms?",
+          a: "Alternating Current",
+          b: "Amplified Circuit",
+          c: "Analog Capacitance",
+          d: "Active Conductor",
+        },
+        {
+          question: "What is the fundamental unit of charge?",
+          a: "Electron",
+          b: "Proton",
+          c: "Neutron",
+          d: "Photon",
+        },
+        {
+          question: "What is the process of producing a controlled electrical discharge through a gas called?",
+          a: "Arcing",
+          b: "Conduction",
+          c: "Insulation",
+          d: "Ionization",
+        },
+        {
+          question: "Which law states that the total current entering a junction is equal to the total current leaving the junction in a closed circuit?",
+          a: "Kirchhoff's Current Law",
+          b: "Ohm's Law",
+          c: "Faraday's Law",
+          d: "Newton's Law",
+        },
+        {
+          question: "What is the SI unit of electric charge?",
+          a: "Coulomb (C)",
+          b: "Volt (V)",
+          c: "Ampere (A)",
+          d: "Ohm (Ω)",
+        },
+        {
+          question: "Which electrical component is used to store a small amount of energy for backup power?",
+          a: "Supercapacitor",
+          b: "Battery",
+          c: "Resistor",
+          d: "Transistor",
+        },
+        {
+          question: "In electrical circuits, what does 'DC' mean?",
+          a: "Direct Current",
+          b: "Digital Circuit",
+          c: "Dynamic Capacitance",
+          d: "Dual Conductor",
+        },
+        {
+          question: "What is the primary purpose of a diode in an electrical circuit?",
+          a: "To allow current to flow in one direction only",
+          b: "To amplify electrical signals",
+          c: "To regulate voltage",
+          d: "To store energy",
+        },
+      ];
+      const selectedQuestions =     shuffleArray(questions);
 
+// Select the first 10 questions
+
+console.log(selectedQuestions)
+      // Loop through the questions and format them into text
+      selectedQuestions.forEach((q, index) => {
+        formattedText += `${index + 1}. ${q.question}\n`;
+        formattedText += `   a) ${q.a}\n`;
+        formattedText += `   b) ${q.b}\n`;
+        formattedText += `   c) ${q.c}\n`;
+        formattedText += `   d) ${q.d}\n\n`;
+      });
+      // Add text content (questions and answers)
+      const textContent = `
+        1. What is the SI unit of electric current?
+           a) Ampere (A)
+           b) Volt (V)
+           c) Ohm (Ω)
+           d) Watt (W)
+        
+        2. What is the term for the opposition to the flow of electric current in a circuit?
+           a) Resistance
+           b) Voltage
+           c) Current
+           d) Conductance
+        
+        // Add more questions and answers here
+      `;
+
+      pdf.setFontSize(12);
+      pdf.text(formattedText, 10, 100); // Adjust the position as needed
+
+      pdf.save('generated.pdf');
+
+  };
+
+  const toggle = () => setModal(!modal);
 
   const onSubmit = (data) => {
     // Handle form submission
     console.log(data);
+    setModal(!modal)
   };
   return (
     <div className="container my-5">
+    <div className='navbar  d-flex justify-content-between  py-2 px-3 '>
+            <span className='fs-5'>Welcome,&nbsp;<span className='text-success fw-bold text-decoration-underline'>{user && user.displayName}</span></span>
+            <span><button className="btn btn-outline-danger px-3 rounded-0" onClick={handleLogout}>
+            <i class="bi bi-box-arrow-in-left "></i>&nbsp;Log Out
+        </button></span>
+          </div>
+          <div className='text-center'>
+          <img src={process.env.PUBLIC_URL + '/TCIPL.jpg'} className='img-fluid'  alt="Logo" />
+          </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="table-responsive">
           <table className="table table-striped table-responsive">
@@ -407,9 +621,39 @@ function Home() {
         </table>
 
         {/* SUBMIT BUTTON */}
-        <button type="submit" className="btn btn-outline-primary rounded-0">
+        <div className='d-flex justify-content-center w-100'><button type="submit" className="btn btn-outline-primary rounded-0">
           Submit Form
-        </button>
+        </button></div>
+        <Modal isOpen={modal} toggle={toggle}>
+        <ModalHeader toggle={toggle}>MCQ Examination Test</ModalHeader>
+        <ModalBody>
+      
+        <p><span className='text-danger'>Please Select Your Examination Subject Carefully*</span></p><br/>
+        <div className='d-flex gap-5'>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" />
+                                <label class="form-check-label" for="exampleRadios1">
+                                  Electrical
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2"/>
+                                <label class="form-check-label" for="exampleRadios2">
+                                  Instrumentation
+                                </label>
+                              </div>
+                          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={() => {toggle();handleGeneratePDF()}}>
+            Submit
+          </Button>{' '}
+          <Button color="secondary" onClick={toggle}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
+              
       </form>
     </div>
 
