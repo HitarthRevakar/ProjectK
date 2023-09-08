@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useUserAuth } from "../../context/UserAuthContext";
 import { useForm } from 'react-hook-form';
@@ -6,10 +6,15 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import './home.css' 
+import firebase,{ firestore, storage } from '../../firebase';
+
+
+import { async } from 'q';
 function Home() {
   const { logOut, user } = useUserAuth();
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
+  let imageRef = useRef();
   const {
     register,
     handleSubmit,
@@ -98,12 +103,45 @@ function Home() {
       }
     }
   }
-  const handleGeneratePDF = () => {
-    
-
-   
-      const pdf = new jsPDF();
+  const handleGeneratePDF = async () => {
+    try {
+      debugger
+      // Upload the user's photo to Firebase Storage
+      const storageRef = storage.ref();
+      const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
+  debugger
+      await userPhotoRef.put(formData.user_photo[0]);
+  debugger
+      // Get the download URL of the uploaded photo
+      const downloadURL = await userPhotoRef.getDownloadURL();
+      console.log('Download URL:', downloadURL);
+  debugger
+      // Update the formData with the download URL
+      formData.user_photo = downloadURL;
   
+      // Store the user's data, including the photo URL, in Firestore
+      await firestore.collection('candidate-info').add(formData);
+  
+      // Now you can proceed with generating the PDF
+      const pdf = new jsPDF();
+      const imgWidth = 100; // Adjust the image width as needed
+    const imgHeight = 100; // Adjust the image height as needed
+
+    // Assuming formData.user_photo contains the download URL of the image
+    const imgUrl = downloadURL;
+debugger
+// const encodedUrl = downloadURL.replace('/user_photos/', '/user_photos%2F');
+    // Load the image using jsPDF's addImage method
+    const element = imageRef.current;
+
+    // Use html2canvas to capture the element as an image
+    await html2canvas(element).then((canvas) => {
+      // Convert the canvas to a data URL
+      const imageSrc = canvas.toDataURL('image/png');
+      pdf.addImage(imageSrc, 'JPG', 10, 10, imgWidth, imgHeight);
+      pdf.addPage();
+      // You can now use `imageSrc` as the source for an <img> tag or do other operations (e.g., save it to the server).
+    });
       let formattedText = '';
       let questions = [
         {
@@ -271,17 +309,25 @@ console.log(selectedQuestions)
       `;
 
       pdf.setFontSize(12);
-      pdf.text(formattedText, 10, 100); // Adjust the position as needed
+      pdf.text(formattedText, 10, 10); // Adjust the position as needed
 
       pdf.save('generated.pdf');
 
+      // ... (rest of your PDF generation code)
+    } catch (error) {
+      console.error('Error uploading file or storing data:', error);
+    }
   };
+  
 
   const toggle = () => setModal(!modal);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     // Handle form submission
     console.log(data);
+    setFormData(data)
+    
+
     setModal(!modal)
   };
   return (
@@ -295,8 +341,8 @@ console.log(selectedQuestions)
           <div className='text-center'>
           <img src={process.env.PUBLIC_URL + '/TCIPL.jpg'} className='img-fluid'  alt="Logo" />
           </div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="table-responsive">
+      <form ref={imageRef} onSubmit={handleSubmit(onSubmit)}>
+        <div className="table-responsive" >
           <table className="table table-striped table-responsive">
             <tbody>
               {/* PERSONAL DETAILS */}
@@ -311,7 +357,7 @@ console.log(selectedQuestions)
                   <input
                     type="text"
                     name="candidate_name"
-                    {...register('candidate_name', { required: true })}
+                    {...register('candidate_name', { required: false })}
                     className={`form-control ${
                       errors.candidate_name ? 'error-input' : ''
                     }`}
@@ -323,7 +369,7 @@ console.log(selectedQuestions)
                     accept="image/*"
                     type="file"
                     name="user_photo"
-                    {...register('user_photo', { required: true })}
+                    {...register('user_photo', { required: false })}
                     className={`form-control ${
                       errors.user_photo ? 'error-input' : ''
                     }`}
@@ -339,7 +385,7 @@ console.log(selectedQuestions)
                   <input
                     type="text"
                     name="id_number"
-                    {...register('id_number', { required: true })}
+                    {...register('id_number', { required: false })}
                     className={`form-control ${
                       errors.id_number ? 'error-input' : ''
                     }`}
@@ -350,7 +396,7 @@ console.log(selectedQuestions)
                   <input
                     type="text"
                     name="contact"
-                    {...register('contact', { required: true })}
+                    {...register('contact', { required: false })}
                     className={`form-control ${
                       errors.contact ? 'error-input' : ''
                     }`}
@@ -366,7 +412,7 @@ console.log(selectedQuestions)
                   <input
                     type="email"
                     name="email"
-                    {...register('email', { required: true })}
+                    {...register('email', { required: false })}
                     className={`form-control ${
                       errors.email ? 'error-input' : ''
                     }`}
@@ -377,7 +423,7 @@ console.log(selectedQuestions)
                   <input
                     type="text"
                     name="nationality"
-                    {...register('nationality', { required: true })}
+                    {...register('nationality', { required: false })}
                     className={`form-control ${
                       errors.nationality ? 'error-input' : ''
                     }`}
@@ -390,7 +436,7 @@ console.log(selectedQuestions)
                   <input
                     type="text"
                     name="state"
-                    {...register('state', { required: true })}
+                    {...register('state', { required: false })}
                     className={`form-control ${
                       errors.state ? 'error-input' : ''
                     }`}
@@ -400,7 +446,7 @@ console.log(selectedQuestions)
                 <td>
                   <select
                     name="marital_status"
-                    {...register('marital_status', { required: true })}
+                    {...register('marital_status', { required: false })}
                     className={`form-select ${
                       errors.marital_status ? 'error-input' : ''
                     }`}
@@ -417,7 +463,7 @@ console.log(selectedQuestions)
                   <input
                     type="date"
                     name="dob"
-                    {...register('dob', { required: true })}
+                    {...register('dob', { required: false })}
                     className={`form-control ${
                       errors.dob ? 'error-input' : ''
                     }`}
@@ -451,7 +497,7 @@ console.log(selectedQuestions)
                   type="checkbox"
                   value="english"
                   name="language"
-                  {...register('language', { required: true })}
+                  {...register('language', { required: false })}
                   className={` ${
                       errors.language ? 'error-input' : ''
                     }`}
@@ -463,7 +509,7 @@ console.log(selectedQuestions)
                   name="language"
                   value="hindi"
 
-                  {...register('language', { required: true })}
+                  {...register('language', { required: false })}
                   className={` ${
                       errors.language ? 'error-input' : ''
                     }`}
@@ -474,7 +520,7 @@ console.log(selectedQuestions)
                   type="checkbox"
                   value="gujarati"
                   name="language"
-                  {...register('language', { required: true })}
+                  {...register('language', { required: false })}
                   className={` ${
                       errors.language ? 'error-input' : ''
                     }`}
@@ -485,7 +531,7 @@ console.log(selectedQuestions)
                   type="checkbox"
                   value="other"
                   name="language"
-                  {...register('language', { required: true })}
+                  {...register('language', { required: false })}
                   className={` ${
                       errors.language ? 'error-input' : ''
                     }`}
@@ -510,7 +556,7 @@ console.log(selectedQuestions)
                 <input
                   type="text"
                   name="academic_qualification"
-                  {...register('academic_qualification', { required: true })}
+                  {...register('academic_qualification', { required: false })}
                   className={`form-control ${
                       errors.academic_qualification ? 'error-input' : ''
                     }`}
@@ -548,7 +594,7 @@ console.log(selectedQuestions)
                 <input
                   type="text"
                   name="total_experience"
-                  {...register('total_experience', { required: true })}
+                  {...register('total_experience', { required: false })}
                   className={`form-control ${
                       errors.total_experience ? 'error-input' : ''
                     }`}
