@@ -13,33 +13,46 @@ import { auth } from "../firebase";
 const userAuthContext = createContext();
 
 export function UserAuthContextProvider({ children }) {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState();
 
   function logIn(email, password) {
     return signInWithEmailAndPassword(auth, email, password);
   }
 
-  function signUp(fName, email, password) {
-    // Create a new user with email and password
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Once the user is created, update their display name
-        return updateProfile(userCredential.user, {
-          displayName: fName
-        })
-          .then(() => {
-            // Display name updated successfully
-            console.log('Display name updated successfully');
-          })
-          .catch((error) => {
-            // Handle errors updating display name
-            console.error('Error updating display name:', error);
-          });
-      })
-      .catch((error) => {
-        // Handle errors creating user
-        console.error('Error creating user:', error);
+  // function signUp(fName, email, password) {
+  //   // Create a new user with email and password
+  //   createUserWithEmailAndPassword(auth, email, password, )
+  //     .then((userCredential) => {
+  //       // Once the user is created, update their display name
+  //       return updateProfile(userCredential.user, {
+  //         displayName: fName
+  //       })
+  //         .then(() => {
+  //           // Display name updated successfully
+  //           console.log('Display name updated successfully');
+  //         })
+  //         .catch((error) => {
+  //           // Handle errors updating display name
+  //           console.error('Error updating display name:', error);
+  //         });
+  //     })
+  //     .catch((error) => {
+  //       // Handle errors creating user
+  //       console.error('Error creating user:', error);
+  //     });
+  // }
+  async function signUp(email, password, fName) {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      // Update the user's profile with the full name
+      await updateProfile(userCredential.user, {
+        displayName: fName,
       });
+      setUser(userCredential.user); // Set the user in your context
+      return userCredential.user; // Return the user object
+    } catch (error) {
+      throw error;
+    }
   }
   
   function logOut() {

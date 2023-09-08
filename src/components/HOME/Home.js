@@ -187,238 +187,153 @@ const Home = () => {
           <img src={process.env.PUBLIC_URL + '/TCIPL.jpg'} className='img-fluid'  alt="Logo" />
           </div>
         <div className='my-2'>
-            {/* <div class="container ">
-              <form class="row g-3 my-5" onSubmit={form2} >
-                <div class="col-md-6">
-                  <h4>Candidate Information</h4>
-                  <table class="table">
-                    <tr>
-                      <td><label for="exampleInputName1" class="form-label">Candidate Name:</label></td>
-                      <td><input type="text" name='fullname' value={formData.fullname} onChange={(e) => { handleChange(e) }} class="form-control" placeholder="Full Name" id="exampleInputName1" required/></td>
-                    </tr>
-                    <tr>
-                      <td><label for="exampleInputId1" class="form-label">ID Number</label></td>
-                      <td><input type="number" name='idnumber' value={formData.idnumber} onChange={(e) => { handleChange(e) }} class="form-control" id="exampleInputId1" required/></td>
-                    </tr>
-                    <tr>
-                      <td><label for="exampleInputNation1" class="form-label">Nationality</label></td>
-                      <td><input type="text" name='nation'  value={formData.nation} onChange={(e) => { handleChange(e) }} class="form-control" placeholder="Your Country Name" id="exampleInputNation1" /></td>
-                    </tr>
-                    <tr>
-                      <td><label for="exampleInputDob1" class="form-label">Date Of Birth</label></td>
-                      <td><input type="date" name='dob'  value={formData.dob} onChange={(e) => { handleChange(e) }} class="form-control" id="exampleInputDob1" /></td>
-                    </tr>
-                  </table>
-                </div>
-                <div class="col-md-6">
-                  <h4>Contact Information</h4>
-                  <table class="table">
-                    <tr>
-                      <td><label for="exampleInputEmail1" class="form-label">Email Address</label></td>
-                      <td><input type="email" name='email' value={formData.email} onChange={(e) => { handleChange(e) }} class="form-control" placeholder="eg. name@mail.com" id="exampleInputEmail1" aria-describedby="emailHelp" /></td>
-                    </tr>
-                    <tr>
-                      <td><label for="exampleInputMobile1" class="form-label">Contact No.</label></td>
-                      <td><input type="text" name='mobile'  value={formData.mobile} onChange={(e) => { handleChange(e) }} class="form-control" placeholder="Your Mobile Number" id="exampleInputMobile1" /></td>
-                    </tr>
-                    <tr>
-                      <td><label for="exampleInputState1" class="form-label">State</label></td>
-                      <td><input type="text" name='state' value={formData.state} onChange={(e) => { handleChange(e) }} class="form-control" id="exampleInputState1" /></td>
-                    </tr>
-                  </table>
-                </div>
-                <div class="col-12 float-end">
-                  <button class="btn btn-outline-dark rounded-0" type="submit">Submit</button>
-                </div>
-              </form>
-            </div> */}
             <div class="container my-5">
               <form onSubmit={handleSubmit}>
                 <div class="table-responsive">
-                  {/* <table class="table ">
+                  <table className="table">
                     <tr>
-                      <td class="section-header" colspan="4">PERSONAL DETAILS:</td>
+                      <td className="section-header" colspan="4">PERSONAL DETAILS:</td>
                     </tr>
                     <tr>
-                      <td rowspan="1">CANDIDATE NAME:</td>
-                      <td rowspan="1" className=''>
-                       <span></span> <input type="text" class="form-control" name="candidate_name" value={formData.candidate_name} onChange={handleInputChange} required/>
+                      <td>CANDIDATE NAME:</td>
+                      <td>
+                        <span></span>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="candidate_name"
+                          value={formData.candidate_name}
+                          onChange={handleInputChange}
+                          required
+                        />
                         <br />
-                    
-                        <img alt="Preview" id="preview" src="#" style={{ maxWidth: "100px", maxHeight: "100px", display: "none" }} />
+                        <img
+                          alt="Preview"
+                          id="preview"
+                          src="#"
+                          style={{ maxWidth: "100px", maxHeight: "100px", display: "none" }}
+                        />
                       </td>
-                      <td colSpan={1}>UPLOAD PASSPORT SIZE PHOTO:</td>
-                      <td colSpan={1}><input accept="image/*" class="form-control" name="user_photo" onchange="previewImage(this);" type="file" /></td>
+                      <td>UPLOAD PASSPORT SIZE PHOTO:</td>
+                      <td>
+                        <input
+                          accept="image/*"
+                          className="form-control"
+                          name="user_photo"
+                          onchange="previewImage(this);"
+                          type="file"
+                        />
+                      </td>
                     </tr>
-                    <tr className=''>
+                    <tr>
                       <td>I.D NUMBER (GOVT APPROVED):</td>
-                      <td><input class="form-control" type="text" name="id_number" value={formData.id_number} onChange={handleInputChange}  required/></td>
-                      <td>CONTACT NO: </td><td><input type="text" class="form-control" name="contact" value={formData.contact} onChange={handleInputChange}  required /></td>
+                      <td>
+                        <input
+                          className="form-control"
+                          type="text"
+                          name="id_number"
+                          value={formData.id_number}
+                          onChange={handleInputChange}
+                          required
+                        />
+                      </td>
+                      <td>CONTACT NO:</td>
+                      <td>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="contact"
+                          value={formData.contact}
+                          onChange={handleInputChange}
+                          required
+                        />
+                      </td>
                     </tr>
                     <tr>
-                      <td>EMAIL ID:</td><td><input type="email" class="form-control" name="email" value={formData.email} onChange={handleInputChange} required /></td>
-                      <td>NATIONALITY:</td><td><input type="text" class="form-control" name="nationality" value={formData.nationality} onChange={handleInputChange}  required/></td>
+                      <td>EMAIL ID:</td>
+                      <td>
+                        <input
+                          type="email"
+                          className="form-control"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          required
+                        />
+                      </td>
+                      <td>NATIONALITY:</td>
+                      <td>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="nationality"
+                          value={formData.nationality}
+                          onChange={handleInputChange}
+                          required
+                        />
+                      </td>
                     </tr>
                     <tr>
-                      <td>STATE: </td><td><input type="text" class="form-control" name="candidate_state" value={formData.state} onChange={handleInputChange}  /></td>
+                      <td>STATE:</td>
+                      <td>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="candidate_state"
+                          value={formData.state}
+                          onChange={handleInputChange}
+                        />
+                      </td>
                       <td>MARITAL STATUS:</td>
                       <td>
-                        <select class="form-select dropdown-toggle" name="marital_status" value={formData.marital_status} onChange={handleInputChange}>
+                        <select
+                          className="form-select dropdown-toggle"
+                          name="marital_status"
+                          value={formData.marital_status}
+                          onChange={handleInputChange}
+                        >
                           <option value="">Select an option</option>
-
                           <option value="single">Single</option>
                           <option value="married">Married</option>
                         </select>
                       </td>
                     </tr>
                     <tr>
-                      <td>DATE OF BIRTH:</td><td><input type="date" class="form-control" name="date_of_birth" value={formData.date_of_birth} onChange={handleInputChange}  required/></td>
+                      <td>DATE OF BIRTH:</td>
+                      <td>
+                        <input
+                          type="date"
+                          className="form-control"
+                          name="date_of_birth"
+                          value={formData.date_of_birth}
+                          onChange={handleInputChange}
+                          required
+                        />
+                      </td>
+                      <td>TRADE NAME:</td>
+                      <td>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="trade_name"
+                          value={formData.trade_name}
+                          onChange={handleInputChange}
+                        />
+                      </td>
                     </tr>
-                  </table> */}
-<table className="table">
-  <tr>
-    <td className="section-header" colspan="4">PERSONAL DETAILS:</td>
-  </tr>
-  <tr>
-    <td>CANDIDATE NAME:</td>
-    <td>
-      <span></span>
-      <input
-        type="text"
-        className="form-control"
-        name="candidate_name"
-        value={formData.candidate_name}
-        onChange={handleInputChange}
-        required
-      />
-      <br />
-      <img
-        alt="Preview"
-        id="preview"
-        src="#"
-        style={{ maxWidth: "100px", maxHeight: "100px", display: "none" }}
-      />
-    </td>
-    <td>UPLOAD PASSPORT SIZE PHOTO:</td>
-    <td>
-      <input
-        accept="image/*"
-        className="form-control"
-        name="user_photo"
-        onchange="previewImage(this);"
-        type="file"
-      />
-    </td>
-  </tr>
-  <tr>
-    <td>I.D NUMBER (GOVT APPROVED):</td>
-    <td>
-      <input
-        className="form-control"
-        type="text"
-        name="id_number"
-        value={formData.id_number}
-        onChange={handleInputChange}
-        required
-      />
-    </td>
-    <td>CONTACT NO:</td>
-    <td>
-      <input
-        type="text"
-        className="form-control"
-        name="contact"
-        value={formData.contact}
-        onChange={handleInputChange}
-        required
-      />
-    </td>
-  </tr>
-  <tr>
-    <td>EMAIL ID:</td>
-    <td>
-      <input
-        type="email"
-        className="form-control"
-        name="email"
-        value={formData.email}
-        onChange={handleInputChange}
-        required
-      />
-    </td>
-    <td>NATIONALITY:</td>
-    <td>
-      <input
-        type="text"
-        className="form-control"
-        name="nationality"
-        value={formData.nationality}
-        onChange={handleInputChange}
-        required
-      />
-    </td>
-  </tr>
-  <tr>
-    <td>STATE:</td>
-    <td>
-      <input
-        type="text"
-        className="form-control"
-        name="candidate_state"
-        value={formData.state}
-        onChange={handleInputChange}
-      />
-    </td>
-    <td>MARITAL STATUS:</td>
-    <td>
-      <select
-        className="form-select dropdown-toggle"
-        name="marital_status"
-        value={formData.marital_status}
-        onChange={handleInputChange}
-      >
-        <option value="">Select an option</option>
-        <option value="single">Single</option>
-        <option value="married">Married</option>
-      </select>
-    </td>
-  </tr>
-  <tr>
-    <td>DATE OF BIRTH:</td>
-    <td>
-      <input
-        type="date"
-        className="form-control"
-        name="date_of_birth"
-        value={formData.date_of_birth}
-        onChange={handleInputChange}
-        required
-      />
-    </td>
-    <td>TRADE NAME:</td>
-    <td>
-      <input
-        type="text"
-        className="form-control"
-        name="trade_name"
-        value={formData.trade_name}
-        onChange={handleInputChange}
-      />
-    </td>
-  </tr>
-  <tr>
-    <td>DISCIPLINE:</td>
-    <td>
-      <input
-        type="text"
-        className="form-control"
-        name="discipline"
-        value={formData.discipline}
-        onChange={handleInputChange}
-      />
-    </td>
-  </tr>
-</table>
+                    <tr>
+                      <td>DISCIPLINE:</td>
+                      <td>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="discipline"
+                          value={formData.discipline}
+                          onChange={handleInputChange}
+                        />
+                      </td>
+                    </tr>
+                  </table>
                 </div>
 
                 <table>
