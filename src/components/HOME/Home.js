@@ -187,7 +187,7 @@ const Home = () => {
           <img src={process.env.PUBLIC_URL + '/TCIPL.jpg'} className='img-fluid'  alt="Logo" />
           </div>
         <div className='my-2'>
-            <div class="container my-5">
+            <div class="container  my-5">
               <form onSubmit={handleSubmit}>
                 <div class="table-responsive">
                   <table className="table">
