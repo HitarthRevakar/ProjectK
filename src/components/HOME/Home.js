@@ -6,10 +6,10 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import './home.css' 
-import firebase,{ firestore, storage } from '../../firebase';
+import { firestore, storage } from '../../firebase';
 
 
-import { async } from 'q';
+
 function Home() {
   const { logOut, user } = useUserAuth();
   const [modal, setModal] = useState(false);
@@ -73,8 +73,8 @@ function Home() {
   };
 
   const [formData, setFormData] = useState(initialFormData);
-  const [formErrors, setFormErrors] = useState({});
-  const [isFormValid, setIsFormValid] = useState(false);
+
+
   const handleLogout = async () => {
     try {
       await logOut();
@@ -84,15 +84,7 @@ function Home() {
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value, type, checked, files } = e.target;
-    const newValue = type === 'checkbox' ? checked : type === 'file' ? files[0] : value;
-
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: newValue,
-    }));
-  };
+ 
   function shuffleArray(array) {
     let newQuestions = []
     for (let i = array.length - 1; i > 0; i--) {
@@ -124,11 +116,11 @@ function Home() {
   
       // Now you can proceed with generating the PDF
       const pdf = new jsPDF();
-      const imgWidth = 100; // Adjust the image width as needed
-    const imgHeight = 100; // Adjust the image height as needed
+      const imgWidth = 180; // Adjust the image width as needed
+    const imgHeight = 250; // Adjust the image height as needed
 
     // Assuming formData.user_photo contains the download URL of the image
-    const imgUrl = downloadURL;
+
 debugger
 // const encodedUrl = downloadURL.replace('/user_photos/', '/user_photos%2F');
     // Load the image using jsPDF's addImage method
@@ -138,7 +130,7 @@ debugger
     await html2canvas(element).then((canvas) => {
       // Convert the canvas to a data URL
       const imageSrc = canvas.toDataURL('image/png');
-      pdf.addImage(imageSrc, 'JPG', 10, 10, imgWidth, imgHeight);
+      pdf.addImage(imageSrc, 'JPG', 7, 10, imgWidth, imgHeight);
       pdf.addPage();
       // You can now use `imageSrc` as the source for an <img> tag or do other operations (e.g., save it to the server).
     });
@@ -292,21 +284,7 @@ console.log(selectedQuestions)
         formattedText += `   d) ${q.d}\n\n`;
       });
       // Add text content (questions and answers)
-      const textContent = `
-        1. What is the SI unit of electric current?
-           a) Ampere (A)
-           b) Volt (V)
-           c) Ohm (Ω)
-           d) Watt (W)
-        
-        2. What is the term for the opposition to the flow of electric current in a circuit?
-           a) Resistance
-           b) Voltage
-           c) Current
-           d) Conductance
-        
-        // Add more questions and answers here
-      `;
+     
 
       pdf.setFontSize(12);
       pdf.text(formattedText, 10, 10); // Adjust the position as needed
@@ -339,12 +317,36 @@ console.log(selectedQuestions)
         </button></span>
           </div>
           <div className='text-center'>
-          <img src={process.env.PUBLIC_URL + '/TCIPL.jpg'} className='img-fluid'  alt="Logo" />
+         
           </div>
       <form ref={imageRef} onSubmit={handleSubmit(onSubmit)}>
+      <div className="table-responsive" >
+          <table className="table table-striped table-responsive">
+            <tbody>
+              {/* PERSONAL DETAILS */}
+             
+  
+            </tbody>
+          </table>
+        </div>
         <div className="table-responsive" >
           <table className="table table-striped table-responsive">
             <tbody>
+            <tr className='text-center align-items-center' style={{height:"150px", backgroundColor:"white"}}>
+                <td className="section-header" colSpan="1">
+                <img src={process.env.PUBLIC_URL + '/logo.jpg'} style={{border:"none"}}  className='img-fluid'  alt="Logo" />
+                </td>
+                <td style={{fontFamily:"Times New Roman", fontWeight:"bolder", color:"#0060B0"}} colSpan="2" className='mt-1 pt-2 align-items-center'>
+               <div className='align-items-center mt-5 '> TECHNO CONCEPTS INSTRUMENTS PRIVATE LIMITED
+VALIDATION CENTER, JAMNAGAR</div>
+                </td>
+                <td colSpan="1">
+                <div className='mt-5'>
+                PHOTO
+
+                </div>
+                </td>
+              </tr>
               {/* PERSONAL DETAILS */}
               <tr>
                 <td className="section-header" colSpan="4">
@@ -477,7 +479,9 @@ console.log(selectedQuestions)
 
         {/* LANGUAGES KNOWN */}
         <table className="table table-bordered">
+        
           <thead>
+          
             <tr>
               <th colSpan="5">LANGUAGES KNOWN:</th>
             </tr>
