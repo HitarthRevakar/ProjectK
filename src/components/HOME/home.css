@@ -33,7 +33,15 @@ table {
     border-collapse: collapse;
     margin-bottom: 20px;
 }
-
+tr:nth-child(1) {
+    background-color: #fff !important; /* Change this to your desired color */
+  }
+  
+  /* Style even rows */
+  tr:nth-child(2) {
+    background-color: #f2f2f2 !important; /* Change this to your desired color */
+  }
+  
 table, th, td {
     border: 1px solid #a0a29e;
 }
@@ -44,7 +52,7 @@ th, td {
 
 /* Style for section headers */
 .section-header {
-    background-color: #f0f0f0;
+    background-color: white;
     font-weight: bold;
 }
 
