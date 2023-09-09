@@ -37,7 +37,7 @@ const Login = () => {
             <div className='login position-absolute top-50 start-50 translate-middle'>
                 <div className="form_container">
                     <div className="logo_container">
-                        <img src={process.env.PUBLIC_URL + '/login-icon.png'} className='border-0' width={80} height={80} alt='icon' />
+                        <img src={process.env.PUBLIC_URL + '/login-icon.png'} alt="" width={90} height={80}/>
                     </div>
                     <div className="title_container">
                         <p className="title">Login to your Account</p>
@@ -88,8 +88,13 @@ const Login = () => {
                                 <hr className="line" />
                             </div>
                             <GoogleButton  className='' type='dark' onClick={handleGoogleSignIn}/>
-
-                            <div>For New Account&nbsp;<Link to="/signup" className='text-decoration-none text-primary fw-bold'>Register Now !</Link></div>
+                            {/* <button title="Sign In" type="submit" className="sign-in_ggl">
+                                <span>Sign In with Google</span>
+                            </button> */}
+                            {/* <button title="Sign In" type="submit" className="sign-in_apl">
+                                <span>Sign In with Apple</span>
+                            </button> */}
+                            <div>For New Account&nbsp;<Link to="/signup" className='text-decoration-none text-danger fw-bold'>Register Now !</Link></div>
                             <p className="note">Terms of use &amp; Conditions</p>
                         </form>
                 </div>

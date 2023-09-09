@@ -2,7 +2,10 @@ body{
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 18px;
 }
-
+.error-input {
+    border:1.5px red solid !important;
+    outline: 1px solid red;
+}
 img{
     padding: 10px;
     border: .5px solid #b9b3b3db;
@@ -10,7 +13,14 @@ img{
     border-radius: 15px;
 }
 
-
+#form-2 .navbar{
+    margin-left: -11px ;
+    margin-right: -11px ;
+    padding: 15px 15px 15px 20px !important;
+    margin-bottom: 30px;
+    background-color: rgb(251, 244, 236);
+    border-bottom: 1px solid #b0aaaa;
+}
 .form-container {
     max-width: 800px;
     margin: 0 auto;
@@ -39,9 +49,9 @@ th, td {
 }
 
 /* Style for form inputs */
-#form-2 input[type="text"],
-#form-2 input[type="email"],
-#form-2 input[type="date"],
+input[type="text"],
+input[type="email"],
+input[type="date"],
 select {
     width: 100%;
     padding: 5px;
