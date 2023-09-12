@@ -5,6 +5,7 @@ import Signup from './components/Signup';
 import {UserAuthContextProvider} from './context/UserAuthContext';
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from '../src/components/HOME/Home';
+import AdminApp from './components/ADMIN/AdminApp';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Login />} />
           <Route path='/signup' element={<Signup />} />
+          <Route path='/admin' element={<AdminApp />} />
           <Route path='/home' element={
             <ProtectedRoute>
               <Home />

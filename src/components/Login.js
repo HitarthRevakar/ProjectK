@@ -2,7 +2,6 @@ import React, {useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import GoogleButton from 'react-google-button'
 import { useUserAuth } from '../context/UserAuthContext';
-import '../App.css'
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -94,7 +93,8 @@ const Login = () => {
                             {/* <button title="Sign In" type="submit" className="sign-in_apl">
                                 <span>Sign In with Apple</span>
                             </button> */}
-                            <div>For New Account&nbsp;<Link to="/signup" className='text-decoration-none text-danger fw-bold'>Register Now !</Link></div>
+                            <a href="../components/ADMIN/AdminApp.js" className='text-underline-none text-secondary'>For Admin</a>
+                            <div>For New Account&nbsp;<Link to="/signup" className='text-decoration-none text-primary fw-bold'>Register Now !</Link></div>
                             <p className="note">Terms of use &amp; Conditions</p>
                         </form>
                 </div>

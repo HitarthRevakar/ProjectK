@@ -6,7 +6,9 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import './home.css' 
-import { firestore, storage } from '../../firebase';
+import questionsSet1 from '../QuestionPaper/Electrical.json';
+import questionsSet2 from '../QuestionPaper/Instrumentation.json';
+import { storage } from '../../firebase';
 
 
 
@@ -84,234 +86,123 @@ function Home() {
     }
   };
 
- 
-  function shuffleArray(array) {
-    let newQuestions = []
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      newQuestions.push(array[j]);
-      if(newQuestions.length > 9){
-        return newQuestions
-      }
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+
+  function displayUserPhoto(event) {
+    const photo = event.target.files[0];
+
+    if (photo) {
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        setSelectedPhoto(e.target.result);
+      };
+
+      reader.readAsDataURL(photo);
+    } else {
+      setSelectedPhoto(null);
     }
   }
+ 
+
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  const handleRadioChange = (value) => {
+    setSelectedOption(value);
+  };
+
+  const shuffleArray = (array) => {
+    const shuffledArray = [...array];
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+    }
+    return shuffledArray;
+  };
+
+
   const handleGeneratePDF = async () => {
-    try {
-      debugger
       // Upload the user's photo to Firebase Storage
       const storageRef = storage.ref();
       const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
-  debugger
+    try {
+
       await userPhotoRef.put(formData.user_photo[0]);
-  debugger
+  
       // Get the download URL of the uploaded photo
       const downloadURL = await userPhotoRef.getDownloadURL();
       console.log('Download URL:', downloadURL);
-  debugger
+  
       // Update the formData with the download URL
       formData.user_photo = downloadURL;
   
-      // Store the user's data, including the photo URL, in Firestore
-      await firestore.collection('candidate-info').add(formData);
-  
-      // Now you can proceed with generating the PDF
-      const pdf = new jsPDF();
-      const imgWidth = 180; // Adjust the image width as needed
-    const imgHeight = 250; // Adjust the image height as needed
+      // Create a new jsPDF instance
+      const pdf = new jsPDF({unit: 'mm',
+      format: 'a4',});
+      pdf.setFontSize(10); 
 
-    // Assuming formData.user_photo contains the download URL of the image
+      // Assuming imageRef.current is correctly defined
+      const canvas = await html2canvas(imageRef.current);
 
-debugger
-// const encodedUrl = downloadURL.replace('/user_photos/', '/user_photos%2F');
-    // Load the image using jsPDF's addImage method
-    const element = imageRef.current;
-
-    // Use html2canvas to capture the element as an image
-    await html2canvas(element).then((canvas) => {
-      // Convert the canvas to a data URL
       const imageSrc = canvas.toDataURL('image/png');
-      pdf.addImage(imageSrc, 'JPG', 7, 10, imgWidth, imgHeight);
+      pdf.addImage(imageSrc, 'PNG', 10, 10, 190, 270);
+  
+      // Add a new page for the questions
       pdf.addPage();
-      // You can now use `imageSrc` as the source for an <img> tag or do other operations (e.g., save it to the server).
-    });
-      let formattedText = '';
-      let questions = [
-        {
-          question: "What is the SI unit of electric current?",
-          a: "Ampere (A)",
-          b: "Volt (V)",
-          c: "Ohm (Ω)",
-          d: "Watt (W)",
-        },
-        {
-          question: "What is the term for the opposition to the flow of electric current in a circuit?",
-          a: "Resistance",
-          b: "Voltage",
-          c: "Current",
-          d: "Conductance",
-        },
-        {
-          question: "What is the unit of electrical resistance?",
-          a: "Ohm (Ω)",
-          b: "Farad (F)",
-          c: "Hertz (Hz)",
-          d: "Newton (N)",
-        },
-        {
-          question: "Which component is used to store electrical energy in a circuit?",
-          a: "Capacitor",
-          b: "Inductor",
-          c: "Resistor",
-          d: "Transistor",
-        },
-        {
-          question: "What does DC stand for in electrical terms?",
-          a: "Direct Current",
-          b: "Digital Circuit",
-          c: "Dynamic Capacitance",
-          d: "Dual Conductor",
-        },
-        {
-          question: "What is the formula for Ohm's Law?",
-          a: "V = IR",
-          b: "P = VI",
-          c: "R = VI",
-          d: "I = VR",
-        },
-        {
-          question: "Which type of motor is often used in household appliances like fans?",
-          a: "Induction Motor",
-          b: "Synchronous Motor",
-          c: "DC Motor",
-          d: "Stepper Motor",
-        },
-        {
-          question: "What is the primary function of a transformer?",
-          a: "To change voltage levels",
-          b: "To rectify AC to DC",
-          c: "To amplify electrical signals",
-          d: "To generate electricity",
-        },
-        {
-          question: "Which material is commonly used as an insulator in electrical wires?",
-          a: "Rubber",
-          b: "Copper",
-          c: "Aluminum",
-          d: "Silver",
-        },
-        {
-          question: "What is the standard voltage for residential electrical outlets in most countries?",
-          a: "110-120V",
-          b: "220-240V",
-          c: "12V",
-          d: "480V",
-        },
-        {
-          question: "Which semiconductor device is used for switching applications in electronic circuits?",
-          a: "Transistor",
-          b: "Resistor",
-          c: "Capacitor",
-          d: "Diode",
-        },
-        {
-          question: "What does AC stand for in electrical terms?",
-          a: "Alternating Current",
-          b: "Amplified Circuit",
-          c: "Analog Capacitance",
-          d: "Active Conductor",
-        },
-        {
-          question: "What is the fundamental unit of charge?",
-          a: "Electron",
-          b: "Proton",
-          c: "Neutron",
-          d: "Photon",
-        },
-        {
-          question: "What is the process of producing a controlled electrical discharge through a gas called?",
-          a: "Arcing",
-          b: "Conduction",
-          c: "Insulation",
-          d: "Ionization",
-        },
-        {
-          question: "Which law states that the total current entering a junction is equal to the total current leaving the junction in a closed circuit?",
-          a: "Kirchhoff's Current Law",
-          b: "Ohm's Law",
-          c: "Faraday's Law",
-          d: "Newton's Law",
-        },
-        {
-          question: "What is the SI unit of electric charge?",
-          a: "Coulomb (C)",
-          b: "Volt (V)",
-          c: "Ampere (A)",
-          d: "Ohm (Ω)",
-        },
-        {
-          question: "Which electrical component is used to store a small amount of energy for backup power?",
-          a: "Supercapacitor",
-          b: "Battery",
-          c: "Resistor",
-          d: "Transistor",
-        },
-        {
-          question: "In electrical circuits, what does 'DC' mean?",
-          a: "Direct Current",
-          b: "Digital Circuit",
-          c: "Dynamic Capacitance",
-          d: "Dual Conductor",
-        },
-        {
-          question: "What is the primary purpose of a diode in an electrical circuit?",
-          a: "To allow current to flow in one direction only",
-          b: "To amplify electrical signals",
-          c: "To regulate voltage",
-          d: "To store energy",
-        },
-      ];
-      const selectedQuestions =     shuffleArray(questions);
-
-// Select the first 10 questions
-
-console.log(selectedQuestions)
-      // Loop through the questions and format them into text
-      selectedQuestions.forEach((q, index) => {
-        formattedText += `${index + 1}. ${q.question}\n`;
-        formattedText += `   a) ${q.a}\n`;
-        formattedText += `   b) ${q.b}\n`;
-        formattedText += `   c) ${q.c}\n`;
-        formattedText += `   d) ${q.d}\n\n`;
-      });
-      // Add text content (questions and answers)
-     
-
-      pdf.setFontSize(12);
-      pdf.text(formattedText, 10, 10); // Adjust the position as needed
-
-      pdf.save('generated.pdf');
-
-      // ... (rest of your PDF generation code)
+  
+      // Assuming question is correctly defined and selectedOption is set
+      if (selectedOption !== null) {
+        const questions = selectedOption === 'option1' ? shuffleArray(questionsSet1) : shuffleArray(questionsSet2);
+        let currentYPosition = 10;  // Initialize Y-coordinate for the new page
+  
+        questions.forEach((q, index) => {
+          // Check if we need to add a new page
+          if (currentYPosition > 270) { // Check if Y-coordinate is beyond page's limit
+            pdf.addPage();
+            currentYPosition = 10; // Reset Y-coordinate for the new page
+          }
+  
+          pdf.text(`Question ${index + 1}: ${q.question}`, 10, currentYPosition);
+          currentYPosition += 10;
+  
+          pdf.text(`A) ${q.a}`, 20, currentYPosition);
+          currentYPosition += 10;
+  
+          pdf.text(`B) ${q.b}`, 20, currentYPosition);
+          currentYPosition += 10;
+  
+          pdf.text(`C) ${q.c}`, 20, currentYPosition);
+          currentYPosition += 10;
+  
+          pdf.text(`D) ${q.d}`, 20, currentYPosition);
+          currentYPosition += 10;  // Add more space before the next question
+        });
+  
+        pdf.save('generated.pdf');
+      } else {
+        alert('Please select an option !');
+      }
     } catch (error) {
-      console.error('Error uploading file or storing data:', error);
+      console.error('An error occurred:', error);
+      alert('An error occurred while generating the PDF. Please try again.');
     }
   };
   
 
   const toggle = () => setModal(!modal);
 
+
   const onSubmit = async (data) => {
     // Handle form submission
     console.log(data);
     setFormData(data)
-    
-
     setModal(!modal)
   };
+
   return (
-    <div className="container my-5">
-    <div className='navbar  d-flex justify-content-between  py-2 px-3 '>
-            <span className='fs-5'>Welcome,&nbsp;<span className='text-success fw-bold text-decoration-underline'>{user && user.displayName}</span></span>
+    <div className="container my-3">
+    <div className='navbar bg-body-tertiary  d-flex justify-content-between  py-2 px-3 '>
+            <span className='fs-5'>Welcome,&nbsp;<i className="bi bi-person-circle text-secondary "></i>&nbsp;<span className='text-success fw-bold text-decoration-underline'>{user && user.displayName}</span></span>
             <span><button className="btn btn-outline-danger px-3 rounded-0" onClick={handleLogout}>
             <i class="bi bi-box-arrow-in-left "></i>&nbsp;Log Out
         </button></span>
@@ -332,18 +223,21 @@ console.log(selectedQuestions)
         <div className="table-responsive" >
           <table className="table table-striped table-responsive">
             <tbody>
-            <tr className='text-center align-items-center' style={{height:"150px", backgroundColor:"white"}}>
-                <td className="section-header" colSpan="1">
-                <img src={process.env.PUBLIC_URL + '/logo.jpg'} style={{border:"none"}}  className='img-fluid'  alt="Logo" />
+            <tr className='text-center align-items-center' style={{height:"140px", backgroundColor:"white"}}>
+                <td className="" colSpan="1">
+                  <img src={process.env.PUBLIC_URL + '/logo.jpg'} style={{border:"none"}}  className='mt-2'  alt="Logo" />
                 </td>
                 <td style={{fontFamily:"Times New Roman", fontWeight:"bolder", color:"#0060B0"}} colSpan="2" className='mt-1 pt-2 align-items-center'>
-               <div className='align-items-center mt-5 '> TECHNO CONCEPTS INSTRUMENTS PRIVATE LIMITED
-VALIDATION CENTER, JAMNAGAR</div>
+               <div className='align-items-center mt-5 fs-4 '> TECHNO CONCEPTS INSTRUMENTS PRIVATE LIMITED VALIDATION CENTER, JAMNAGAR</div>
                 </td>
                 <td colSpan="1">
-                <div className='mt-5'>
-                PHOTO
-
+                <div className='my-3 img-fluid ' id="photo-container">
+                {selectedPhoto ? (
+                  <img src={selectedPhoto} className='border-dark' alt="User Photo" width="160" height="160" />
+                ) : (
+                  <div className='text-center align-items-center'><p>PHOTO</p></div>
+                  
+                )}
                 </div>
                 </td>
               </tr>
@@ -359,7 +253,7 @@ VALIDATION CENTER, JAMNAGAR</div>
                   <input
                     type="text"
                     name="candidate_name"
-                    {...register('candidate_name', { required: false })}
+                    {...register('candidate_name', { required: true })}
                     className={`form-control ${
                       errors.candidate_name ? 'error-input' : ''
                     }`}
@@ -371,10 +265,11 @@ VALIDATION CENTER, JAMNAGAR</div>
                     accept="image/*"
                     type="file"
                     name="user_photo"
-                    {...register('user_photo', { required: false })}
+                    {...register('user_photo', { required: true })}
                     className={`form-control ${
                       errors.user_photo ? 'error-input' : ''
                     }`}
+                    onChange={(e) => displayUserPhoto(e)}
                   />
                 </td>
               </tr>
@@ -387,7 +282,7 @@ VALIDATION CENTER, JAMNAGAR</div>
                   <input
                     type="text"
                     name="id_number"
-                    {...register('id_number', { required: false })}
+                    {...register('id_number', { required: true })}
                     className={`form-control ${
                       errors.id_number ? 'error-input' : ''
                     }`}
@@ -398,7 +293,7 @@ VALIDATION CENTER, JAMNAGAR</div>
                   <input
                     type="text"
                     name="contact"
-                    {...register('contact', { required: false })}
+                    {...register('contact', { required: true })}
                     className={`form-control ${
                       errors.contact ? 'error-input' : ''
                     }`}
@@ -414,7 +309,7 @@ VALIDATION CENTER, JAMNAGAR</div>
                   <input
                     type="email"
                     name="email"
-                    {...register('email', { required: false })}
+                    {...register('email', { required: true })}
                     className={`form-control ${
                       errors.email ? 'error-input' : ''
                     }`}
@@ -425,7 +320,7 @@ VALIDATION CENTER, JAMNAGAR</div>
                   <input
                     type="text"
                     name="nationality"
-                    {...register('nationality', { required: false })}
+                    {...register('nationality', { required: true })}
                     className={`form-control ${
                       errors.nationality ? 'error-input' : ''
                     }`}
@@ -438,7 +333,7 @@ VALIDATION CENTER, JAMNAGAR</div>
                   <input
                     type="text"
                     name="state"
-                    {...register('state', { required: false })}
+                    {...register('state', { required: true })}
                     className={`form-control ${
                       errors.state ? 'error-input' : ''
                     }`}
@@ -448,7 +343,7 @@ VALIDATION CENTER, JAMNAGAR</div>
                 <td>
                   <select
                     name="marital_status"
-                    {...register('marital_status', { required: false })}
+                    {...register('marital_status', { required: true })}
                     className={`form-select ${
                       errors.marital_status ? 'error-input' : ''
                     }`}
@@ -465,7 +360,7 @@ VALIDATION CENTER, JAMNAGAR</div>
                   <input
                     type="date"
                     name="dob"
-                    {...register('dob', { required: false })}
+                    {...register('dob', { required: true })}
                     className={`form-control ${
                       errors.dob ? 'error-input' : ''
                     }`}
@@ -478,7 +373,7 @@ VALIDATION CENTER, JAMNAGAR</div>
         </div>
 
         {/* LANGUAGES KNOWN */}
-        <table className="table table-bordered">
+        <table className="table table-responsive">
         
           <thead>
           
@@ -501,7 +396,7 @@ VALIDATION CENTER, JAMNAGAR</div>
                   type="checkbox"
                   value="english"
                   name="language"
-                  {...register('language', { required: false })}
+                  {...register('language', { required: true })}
                   className={` ${
                       errors.language ? 'error-input' : ''
                     }`}
@@ -513,7 +408,7 @@ VALIDATION CENTER, JAMNAGAR</div>
                   name="language"
                   value="hindi"
 
-                  {...register('language', { required: false })}
+                  {...register('language', { required: true })}
                   className={` ${
                       errors.language ? 'error-input' : ''
                     }`}
@@ -524,7 +419,7 @@ VALIDATION CENTER, JAMNAGAR</div>
                   type="checkbox"
                   value="gujarati"
                   name="language"
-                  {...register('language', { required: false })}
+                  {...register('language', { required: true })}
                   className={` ${
                       errors.language ? 'error-input' : ''
                     }`}
@@ -535,11 +430,116 @@ VALIDATION CENTER, JAMNAGAR</div>
                   type="checkbox"
                   value="other"
                   name="language"
-                  {...register('language', { required: false })}
+                  {...register('language', { required: true })}
                   className={` ${
                       errors.language ? 'error-input' : ''
                     }`}
                 />
+              </td>
+            </tr>
+            {/* Add more LANGUAGES KNOWN fields here */}
+          </tbody>
+          <tbody>
+            <tr>
+              <td>WRITE</td>
+              <td>
+                <input
+                  type="checkbox"
+                  value="english"
+                  name="language"
+                  {...register('language', { required: true })}
+                  className={` ${
+                      errors.language ? 'error-input' : ''
+                    }`}
+                />
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  name="language"
+                  value="hindi"
+
+                  {...register('language', { required: true })}
+                  className={` ${
+                      errors.language ? 'error-input' : ''
+                    }`}
+                />
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  value="gujarati"
+                  name="language"
+                  {...register('language', { required: true })}
+                  className={` ${
+                      errors.language ? 'error-input' : ''
+                    }`}
+                />
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  value="other"
+                  name="language"
+                  {...register('language', { required: true })}
+                  className={` ${
+                      errors.language ? 'error-input' : ''
+                    }`}
+                />
+              </td>
+            </tr>
+            {/* Add more LANGUAGES KNOWN fields here */}
+          </tbody>
+          <tbody>
+            <tr>
+              <td>SPEAK</td>
+              <td>
+                  <select
+                    className={`form-select ${errors.language ? 'error-input' : ''}`}
+                    name="language"
+                    Value="english" 
+                    {...register('language', { required: true })}
+                  >
+                    <option value="">Select Option</option>
+                    <option value="yes">Yes</option>
+                    <option ion value="no">No</option>
+                  </select>
+              </td>
+              <td>
+                <select
+                      className={`form-select ${errors.language ? 'error-input' : ''}`}
+                      name="language"
+                      Value="hindi" 
+                      {...register('language', { required: true })}
+                    >
+                      <option value="">Select Option</option>
+                      <option value="yes">Yes</option>
+                      <option ion value="no">No</option>
+                </select>
+              </td>
+              <td>
+                <select
+                        className={`form-select ${errors.language ? 'error-input' : ''}`}
+                        name="language"
+                        Value="gujarati" 
+                        {...register('language', { required: true })}
+                      >
+                        <option value="">Select Option</option>
+                        <option value="yes">Yes</option>
+                        <option ion value="no">No</option>
+                  </select>
+              </td>
+              <td>
+                <select
+                        className={`form-select ${errors.language ? 'error-input' : ''}`}
+                        name="language"
+                        Value="other" 
+                        {...register('language', { required: true })}
+                      >
+                        <option value="">Select Option</option>
+                        <option value="yes">Yes</option>
+                        <option ion value="no">No</option>
+                  </select>
               </td>
             </tr>
             {/* Add more LANGUAGES KNOWN fields here */}
@@ -560,7 +560,7 @@ VALIDATION CENTER, JAMNAGAR</div>
                 <input
                   type="text"
                   name="academic_qualification"
-                  {...register('academic_qualification', { required: false })}
+                  {...register('academic_qualification', { required: true })}
                   className={`form-control ${
                       errors.academic_qualification ? 'error-input' : ''
                     }`}
@@ -598,7 +598,7 @@ VALIDATION CENTER, JAMNAGAR</div>
                 <input
                   type="text"
                   name="total_experience"
-                  {...register('total_experience', { required: false })}
+                  {...register('total_experience', { required: true })}
                   className={`form-control ${
                       errors.total_experience ? 'error-input' : ''
                     }`}
@@ -610,7 +610,7 @@ VALIDATION CENTER, JAMNAGAR</div>
         </table>
 
         {/* TABLE FOR COMPANY DETAILS */}
-        <table className="GeneratedTable">
+        <table className="table GeneratedTable">
           <thead>
             <tr>
               <th>NAME OF THE COMPANY</th>
@@ -671,41 +671,73 @@ VALIDATION CENTER, JAMNAGAR</div>
         </table>
 
         {/* SUBMIT BUTTON */}
-        <div className='d-flex justify-content-center w-100'><button type="submit" className="btn btn-outline-primary rounded-0">
-          Submit Form
+        <div className='d-flex justify-content-center w-100 '><button type="submit" className="btn btn-outline-secondary shadow border-1 rounded-2 px-4 py-2">
+          Submit <span class="bi bi-send"></span>
         </button></div>
         <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle}>MCQ Examination Test</ModalHeader>
         <ModalBody>
-      
-        <p><span className='text-danger'>Please Select Your Examination Subject Carefully*</span></p><br/>
-        <div className='d-flex gap-5'>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" />
-                                <label class="form-check-label" for="exampleRadios1">
-                                  Electrical
-                                </label>
-                              </div>
-                              <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2"/>
-                                <label class="form-check-label" for="exampleRadios2">
-                                  Instrumentation
-                                </label>
-                              </div>
-                          </div>
+          <p className='mb-3'>
+            <span className="text-danger">Please Select Your Examination Subject Carefully*</span>
+          </p>
+          <div className="d-flex gap-4">
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="selectedOption"
+                id="option1"
+                value="option1"
+                onChange={() => handleRadioChange('option1')}
+              />
+              <label className="form-check-label" htmlFor="option1">
+                Electrical
+              </label>
+            </div>
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="selectedOption"
+                id="option2"
+                value="option2"
+                onChange={() => handleRadioChange('option2')}
+              />
+              <label className="form-check-label" htmlFor="option2">
+                Instrumentation
+              </label>
+            </div>
+          </div>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={() => {toggle();handleGeneratePDF()}}>
+          <Button
+            color="primary"
+            className='rounned-0'
+            onClick={() => {
+              toggle();
+              handleGeneratePDF();
+            }}
+            disabled={!selectedOption}// Disable the button when no option is selected
+          >
             Submit
-          </Button>{' '}
+          </Button>
           <Button color="secondary" onClick={toggle}>
             Cancel
           </Button>
         </ModalFooter>
       </Modal>
-              
       </form>
+
+    <div class="container my-4 text-start">
+        <h4>NOTE:</h4>
+      <ul>
+        <li>CANDIDATE SHOULD REPORT WITH BASIC PPE'S</li>
+        <li>ATTACH ALL RELEVANT EDUCATIONAL AND EXPERIENCE CERTIFICATES WITH THIS FORM</li>
+        <li>CANDIDATE ARE REQUESTED TO STAY WITHIN THE SITE PREMISES FOR THE WHOLE DAY</li>
+      </ul>
     </div>
+
+  </div>
 
   );
 }

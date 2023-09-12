@@ -1,0 +1,54 @@
+[
+    {
+      "question": "Which device is not measuring the pressure of Gas and liquid?",
+      "a": "Proximity sensor",
+      "b": "Pressure sensor",
+      "c": "Pressure Gauge",
+      "d": "DP Transmitter"
+    },
+    {
+      "question": "Which sensor measures the pressure relative to perfect vacuum?",
+      "a": "Absolute pressure sensor",
+      "b": "Gauge pressure sensor",
+      "c": "Vacuum pressure sensor",
+      "d": "Differential pressure sensor"
+    },
+    {
+      "question": "Which pressure standard is used for High pressure range Instrument calibration?",
+      "a": "Dead-weight tester",
+      "b": "Manometer",
+      "c": "Pressure switches",
+      "d": "Strain gauge pressure sensor"
+    },
+    {
+      "question": "Pressure measured relative to perfect vacuum is termed as",
+      "a": "Absolute Pressure Measurement",
+      "b": "Differential Pressure Measurement",
+      "c": "Gauge Pressure Measurement",
+      "d": "Both Absolute and Differential"
+    },
+    {
+      "question": "For Measurement of Liquid Flow Tapping will be",
+      "a": "Above pipe line",
+      "b": "Below pipe line or 45-degree angle",
+      "c": "Above pipe line or 45-degree angle",
+      "d": "Above pipe line or 90-degree angle"
+    },
+    {
+      "question": "Give the Types of Thermocouple",
+      "a": "",
+      "b": "",
+      "c": "",
+      "d": ""
+    },
+    {
+      "question": "Give the Name of type of Control valve"
+    },
+    {
+      "question": "Which is the Input and Output for process control",
+      "a": "AI- Analogue Input",
+      "b": "AO-Analogue output",
+      "c": "DI- Digital Input",
+      "d": "DO-Digital output"
+    }
+]
