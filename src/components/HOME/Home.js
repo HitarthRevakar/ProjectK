@@ -9,6 +9,7 @@ import './home.css'
 import questionsSet1 from '../QuestionPaper/Electrical.json';
 import questionsSet2 from '../QuestionPaper/Instrumentation.json';
 import { storage } from '../../firebase';
+import AdminApp from '../ADMIN/AdminApp';
 
 
 
@@ -161,7 +162,7 @@ function Home() {
             pdf.addPage();
             currentYPosition = 10; // Reset Y-coordinate for the new page
           }
-  
+  // testing
           pdf.text(`Question ${index + 1}: ${q.question}`, 10, currentYPosition);
           currentYPosition += 10;
   
@@ -243,6 +244,7 @@ function Home() {
               </tr>
               {/* PERSONAL DETAILS */}
               <tr>
+                <AdminApp />
                 <td className="section-header" colSpan="4">
                   PERSONAL DETAILS:
                 </td>
