@@ -165,7 +165,7 @@ function Home() {
       pdf.addPage();
   
       // Assuming question is correctly defined and selectedOption is set
-      if (selectedOption !== null) {
+  
         const questions = selectedOption === 'option1' ? shuffleArray(questionsSet1) : shuffleArray(questionsSet2);
         let currentYPosition = 10;  // Initialize Y-coordinate for the new page
   
@@ -193,9 +193,7 @@ function Home() {
         });
   
         pdf.save('generated.pdf');
-      } else {
-        alert('Please select an option !');
-      }
+   
 setSubmitted(false)
     } catch (error) {
       console.error('An error occurred:', error);
@@ -663,7 +661,7 @@ setSubmitted(false)
             </tr>
           </thead>
           <tbody>
-            {[1, 2, 3, 4, 5, 6].map((index) =>{submitted ? (
+            {[1, 2, 3, 4, 5, 6].map((index) => (
         <tr key={index}>
                 <td>
                  <input
@@ -698,7 +696,7 @@ setSubmitted(false)
                   </center>
                 </td>
               </tr> 
-            ): <></>})}
+            ))}
           </tbody>
         </table>
 
@@ -725,12 +723,15 @@ setSubmitted(false)
           <div className="d-flex gap-4">
             <div className="form-check">
               <input
-                className="form-check-input"
+                required
                 type="radio"
-                name="selectedOption"
                 id="option1"
-                value="option1"
-                onChange={() => handleRadioChange('option1')}
+                value="electrical"
+                name="test_type"
+                {...register('test_type', { required: false })}
+                className={` form-check-input ${
+                  errors.test_type ? 'error-input' : ''
+                   }`}
               />
               <label className="form-check-label" htmlFor="option1">
                 Electrical
@@ -738,12 +739,15 @@ setSubmitted(false)
             </div>
             <div className="form-check">
               <input
-                className="form-check-input"
+                required
                 type="radio"
-                name="selectedOption"
                 id="option2"
-                value="option2"
-                onChange={() => handleRadioChange('option2')}
+                value="instrumentation"
+                name="test_type"
+                    {...register('test_type', { required: false })}
+                    className={`form-check-input ${
+                      errors.test_type ? 'error-input' : ''
+                    }`}
               />
               <label className="form-check-label" htmlFor="option2">
                 Instrumentation
@@ -760,7 +764,7 @@ setSubmitted(false)
               handleGeneratePDF();
               setSubmitted(true)
             }}
-            disabled={!selectedOption}// Disable the button when no option is selected
+            // Disable the button when no option is selected
           >
             Submit
           </Button>
