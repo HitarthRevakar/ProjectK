@@ -7,6 +7,7 @@ const EditForm = () => {
   const [formData, setFormData] = useState({
     candidate_name: '',
     email: '',
+    contractor_name: '',
     // Add other form fields here and initialize them as needed
   });
 
@@ -72,8 +73,7 @@ const EditForm = () => {
               <div className='my-3'>
                 <h1 className='text-center text-decoration-underline fw-bold border-2 border py-2'>Assessment Report</h1>
               </div>
-
-              
+             
               <div className='d-md-flex border px-1'>
                 <div className='col-lg-9 col-md-7 col-sm-12 '>
                   <div className='my-4 px-3'>
@@ -93,39 +93,132 @@ const EditForm = () => {
                     <img src={formData.user_photo} alt="user-photo" className='w-50 img-fluid img-thumbnail user-photo  my-3' />
                   </div>
                 </div>
+              </div>
+
+              {/* --------  Marks Details ------ */}
+              <div className='my-5' id='marksTable'>
+                <div class=" table-responsive-sm">
+                  <table class="table ">
+                    <thead>
+                      <tr>
+                        <th scope="col" className='text-center'>Desciptions</th>
+                        <th scope="col" className='text-center'>Marks Obtained</th>
+                        <th scope="col" className='text-center'>Marks Allocate</th>
+                        <th scope="col" className='text-center'>QR Code</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="">
+                        <td scope="row" className='text-center'>Written</td>
+                        <td className='text-center'>
+                          <div className='r1'>
+                            <input type="text" className='form-control text-center marks '/>
+                          </div>
+                          </td>
+                        <td className='text-center'>
+                          <div className='r1'>
+                            <input type="text" className='form-control text-center marks'/>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="">
+                        <td scope="row" className='text-center'>Oral</td>
+                        <td className='text-center'>
+                        <div className='r1'>
+                            <input type="text" className='form-control text-center marks '/>
+                          </div>
+                        </td>
+                        <td className='text-center'>
+                          <div className='r1'>
+                            <input type="text" className='form-control text-center marks '/>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="">
+                        <td scope="row" className='text-center'>Practical</td>
+                        <td className='text-center'>
+                        <div className='r1'>   
+                            <input type="text" className='form-control text-center marks'/>
+                          </div>
+                        </td>
+                        <td className='text-center'>
+                          <div className='r1'>
+                            <input type="text" className='form-control text-center marks '/>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="">
+                        <td scope="row" className='text-center'>Total</td>
+                        <td className='text-center'>
+                        <div className='r1'>
+                            <input type="text" className='form-control text-center marks'/>
+                          </div>
+                        </td>
+                        <td className='text-center'>
+                        <div className='r1'>
+                            <input type="text" className='form-control text-center marks '/>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>   
+              </div>
+
+              <div>
+                <div class="table-responsive">
+                  <table class="table ">
+                    <thead>
+                      <tr>
+                        <th scope="col" colSpan={3}>Official Use Only (Evaluate According to Marks)</th>
+                      </tr>
+                    </thead>
+                    <tbody className='text-center'>
+                      <tr class="">
+                        <td scope="row">Outstanding</td>
+                        <td></td>
+                        <td>90+</td>
+                      </tr>
+                      <tr class="">
+                        <td scope="row">Excellent</td>
+                        <td>Item</td>
+                        <td>76-89</td>
+                      </tr>
+                      <tr class="">
+                        <td scope="row">Good</td>
+                        <td>Item</td>
+                        <td>60-75</td>
+                      </tr>
+                      <tr class="">
+                        <td scope="row">Average</td>
+                        <td>Item</td>
+                        <td>50-59</td>
+                      </tr>
+                      <tr class="">
+                        <td scope="row">Below</td>
+                        <td>Item</td>
+                        <td>0-49</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                
 
               </div>
+
+
+
+
+
+
+
+
 
             {/* <button type="submit" className="btn btn-primary">Save Changes</button> */}
             </form>
         </div>
 
-        <div>
-          <div class="table-responsive-sm">
-            <table class="table table-primary">
-              <thead>
-                <tr>
-                  <th scope="col">Desciptions</th>
-                  <th scope="col">Marks Allocate</th>
-                  <th scope="col">Column 3</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="">
-                  <td scope="row">R1C1</td>
-                  <td>R1C2</td>
-                  <td>R1C3</td>
-                </tr>
-                <tr class="">
-                  <td scope="row">Item</td>
-                  <td>Item</td>
-                  <td>Item</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          
-        </div>
+
 
 
 
