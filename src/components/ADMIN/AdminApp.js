@@ -58,31 +58,31 @@ const AdminApp = () => {
             <h1>List Of Registered Forms</h1>
           </div>
 
-          <div className='d-flex'>
-            <div className='col-lg-4 col-md-4 text-center my-2' >
+          <div className=' d-flex py-4'>
+            <div className='col-lg-4 col-md-4 col-sm-4 col-5 text-start ' >
               <h4 className='text-danger fw-bold'>ID Number</h4>
             </div>
-            <div className='col-lg-4 col-md-4 text-center' >
+            <div className='col-lg-4 col-md-4 col-sm-4 col-5 text-start' >
               <h4 className='text-danger fw-bold'>Candidate Name</h4>
             </div>
-            <div className='col-lg-4 col-md-4 text-center' >
+            <div className='col-lg-4 col-md-4 col-sm-4 col-5 text-start' >
               <h4 className='text-danger fw-bold'>Email</h4>
             </div>
           </div>
           
           {forms.map((form) => (
             <div className='d-flex' key={form.id}>
-              <div className='col-lg-4 col-md-4'>
+              <div className='col-lg-4 col-md-4 col-sm-4 col-5'>
                 <Link to={`/edit/${form.id}`} className=" text-decoration-none">
                   <p className='border-bottom text-dark'>{form.id_number}</p>
                 </Link>
               </div>
-              <div className='col-lg-4 col-md-4'>
+              <div className='col-lg-4 col-md-4 col-sm-4 col-5'>
                 <Link to={`/edit/${form.id}`} className=" text-decoration-none">
                   <p className='border-bottom text-dark'>{form.candidate_name}</p>
                 </Link>
               </div>
-              <div className='col-lg-4 col-md-4'>
+              <div className='col-lg-4 col-md-4 col-sm-4 col-5'>
                 <Link to={`/edit/${form.id}`} className=" text-decoration-none">
                   <p className='border-bottom text-dark'>{form.email}</p>
                 </Link>

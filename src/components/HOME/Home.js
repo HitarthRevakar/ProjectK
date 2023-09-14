@@ -8,7 +8,7 @@ import jsPDF from 'jspdf';
 import './home.css' 
 import questionsSet1 from '../QuestionPaper/Electrical.json';
 import questionsSet2 from '../QuestionPaper/Instrumentation.json';
-import { storage } from '../../firebase';
+import { firestore,storage } from '../../firebase';
 
 
 
@@ -125,6 +125,7 @@ function Home() {
 
   const handleGeneratePDF = async () => {
       // Upload the user's photo to Firebase Storage
+
       const storageRef = storage.ref();
       const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
     try {
@@ -138,6 +139,16 @@ function Home() {
       // Update the formData with the download URL
       formData.user_photo = downloadURL;
   
+
+      firestore.collection('candidate-info').add(formData)
+      .then((docRef) => {
+        console.log('Document written with ID: ', docRef.id);
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
+      });
+  
+
       // Create a new jsPDF instance
       const pdf = new jsPDF({unit: 'mm',
       format: 'a4',});
@@ -167,17 +178,17 @@ function Home() {
           pdf.text(`Question ${index + 1}: ${q.question}`, 10, currentYPosition);
           currentYPosition += 10;
   
-          pdf.text(`A) ${q.a}`, 20, currentYPosition);
+          pdf.text(`A) ${q.a}`, 10, currentYPosition);
           currentYPosition += 10;
   
-          pdf.text(`B) ${q.b}`, 20, currentYPosition);
+          pdf.text(`B) ${q.b}`, 10, currentYPosition);
           currentYPosition += 10;
   
-          pdf.text(`C) ${q.c}`, 20, currentYPosition);
+          pdf.text(`C) ${q.c}`, 10, currentYPosition);
           currentYPosition += 10;
   
-          pdf.text(`D) ${q.d}`, 20, currentYPosition);
-          currentYPosition += 10;  // Add more space before the next question
+          pdf.text(`D) ${q.d}`, 10, currentYPosition);
+          currentYPosition += 20;  // Add more space before the next question
         });
   
         pdf.save('generated.pdf');

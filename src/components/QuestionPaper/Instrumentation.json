@@ -50,5 +50,85 @@
       "b": "AO-Analogue output",
       "c": "DI- Digital Input",
       "d": "DO-Digital output"
+    },
+
+
+
+
+
+
+
+
+
+    {
+      "question": "From where start work at height activity",
+      "a": "2m",
+      "b": "1.8m",
+      "c": "1.5m",
+      "d": "1.2m"
+    },
+    {
+      "question": "When Scaffolding material certified?",
+      "a": "2 years",
+      "b": "3 years",
+      "c": "6 years",
+      "d": "1 years"
+    },
+    {
+      "question": "What is class B confined space?",
+      "a": "Present of Inert gas",
+      "b": "Presence of toxic or flammable",
+      "c": "Non process equipment",
+      "d": "Deep above 1.2 meter"
+    },
+    {
+      "question": "What is full from of CSM?",
+      "a": "Contractor safety management",
+      "b": "Central shift manager",
+      "c": "Contractor site manager",
+      "d": "None of above"
+    },
+    {
+      "question": "Who approved high risk permit?",
+      "a": "SS",
+      "b": "SFE",
+      "c": "Site president/ Sector chief",
+      "d": "All of the above"
+    },
+    {
+      "question": "What is hierarchy of control measure in HITRA",
+      "a": "Elimination",
+      "b": "Substitution",
+      "c": "Engineering control",
+      "d": "Isolation"
+    },
+    {
+      "question": "What is work at height hazards?",
+      "a": "Fall of person",
+      "b": "Fall of material",
+      "c": "Collapse temporary platform",
+      "d": "All of the above"
+    },
+    {
+      "question": "Full body harness manufacturing validity?",
+      "a": "5 years",
+      "b": "2 years",
+      "c": "3 years",
+      "d": "None of the above"
+    },
+    {
+      "question": "Types of fire extinguisher?",
+      "a": "Foam",
+      "b": "Co2",
+      "c": "DCP",
+      "d": "None of the above"
     }
+
+    
+
+
+
+
+
+
 ]
