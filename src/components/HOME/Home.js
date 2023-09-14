@@ -9,7 +9,6 @@ import './home.css'
 import questionsSet1 from '../QuestionPaper/Electrical.json';
 import questionsSet2 from '../QuestionPaper/Instrumentation.json';
 import { storage } from '../../firebase';
-import AdminApp from '../ADMIN/AdminApp';
 
 
 
@@ -25,6 +24,9 @@ function Home() {
   } = useForm();
 
   const initialFormData = {
+    contractor_name:'',
+    trade:'',
+    discipline: '',
     candidate_name: '',
     user_photo: null,
     id_number: '',
@@ -105,7 +107,6 @@ function Home() {
     }
   }
  
-
   const [selectedOption, setSelectedOption] = useState(null);
 
   const handleRadioChange = (value) => {
@@ -189,9 +190,8 @@ function Home() {
     }
   };
   
-
+  // for submit buton
   const toggle = () => setModal(!modal);
-
 
   const onSubmit = async (data) => {
     // Handle form submission
@@ -212,15 +212,6 @@ function Home() {
          
           </div>
       <form ref={imageRef} onSubmit={handleSubmit(onSubmit)}>
-      <div className="table-responsive" >
-          <table className="table table-striped table-responsive">
-            <tbody>
-              {/* PERSONAL DETAILS */}
-             
-  
-            </tbody>
-          </table>
-        </div>
         <div className="table-responsive" >
           <table className="table table-striped table-responsive">
             <tbody>
@@ -229,7 +220,7 @@ function Home() {
                   <img src={process.env.PUBLIC_URL + '/logo.jpg'} style={{border:"none"}}  className='mt-2'  alt="Logo" />
                 </td>
                 <td style={{fontFamily:"Times New Roman", fontWeight:"bolder", color:"#0060B0"}} colSpan="2" className='mt-1 pt-2 align-items-center'>
-               <div className='align-items-center mt-5 fs-4 '> TECHNO CONCEPTS INSTRUMENTS PRIVATE LIMITED VALIDATION CENTER, JAMNAGAR</div>
+               <div className='align-items-center mt-5 '><h4 className='fw-bold'>TECHNO CONCEPTS INSTRUMENTS PRIVATE LIMITED VALIDATION CENTER, JAMNAGAR</h4>  </div>
                 </td>
                 <td colSpan="1">
                 <div className='my-3 img-fluid ' id="photo-container">
@@ -242,9 +233,48 @@ function Home() {
                 </div>
                 </td>
               </tr>
-              {/* PERSONAL DETAILS */}
               <tr>
-                <AdminApp />
+                <td rowSpan="1" colSpan="1"><p className='mt-2'>CONTRACTOR NAME :</p> </td>
+                <td rowSpan="1" colSpan="3" className="align-items-center">
+                  <input
+                    type="text"
+                    name="contractor_name"
+                    {...register('contractor_name', { required: true })}
+                    className={`form-control ${
+                      errors.contractor_name ? 'error-input' : ''
+                    }`}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td rowSpan="1" colSpan="1"><p className='mt-2'>TRADE :</p> </td>
+                <td rowSpan="1" colSpan="3" className="align-items-center">
+                  <input
+                    type="text"
+                    name="trade"
+                    className='form-control'
+                    // {...register('trade', { required: true })}
+                    // className={`form-control ${
+                    //   errors.trade ? 'error-input' : ''
+                    // }`}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td rowSpan="1" colSpan="1"><p className='mt-2'>DISCIPLINE :</p> </td>
+                <td rowSpan="1" colSpan="3" className="align-items-center">
+                  <input
+                    type="text"
+                    name="discipline"
+                    className='form-control'
+                    // {...register('discipline', { required: true })}
+                    // className={`form-control ${
+                    //   errors.discipline ? 'error-input' : ''
+                    // }`}
+                  />
+                </td>
+              </tr>
+              <tr>
                 <td className="section-header" colSpan="4">
                   PERSONAL DETAILS:
                 </td>
@@ -256,13 +286,13 @@ function Home() {
                     type="text"
                     name="candidate_name"
                     {...register('candidate_name', { required: true })}
-                    className={`form-control ${
+                    className={`form-control  ${
                       errors.candidate_name ? 'error-input' : ''
                     }`}
                   />
                 </td>
-                <td colSpan={1}>UPLOAD PASSPORT SIZE PHOTO:</td>
-                <td colSpan={1}>
+                <td colSpan="1">UPLOAD PHOTO:</td>
+                <td colSpan="1">
                   <input
                     accept="image/*"
                     type="file"
@@ -279,7 +309,7 @@ function Home() {
 
               {/* CONTACT INFORMATION */}
               <tr>
-                <td>I.D NUMBER (GOVT APPROVED):</td>
+                <td>I.D NUMBER <br/>(ANY GOVT. APPROVED):</td>
                 <td>
                   <input
                     type="text"

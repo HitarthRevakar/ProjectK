@@ -6,6 +6,7 @@ import {UserAuthContextProvider} from './context/UserAuthContext';
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from '../src/components/HOME/Home';
 import AdminApp from './components/ADMIN/AdminApp';
+import EditForm from './components/ADMIN/EditForm/EditForm';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path='/' element={<Login />} />
           <Route path='/signup' element={<Signup />} />
           <Route path='/admin' element={<AdminApp />} />
+          <Route path='/edit/:id' element={<EditForm />} />
           <Route path='/home' element={
             <ProtectedRoute>
               <Home />

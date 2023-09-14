@@ -88,7 +88,8 @@ const Login = () => {
                             </div>
                             <GoogleButton  className='' type='dark' onClick={handleGoogleSignIn}/>
 
-                            <a href="../components/ADMIN/AdminApp.js" className='text-underline-none text-secondary'>For Admin</a>
+                            {/* <a href="../components/ADMIN/AdminApp.js" className='text-underline-none text-secondary'>For Admin</a> */}
+                            <Link to="/admin" className='text-decoration-none text-secondary fw-bold'>For Admin</Link>
                             <div>For New Account&nbsp;<Link to="/signup" className='text-decoration-none text-primary fw-bold'>Register Now !</Link></div>
                             <p className="note">Terms of use &amp; Conditions</p>
                         </form>
