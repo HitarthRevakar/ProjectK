@@ -31,7 +31,7 @@ const ProtectedRoute = ({ children }) => {
     }
   }, [user, isLoading, navigate]);
 
-  return isLoading ? <LoadingSpinner /> : user ? children : null;
+  // return isLoading ? <LoadingSpinner /> : user ? children : null;
 };
 
 export default ProtectedRoute;

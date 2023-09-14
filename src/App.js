@@ -18,9 +18,9 @@ function App() {
           <Route path='/admin' element={<AdminApp />} />
           <Route path='/edit/:id' element={<EditForm />} />
           <Route path='/home' element={
-            <ProtectedRoute>
+          
               <Home />
-            </ProtectedRoute>
+          
           } />
         </Routes>
       </UserAuthContextProvider>

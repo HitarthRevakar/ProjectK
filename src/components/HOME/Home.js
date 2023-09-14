@@ -15,6 +15,7 @@ import { storage } from '../../firebase';
 function Home() {
   const { logOut, user } = useUserAuth();
   const [modal, setModal] = useState(false);
+  const [submitted , setSubmitted] = useState(false)
   const navigate = useNavigate();
   let imageRef = useRef();
   const {
@@ -184,6 +185,7 @@ function Home() {
       } else {
         alert('Please select an option !');
       }
+setSubmitted(false)
     } catch (error) {
       console.error('An error occurred:', error);
       alert('An error occurred while generating the PDF. Please try again.');
@@ -291,6 +293,7 @@ function Home() {
                     }`}
                   />
                 </td>
+                {!submitted ?<>
                 <td colSpan="1">UPLOAD PHOTO:</td>
                 <td colSpan="1">
                   <input
@@ -303,7 +306,7 @@ function Home() {
                     }`}
                     onChange={(e) => displayUserPhoto(e)}
                   />
-                </td>
+                </td></>:<></>}
               </tr>
               {/* Add more PERSONAL DETAILS fields here */}
 
@@ -427,10 +430,10 @@ function Home() {
                 <input
                   type="checkbox"
                   value="english"
-                  name="language"
-                  {...register('language', { required: true })}
+                  name="read"
+                  {...register('read', { required: true })}
                   className={` ${
-                      errors.language ? 'error-input' : ''
+                      errors.read ? 'error-input' : ''
                     }`}
                 />
               </td>
@@ -440,9 +443,9 @@ function Home() {
                   name="language"
                   value="hindi"
 
-                  {...register('language', { required: true })}
+                  {...register('read', { required: true })}
                   className={` ${
-                      errors.language ? 'error-input' : ''
+                      errors.read ? 'error-input' : ''
                     }`}
                 />
               </td>
@@ -451,9 +454,9 @@ function Home() {
                   type="checkbox"
                   value="gujarati"
                   name="language"
-                  {...register('language', { required: true })}
+                  {...register('read', { required: true })}
                   className={` ${
-                      errors.language ? 'error-input' : ''
+                      errors.read ? 'error-input' : ''
                     }`}
                 />
               </td>
@@ -462,9 +465,9 @@ function Home() {
                   type="checkbox"
                   value="other"
                   name="language"
-                  {...register('language', { required: true })}
+                  {...register('read', { required: true })}
                   className={` ${
-                      errors.language ? 'error-input' : ''
+                      errors.read ? 'error-input' : ''
                     }`}
                 />
               </td>
@@ -479,9 +482,9 @@ function Home() {
                   type="checkbox"
                   value="english"
                   name="language"
-                  {...register('language', { required: true })}
+                  {...register('write', { required: true })}
                   className={` ${
-                      errors.language ? 'error-input' : ''
+                      errors.write ? 'error-input' : ''
                     }`}
                 />
               </td>
@@ -491,9 +494,9 @@ function Home() {
                   name="language"
                   value="hindi"
 
-                  {...register('language', { required: true })}
+                  {...register('write', { required: true })}
                   className={` ${
-                      errors.language ? 'error-input' : ''
+                      errors.write ? 'error-input' : ''
                     }`}
                 />
               </td>
@@ -502,9 +505,9 @@ function Home() {
                   type="checkbox"
                   value="gujarati"
                   name="language"
-                  {...register('language', { required: true })}
+                  {...register('write', { required: true })}
                   className={` ${
-                      errors.language ? 'error-input' : ''
+                      errors.write ? 'error-input' : ''
                     }`}
                 />
               </td>
@@ -513,9 +516,9 @@ function Home() {
                   type="checkbox"
                   value="other"
                   name="language"
-                  {...register('language', { required: true })}
+                  {...register('write', { required: true })}
                   className={` ${
-                      errors.language ? 'error-input' : ''
+                      errors.write ? 'error-input' : ''
                     }`}
                 />
               </td>
@@ -526,52 +529,49 @@ function Home() {
             <tr>
               <td>SPEAK</td>
               <td>
-                  <select
-                    className={`form-select ${errors.language ? 'error-input' : ''}`}
-                    name="language"
-                    Value="english" 
-                    {...register('language', { required: true })}
-                  >
-                    <option value="">Select Option</option>
-                    <option value="yes">Yes</option>
-                    <option ion value="no">No</option>
-                  </select>
+                <input
+                  type="checkbox"
+                  value="english"
+                  name="language"
+                  {...register('speak', { required: true })}
+                  className={` ${
+                      errors.speak ? 'error-input' : ''
+                    }`}
+                />
               </td>
               <td>
-                <select
-                      className={`form-select ${errors.language ? 'error-input' : ''}`}
-                      name="language"
-                      Value="hindi" 
-                      {...register('language', { required: true })}
-                    >
-                      <option value="">Select Option</option>
-                      <option value="yes">Yes</option>
-                      <option ion value="no">No</option>
-                </select>
+                <input
+                  type="checkbox"
+                  name="language"
+                  value="hindi"
+
+                  {...register('speak', { required: true })}
+                  className={` ${
+                      errors.speak ? 'error-input' : ''
+                    }`}
+                />
               </td>
               <td>
-                <select
-                        className={`form-select ${errors.language ? 'error-input' : ''}`}
-                        name="language"
-                        Value="gujarati" 
-                        {...register('language', { required: true })}
-                      >
-                        <option value="">Select Option</option>
-                        <option value="yes">Yes</option>
-                        <option ion value="no">No</option>
-                  </select>
+                <input
+                  type="checkbox"
+                  value="gujarati"
+                  name="language"
+                  {...register('speak', { required: true })}
+                  className={` ${
+                      errors.speak ? 'error-input' : ''
+                    }`}
+                />
               </td>
               <td>
-                <select
-                        className={`form-select ${errors.language ? 'error-input' : ''}`}
-                        name="language"
-                        Value="other" 
-                        {...register('language', { required: true })}
-                      >
-                        <option value="">Select Option</option>
-                        <option value="yes">Yes</option>
-                        <option ion value="no">No</option>
-                  </select>
+                <input
+                  type="checkbox"
+                  value="other"
+                  name="language"
+                  {...register('speak', { required: true })}
+                  className={` ${
+                      errors.speak ? 'error-input' : ''
+                    }`}
+                />
               </td>
             </tr>
             {/* Add more LANGUAGES KNOWN fields here */}
@@ -652,14 +652,13 @@ function Home() {
             </tr>
           </thead>
           <tbody>
-            {[1, 2, 3, 4, 5, 6].map((index) => (
-              <tr key={index}>
+            {[1, 2, 3, 4, 5, 6].map((index) =>{submitted ? (
+        <tr key={index}>
                 <td>
-                  <input
+                 <input
                     type="text"
                     name={`company_name_${index}`}
                     {...register(`company_name_${index}`)}
-                    
                   />
                 </td>
                 <td>
@@ -687,8 +686,8 @@ function Home() {
                     />
                   </center>
                 </td>
-              </tr>
-            ))}
+              </tr> 
+            ): <></>})}
           </tbody>
         </table>
 
@@ -748,6 +747,7 @@ function Home() {
             onClick={() => {
               toggle();
               handleGeneratePDF();
+              setSubmitted(true)
             }}
             disabled={!selectedOption}// Disable the button when no option is selected
           >
