@@ -14,14 +14,13 @@ function App() {
       <UserAuthContextProvider>
         <Routes>
           <Route path='/' element={<Login />} />
-          <Route path='/signup' element={<Signup />} />
-          <ProtectedRoute>
-          <>
+          <Route path='/signup' element={<Signup />} />       
           <Route path='/admin' element={<AdminApp />} />
           <Route path='/edit/:id' element={<EditForm />} />
+          {/* <ProtectedRoute> */}
           <Route path='/home' element={<Home /> } /> 
-            </>
-              </ProtectedRoute>
+          
+              {/* </ProtectedRoute> */}
          
         </Routes>
       </UserAuthContextProvider>

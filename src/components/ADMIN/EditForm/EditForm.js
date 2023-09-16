@@ -19,20 +19,25 @@ const EditForm = () => {
     // Add other form fields here and initialize them as needed
   });
 
-//   useEffect(()=>{
-// let userId = id;
-//       const resultRef = firestore.collection('candidate-marks')
-//     async  function fetchResult(){
-//       const docs = await resultRef.get();
-//       if (docs.data().length) {
-//         // Set  formData state with the fetched data
-//         setResult(docs.data());
-//       } else {
-//         console.log('No such document!');
-//       }
-//       }
-//       fetchResult();
-//   },[])
+  useEffect(()=>{
+let userId = id;
+      const resultRef = firestore.collection('candidate-marks')
+    async  function fetchResult(){
+      const snapshot = await resultRef.get();
+      const formsData = snapshot.docs.map((doc) => ({
+        id: doc.id, // Document ID
+        ...doc.data(), // Data inside the document
+      }));
+
+      const result1 = formsData.find(user => user.userId == id)
+      
+      // Set the forms state with the fetched data
+      setResult(result1);  
+      // setValue(result)
+      debugger
+      }
+      fetchResult();
+  },[])
 
   // useEffect(()=>{
   //   if(result){
@@ -89,6 +94,13 @@ const EditForm = () => {
 
 
   }
+  useEffect(() => {
+    setValue('written', result.written);
+    setValue('oral', result.oral);
+    setValue('practical', result.practical);
+    setValue('total', result.total);
+
+  }, [ result]);
   // Function to handle form submission (update candidate data)
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
@@ -110,6 +122,7 @@ const EditForm = () => {
 
   document.addEventListener("DOMContentLoaded", function() {
     function calculateTotal() {
+      debugger
       // Define your fields by their 'name' attributes
       let written1 = parseFloat(document.querySelector("input[name='written']").value) || 0;
 
