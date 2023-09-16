@@ -215,7 +215,7 @@ setSubmitted(false)
   return (
     <div className="container my-3">
     <div className='navbar bg-body-tertiary  d-flex justify-content-between  py-2 px-3 '>
-            <span className='fs-5'>Welcome,&nbsp;<i className="bi bi-person-circle text-secondary "></i>&nbsp;<span className='text-success fw-bold text-decoration-underline'>{user && user.displayName}</span></span>
+            <span className='fs-5'>Welcome,&nbsp;<i className="bi bi-person-circle text-secondary "></i>&nbsp;<span className='text-success fw-bold text-decoration-underline'>{user && user.firstName}</span></span>
             <span><button className="btn btn-outline-danger px-3 rounded-0" onClick={handleLogout}>
             <i class="bi bi-box-arrow-in-left "></i>&nbsp;Log Out
         </button></span>

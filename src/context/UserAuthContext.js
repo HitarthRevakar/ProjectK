@@ -9,6 +9,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase";
+import { firestore, storage } from '../firebase';
 
 const userAuthContext = createContext();
 
@@ -46,10 +47,16 @@ export function UserAuthContextProvider({ children }) {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       // Update the user's profile with the full name
       await updateProfile(userCredential.user, {
-        firstName: firstName,
-        lastName: lastName,
-        fullName: firstName + " " + lastName
+        displayName: firstName + " " + lastName
       });
+      const userDocRef = firestore.collection('users').doc(userCredential.user.uid);
+
+        await userDocRef.set({
+          firstName: firstName,
+          lastName: lastName,
+        fullName: firstName + " " + lastName
+
+        });
       setUser(userCredential.user); // Set the user in your context
       return userCredential.user; // Return the user object
     } catch (error) {

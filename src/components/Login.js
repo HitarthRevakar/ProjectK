@@ -15,6 +15,7 @@ const Login = () => {
       setError("");
       try {
      let user = await logIn(email, password);
+     
     localStorage.setItem("user", JSON.stringify(user.user))
      debugger
         navigate("/home");
