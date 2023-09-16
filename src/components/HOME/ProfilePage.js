@@ -28,7 +28,7 @@ function ProfilePage() {
 
   return (
     <div className="container mt-5">
-      <div className="text-center">
+      <div className="text-start">
         <img
           src={formData.user_photo || 'https://placekitten.com/150/150'} // Replace with your image URL
           alt="Profile"
@@ -100,7 +100,7 @@ function ProfilePage() {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary">Submit</button>
+        <button type="submit" className="btn btn-primary my-3">Submit</button>
       </form>
     </div>
   );
