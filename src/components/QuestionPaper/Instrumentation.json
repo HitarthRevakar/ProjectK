@@ -55,15 +55,125 @@
       "c": "DI- Digital Input",
       "d": "DO-Digital output"
     },
-
-
-
-
-
-
-
-
-
+    {
+      "question": "Which instrument to be used for low pressure calibration?",
+      "a": "mV source",
+      "b": "mA Source",
+      "c": "Pneumatics Hand pump",
+      "d": "Temperature Bath"
+    },
+    {
+      "question": "What is the output of Thermocouple",
+      "a": "1 to 5 DC volt",
+      "b": "1 to 5 AC volt",
+      "c": "mV DC",
+      "d": "4 to 20 Ma"      
+    },
+    {
+      "question": "What is the document required for work on any Job?",
+      "a": "Work Permit",
+      "b": "RA-Risk Assessment Sheet",
+      "c": "Tools and Testing Instruments",
+      "d": "All of the Above"
+    },
+    {
+      "question": "Which devices measures gases or liquid?",
+      "a": "Proximity sensor",
+      "b": "Pressure sensor",
+      "c": "Temperature sensor",
+      "d": "Touch sensor"
+    },
+    {
+      "question": "Which pressure standard is used for gauge?",
+      "a": "Dead weight tester",
+      "b": "Manometer",
+      "c": "Pressure switches",
+      "d": "Strain gauge pressure sensor"
+    },
+    {
+      "question": "A device for determining die value or magnitude of a quantity or variable",
+      "a": "sensor",
+      "b": "transducer",
+      "c": "instrument",
+      "d": "indicator"
+    },
+    {
+      "question": "Errors due to assignable causes are called",
+      "a": "static errors",
+      "b": "calibration errors",
+      "c": "random errors",
+      "d": "systematic errors"
+    },
+    {
+      "question": "Pick up the appropriate word for A pointer moving over a scale",
+      "a": "instrument",
+      "b": "indicator",
+      "c": "transducer",
+      "d": "recorder"
+    },
+    {
+      "question": "For studying detailed variations with time, one uses",
+      "a": "indicator",
+      "b": "digital indicator",
+      "c": "integrator",
+      "d": "analogue indicator"
+    },
+    {
+      "question": "The ratio of output signal or response of the instrument'” to a change in input or measured Variable is called",
+      "a": "sensitivity",
+      "b": "precision",
+      "c": "amplification",
+      "d": "resolution"
+    },
+    {
+      "question": "It responds directly to the measured quantity, producing a related motion or signal",
+      "a": "sensing element",
+      "b": "transducer",
+      "c": "transmitter",
+      "d": "measuring device"
+    },
+    {
+      "question": "Give Definition and Formula of Pressure",
+      "a": "",
+      "b": "",
+      "c": "",
+      "d": ""
+    },
+    {
+      "question": "Give the Name Types of Control Valve Actuator",
+      "a": "",
+      "b": "",
+      "c": "",
+      "d": ""
+    },
+    {
+      "question": "Give the Name of Mandatory PPE -Personal Protective Equipment",
+      "a": "",
+      "b": "",
+      "c": "",
+      "d": ""
+    },
+    {
+      "question": "Which type of job cannot work in Cold work permit?",
+      "a": "Instrument Installation",
+      "b": "Loop Checking",
+      "c": "Grinding",
+      "d": "Field Calibration"
+    },
+    {
+      "question": "The sensitivity of reading of manometer can be increased by",
+      "a": "inclining the manometer tube",
+      "b": "using low specific gravity fluid",
+      "c": "application of optical magnification",
+      "d": "all of the above"
+    },
+    {
+      "question": "Give formula between Atmosphere Pressure, Absolute pressure and Gauge pressure",
+      "a": "",
+      "b": "",
+      "c": "",
+      "d": ""
+    },
     {
       "question": "From where start work at height activity",
       "a": "2m",
@@ -126,8 +236,14 @@
       "b": "Co2",
       "c": "DCP",
       "d": "None of the above"
+    },
+    {
+      "question": "O2 level in confined space?",
+      "a": "23.5",
+      "b": "19",
+      "c": "21",
+      "d": "20-22"
     }
-
     
 
 
