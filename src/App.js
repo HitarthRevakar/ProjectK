@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Home from '../src/components/HOME/Home';
 import AdminApp from './components/ADMIN/AdminApp';
 import EditForm from './components/ADMIN/EditForm/EditForm';
+import ProfilePage from './components/HOME/ProfilePage';
 
 function App() {
   return (
