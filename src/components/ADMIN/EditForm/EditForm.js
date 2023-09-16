@@ -2,8 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { firestore } from '../../../firebase';
 import '../EditForm/EditForm.css';
+import { useForm } from 'react-hook-form';
 const EditForm = () => {
   const { id } = useParams();
+  const [result, setResult] = useState()
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm();
   const [formData, setFormData] = useState({
     candidate_name: '',
     email: '',
@@ -11,10 +19,32 @@ const EditForm = () => {
     // Add other form fields here and initialize them as needed
   });
 
+//   useEffect(()=>{
+// let userId = id;
+//       const resultRef = firestore.collection('candidate-marks')
+//     async  function fetchResult(){
+//       const docs = await resultRef.get();
+//       if (docs.data().length) {
+//         // Set  formData state with the fetched data
+//         setResult(docs.data());
+//       } else {
+//         console.log('No such document!');
+//       }
+//       }
+//       fetchResult();
+//   },[])
+
+  // useEffect(()=>{
+  //   if(result){
+
+  //     debugger
+  //   }
+  // },[result])
   useEffect(() => {
     // Use a useEffect hook to fetch the candidate's data for editing
     const fetchCandidateData = async () => {
       try {
+
         // Reference the "candidate-info" collection in Firestore
         const candidateRef = firestore.collection('candidate-info').doc(id);
 
@@ -23,6 +53,8 @@ const EditForm = () => {
 
         // Check if the candidate exists
         if (doc.exists) {
+          
+          debugger
           // Set the formData state with the fetched data
           setFormData(doc.data());
         } else {
@@ -44,32 +76,75 @@ const EditForm = () => {
       [name]: value,
     });
   };
+  const onSubmit = (data) => {
+    // Update Firestore
+    data.userId = id
+    firestore.collection('candidate-marks').add(data)
+    .then((docRef) => {
+      console.log('Document written with ID: ', docRef.id);
+    })
+    .catch((error) => {
+      console.error('Error adding document: ', error);
+    });
 
+
+  }
   // Function to handle form submission (update candidate data)
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
 
-    try {
-      // Reference the "candidate-info" collection in Firestore
-      const candidateRef = firestore.collection('candidate-info').doc(id);
+  //   try {
+  //     // Reference the "candidate-info" collection in Firestore
+  //     const candidateRef = firestore.collection('candidate-info').doc(id);
 
-      // Update the candidate's data with the new formData
-      await candidateRef.update(formData);
+  //     // Update the candidate's data with the new formData
+  //     await candidateRef.update(formData);
 
-      // Redirect to the admin page or another page after successful update
-      // You can use React Router's history or a Link component for navigation
-      // Example: history.push('/admin');
-    } catch (error) {
-      console.error('Error updating candidate data: ', error);
+  //     // Redirect to the admin page or another page after successful update
+  //     // You can use React Router's history or a Link component for navigation
+  //     // Example: history.push('/admin');
+  //   } catch (error) {
+  //     console.error('Error updating candidate data: ', error);
+  //   }
+  // };
+
+  document.addEventListener("DOMContentLoaded", function() {
+    function calculateTotal() {
+      // Define your fields by their 'name' attributes
+      let written1 = parseFloat(document.querySelector("input[name='written']").value) || 0;
+
+      let oral1 = parseFloat(document.querySelector("input[name='oral']").value) || 0;
+
+      let practical1 = parseFloat(document.querySelector("input[name='practical']").value) || 0;
+
+
+      // Calculate the totals
+      let total1 = written1 + oral1 + practical1;
+
+
+      // Update the total fields
+      document.querySelector("input[name='total']").value = total1;
+   
     }
-  };
+
+    // Attach event listeners to each input field
+    document.querySelectorAll('.marks').forEach(function(input) {
+      input.addEventListener('input', calculateTotal);
+    });
+  });
+
+
+
+
+
+  
 
   return (
     <div className='my-4' id='editCandidate'>
       <div className="container">
         <div className="row">
             
-            <form onSubmit={handleSubmit} className='userDetail'>
+            <form onSubmit={handleSubmit(onSubmit)} className='userDetail'>
               <div className='my-3'>
                 <h1 className='text-center text-decoration-underline fw-bold border-2 border py-2'>Assessment Report</h1>
               </div>
@@ -112,12 +187,18 @@ const EditForm = () => {
                         <td scope="row" className='text-center'>Written</td>
                         <td className='text-center'>
                           <div className='r1'>
-                            <input type="text" className='form-control text-center marks '/>
+                          <input
+                  type="text"
+                  name="written"
+                  {...register('written', { required: true })}
+                  className={`form-control text-center marks ${errors.written ? 'error-input' : ''}`}
+                 
+                />
                           </div>
                           </td>
                         <td className='text-center'>
                           <div className='r1'>
-                            <input type="text" className='form-control text-center marks'/>
+                              <p>100</p>
                           </div>
                         </td>
                       </tr>
@@ -125,12 +206,18 @@ const EditForm = () => {
                         <td scope="row" className='text-center'>Oral</td>
                         <td className='text-center'>
                         <div className='r1'>
-                            <input type="text" className='form-control text-center marks '/>
+                        <input
+                  type="text"
+                  name="oral"
+                  {...register('oral', { required: true })}
+                  className={`form-control text-center marks ${errors.oral ? 'error-input' : ''}`}
+                 
+                />
                           </div>
                         </td>
                         <td className='text-center'>
                           <div className='r1'>
-                            <input type="text" className='form-control text-center marks '/>
+                            <p>100</p>
                           </div>
                         </td>
                       </tr>
@@ -138,12 +225,21 @@ const EditForm = () => {
                         <td scope="row" className='text-center'>Practical</td>
                         <td className='text-center'>
                         <div className='r1'>   
-                            <input type="text" className='form-control text-center marks'/>
+                        <input
+                  type="text"
+                  name="practical"
+                  {...register('practical', { required: true })}
+                  className={`form-control text-center marks ${errors.practical ? 'error-input' : ''}`}
+                 
+                />
+
+
+
                           </div>
                         </td>
                         <td className='text-center'>
                           <div className='r1'>
-                            <input type="text" className='form-control text-center marks '/>
+                            <p>100</p>
                           </div>
                         </td>
                       </tr>
@@ -151,12 +247,21 @@ const EditForm = () => {
                         <td scope="row" className='text-center'>Total</td>
                         <td className='text-center'>
                         <div className='r1'>
-                            <input type="text" className='form-control text-center marks'/>
+                                    <input
+                  type="text"
+                  name="total"
+                  {...register('total', { required: false })}
+                  className={`form-control text-center marks ${errors.total ? 'error-input' : ''}`}
+                 
+                />
+
+
+                
                           </div>
                         </td>
                         <td className='text-center'>
                         <div className='r1'>
-                            <input type="text" className='form-control text-center marks '/>
+                            <p>300</p>
                           </div>
                         </td>
                       </tr>
@@ -214,7 +319,7 @@ const EditForm = () => {
 
 
 
-            {/* <button type="submit" className="btn btn-primary">Save Changes</button> */}
+            <button type="submit" className="btn btn-primary">Save Changes</button>
             </form>
         </div>
 

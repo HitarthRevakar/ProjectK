@@ -24,8 +24,7 @@ const AdminApp = () => {
 debugger
         // Set the forms state with the fetched data
         setForms(formsData);
-        const user = formsData.filter(user => user.email == "kartikgupta1805@gmail.com")
-        console.log(user)
+
 
         // add images of candidates in admin below code is code to get the images from firebase 
         const storageRef = storage.ref();
