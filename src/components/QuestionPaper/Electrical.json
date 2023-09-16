@@ -173,5 +173,75 @@
       "b": "4 K ohm",
       "c": "2 M ohm",
       "d": "4 G ohm"
+    },
+    {
+      "question": "What is MSDS?",
+      "a": "Material safety data sheet",
+      "b": "Material safety danger sheet",
+      "c": "Material show data sheet",
+      "d": "All of above"
+    },
+    {
+      "question": "How many kg lift the material by manual material handling?",
+      "a": "30 kg",
+      "b": "35 kg",
+      "c": "25 kg",
+      "d": "18 kg"
+    },
+    {
+      "question": "From where start work at height activity",
+      "a": "2m",
+      "b": "1.8m",
+      "c": "1.5m",
+      "d": "1.2m"
+    },
+    {
+      "question": "What is work at height hazards?",
+      "a": "Fall of person",
+      "b": "Fall of material",
+      "c": "Collapse temporary platform",
+      "d": "All of the above"
+    },
+    {
+      "question": "When Scaffolding material certified?",
+      "a": "2 years",
+      "b": "3 years",
+      "c": "6 years",
+      "d": "1 years"
+    },
+    {
+      "question": "Fire extinguish method?",
+      "a": "Smothering",
+      "b": "Starvation",
+      "c": "Cooling",
+      "d": "All of the above"
+    },
+    {
+      "question": "What is class B confined space?",
+      "a": "Present of Inert gas",
+      "b": "Presence of toxic or flammable",
+      "c": "Non process equipment",
+      "d": "Deep above 1.2 meter"
+    },
+    {
+      "question": "IN SUBSTATION WHICH TYPE OF FIRE EXTINGUISHER ARE USED?",
+      "a": "Dry chemical powder",
+      "b": "CO2",
+      "c": "Both type",
+      "d": "None of above"
+    },
+    {
+      "question": "Line of fire example?",
+      "a": "",
+      "b": "",
+      "c": "",
+      "d": ""
+    },
+    {
+      "question": "What is Instrument department LOTO Color?",
+      "a": "Blue",
+      "b": "Red",
+      "c": "Yellow",
+      "d": "Black"
     }
   ]

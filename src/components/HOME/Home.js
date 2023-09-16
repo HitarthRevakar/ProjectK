@@ -8,7 +8,7 @@ import jsPDF from 'jspdf';
 import './home.css' 
 import questionsSet1 from '../QuestionPaper/Electrical.json';
 import questionsSet2 from '../QuestionPaper/Instrumentation.json';
-import { storage } from '../../firebase';
+import { firestore,storage } from '../../firebase';
 
 
 
@@ -126,6 +126,7 @@ function Home() {
 
   const handleGeneratePDF = async () => {
       // Upload the user's photo to Firebase Storage
+
       const storageRef = storage.ref();
       const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
     try {
@@ -139,6 +140,16 @@ function Home() {
       // Update the formData with the download URL
       formData.user_photo = downloadURL;
   
+
+      firestore.collection('candidate-info').add(formData)
+      .then((docRef) => {
+        console.log('Document written with ID: ', docRef.id);
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
+      });
+  
+
       // Create a new jsPDF instance
       const pdf = new jsPDF({unit: 'mm',
       format: 'a4',});
@@ -154,7 +165,7 @@ function Home() {
       pdf.addPage();
   
       // Assuming question is correctly defined and selectedOption is set
-      if (selectedOption !== null) {
+  
         const questions = selectedOption === 'option1' ? shuffleArray(questionsSet1) : shuffleArray(questionsSet2);
         let currentYPosition = 10;  // Initialize Y-coordinate for the new page
   
@@ -168,23 +179,21 @@ function Home() {
           pdf.text(`Question ${index + 1}: ${q.question}`, 10, currentYPosition);
           currentYPosition += 10;
   
-          pdf.text(`A) ${q.a}`, 20, currentYPosition);
+          pdf.text(`A) ${q.a}`, 10, currentYPosition);
           currentYPosition += 10;
   
-          pdf.text(`B) ${q.b}`, 20, currentYPosition);
+          pdf.text(`B) ${q.b}`, 10, currentYPosition);
           currentYPosition += 10;
   
-          pdf.text(`C) ${q.c}`, 20, currentYPosition);
+          pdf.text(`C) ${q.c}`, 10, currentYPosition);
           currentYPosition += 10;
   
-          pdf.text(`D) ${q.d}`, 20, currentYPosition);
-          currentYPosition += 10;  // Add more space before the next question
+          pdf.text(`D) ${q.d}`, 10, currentYPosition);
+          currentYPosition += 20;  // Add more space before the next question
         });
   
         pdf.save('generated.pdf');
-      } else {
-        alert('Please select an option !');
-      }
+   
 setSubmitted(false)
     } catch (error) {
       console.error('An error occurred:', error);
@@ -652,7 +661,7 @@ setSubmitted(false)
             </tr>
           </thead>
           <tbody>
-            {[1, 2, 3, 4, 5, 6].map((index) =>{submitted ? (
+            {[1, 2, 3, 4, 5, 6].map((index) => (
         <tr key={index}>
                 <td>
                  <input
@@ -687,7 +696,7 @@ setSubmitted(false)
                   </center>
                 </td>
               </tr> 
-            ): <></>})}
+            ))}
           </tbody>
         </table>
 
@@ -714,12 +723,15 @@ setSubmitted(false)
           <div className="d-flex gap-4">
             <div className="form-check">
               <input
-                className="form-check-input"
+                required
                 type="radio"
-                name="selectedOption"
                 id="option1"
-                value="option1"
-                onChange={() => handleRadioChange('option1')}
+                value="electrical"
+                name="test_type"
+                {...register('test_type', { required: false })}
+                className={` form-check-input ${
+                  errors.test_type ? 'error-input' : ''
+                   }`}
               />
               <label className="form-check-label" htmlFor="option1">
                 Electrical
@@ -727,12 +739,15 @@ setSubmitted(false)
             </div>
             <div className="form-check">
               <input
-                className="form-check-input"
+                required
                 type="radio"
-                name="selectedOption"
                 id="option2"
-                value="option2"
-                onChange={() => handleRadioChange('option2')}
+                value="instrumentation"
+                name="test_type"
+                    {...register('test_type', { required: false })}
+                    className={`form-check-input ${
+                      errors.test_type ? 'error-input' : ''
+                    }`}
               />
               <label className="form-check-label" htmlFor="option2">
                 Instrumentation
@@ -749,7 +764,7 @@ setSubmitted(false)
               handleGeneratePDF();
               setSubmitted(true)
             }}
-            disabled={!selectedOption}// Disable the button when no option is selected
+            // Disable the button when no option is selected
           >
             Submit
           </Button>
