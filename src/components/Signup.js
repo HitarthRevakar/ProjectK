@@ -7,6 +7,8 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+
   const [error, setError] = useState('');
   const { signUp } = useUserAuth();
   const navigate = useNavigate();
@@ -17,11 +19,11 @@ const Signup = () => {
 
     try {
       // Validate email and password here if needed
-      if (!email || !password || !firstName) {
+      if (!email || !password || !firstName || !lastName) {
         setError('Please fill in all fields.');
         return;
       }
-      await signUp(email, password, firstName);
+      await signUp(email, password, firstName, lastName);
       window.alert('You are Successfully Registered !');
       navigate('/');
     } catch (error) {
@@ -54,7 +56,7 @@ const Signup = () => {
                 First Name
               </label>
               <input
-                placeholder="Ex. Smith Parkar"
+                placeholder="Ex. Smith "
                 type="text"
                 className="input_field"
                 id="user_field"
@@ -67,12 +69,12 @@ const Signup = () => {
                 Last Name
               </label>
               <input
-                placeholder="Ex. Smith Parkar"
+                placeholder="Ex.  Parkar"
                 type="text"
                 className="input_field"
                 id="user_field"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
               />
             </div>
             <div className="input_container">

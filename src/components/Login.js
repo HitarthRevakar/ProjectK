@@ -14,8 +14,8 @@ const Login = () => {
       e.preventDefault();
       setError("");
       try {
-     let user =   await logIn(email, password);
-    localStorage.setItem("setItem", user)
+     let user = await logIn(email, password);
+    localStorage.setItem("user", JSON.stringify(user.user))
      debugger
         navigate("/home");
       } catch (err) {

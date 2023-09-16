@@ -41,14 +41,14 @@ export function UserAuthContextProvider({ children }) {
   //       console.error('Error creating user:', error);
   //     });
   // }
-  async function signUp(email, password, fName) {
+  async function signUp(email, password, firstName, lastName) {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       // Update the user's profile with the full name
       await updateProfile(userCredential.user, {
-        firstName: fName,
-        lastName: fName,
-
+        firstName: firstName,
+        lastName: lastName,
+        fullName: firstName + " " + lastName
       });
       setUser(userCredential.user); // Set the user in your context
       return userCredential.user; // Return the user object

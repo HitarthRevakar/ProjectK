@@ -84,6 +84,7 @@ function Home() {
   const handleLogout = async () => {
     try {
       await logOut();
+      localStorage.clear()
       navigate("/");
     } catch (error) {
       console.log(error.message);
