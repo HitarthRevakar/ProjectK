@@ -6,7 +6,7 @@ import '../App.css';
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [fName, setFName] = useState('');
+  const [firstName, setFirstName] = useState('');
   const [error, setError] = useState('');
   const { signUp } = useUserAuth();
   const navigate = useNavigate();
@@ -17,11 +17,11 @@ const Signup = () => {
 
     try {
       // Validate email and password here if needed
-      if (!email || !password || !fName) {
+      if (!email || !password || !firstName) {
         setError('Please fill in all fields.');
         return;
       }
-      await signUp(email, password, fName);
+      await signUp(email, password, firstName);
       window.alert('You are Successfully Registered !');
       navigate('/');
     } catch (error) {
@@ -51,15 +51,28 @@ const Signup = () => {
           <form className="form" onSubmit={handleSubmit}>
           <div className="input_container">
               <label className="input_label" htmlFor="user_field">
-                User Name
+                First Name
               </label>
               <input
                 placeholder="Ex. Smith Parkar"
                 type="text"
                 className="input_field"
                 id="user_field"
-                value={fName}
-                onChange={(e) => setFName(e.target.value)}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+            </div>
+            <div className="input_container">
+              <label className="input_label" htmlFor="user_field">
+                Last Name
+              </label>
+              <input
+                placeholder="Ex. Smith Parkar"
+                type="text"
+                className="input_field"
+                id="user_field"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
               />
             </div>
             <div className="input_container">

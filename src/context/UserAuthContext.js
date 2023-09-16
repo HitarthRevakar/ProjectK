@@ -46,7 +46,9 @@ export function UserAuthContextProvider({ children }) {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       // Update the user's profile with the full name
       await updateProfile(userCredential.user, {
-        displayName: fName,
+        firstName: fName,
+        lastName: fName,
+
       });
       setUser(userCredential.user); // Set the user in your context
       return userCredential.user; // Return the user object

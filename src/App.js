@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Home from '../src/components/HOME/Home';
 import AdminApp from './components/ADMIN/AdminApp';
 import EditForm from './components/ADMIN/EditForm/EditForm';
+import ProfilePage from './components/HOME/ProfilePage';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path='/signup' element={<Signup />} />
           <Route path='/admin' element={<AdminApp />} />
           <Route path='/edit/:id' element={<EditForm />} />
+          <Route path='/userprofile' element={<ProfilePage/>} />
           <Route path='/home' element={
           
               <Home />
