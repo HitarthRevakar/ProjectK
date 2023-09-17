@@ -7,10 +7,23 @@ import {Row , Col} from 'reactstrap'
 const AdminApp = () => {
   const [forms, setForms] = useState([]);
   let searchTxtRef = useRef()
-  const searchUser = () =>{
+  const searchUser = async () =>{
     let searchTxt = searchTxtRef.current.value;
-    let newForms = forms.filter(form => form?.contractor_name?.includes(searchTxt) || form.candidate_name.includes(searchTxt) || form.email.includes(searchTxt))
+    // Reference the "forms" collection in Firestore
+    const formsRef = firestore.collection('candidate-info');
+
+    // Fetch the documents in the "forms" collection
+    const snapshot = await formsRef.get();
+
+    // Map the documents to an array of data
+    const formsData = snapshot.docs.map((doc) => ({
+      id: doc.id, // Document ID
+      ...doc.data(), // Data inside the document
+    }));
+    let newForms = formsData.filter(form =>form?.contractor_name?.includes(searchTxt) || form.candidate_name.includes(searchTxt) || form.email.includes(searchTxt))
+    debugger
     setForms(newForms)
+    debugger
     
   }
   useEffect(() => {
@@ -67,6 +80,7 @@ const AdminApp = () => {
         id: doc.id, // Document ID
         ...doc.data(), // Data inside the document
       }));
+      
       debugger
       // Set the forms state with the fetched data
       setForms(formsData);
@@ -136,12 +150,16 @@ const AdminApp = () => {
         <td>{form.id_number}</td>
         <td>{form.candidate_name}</td>
         <td>{form.email}</td>
+       
         <td>
+        {!form.marksId?
           <button type="button" className="btn btn-primary">
             <Link to={`/edit/${form.id}`} style={{ color: 'white', textDecoration: 'none' }}>
-              Evaluate
+              Start Evaluation
             </Link>
           </button>
+          :<></>
+        }
         </td>
       </tr>
     ))}
