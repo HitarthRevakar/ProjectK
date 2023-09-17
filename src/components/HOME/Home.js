@@ -26,6 +26,7 @@ function Home() {
   const [modal, setModal] = useState(false);
   const [submitted, setSubmitted] = useState(false)
   const [isButtonVisible, setIsButtonVisible] = useState(true);
+  let [testtypeError, setTesttypeError] = useState("")
   const [indexCount, setIndexCount] = useState(1);
   const lastIndex = useRef(1);
   const navigate = useNavigate();
@@ -123,8 +124,10 @@ function Home() {
 
   const [selectedOption, setSelectedOption] = useState(null);
 
-  const handleRadioChange = (value) => {
-    setSelectedOption(value);
+  const handleRadioChange = (e) => {
+    debugger
+    setTesttypeError("")
+    setSelectedOption(e.target.value);
   };
 
   const shuffleArray = (array) => {
@@ -142,78 +145,90 @@ function Home() {
     setIsButtonVisible(false);
     const storageRef = storage.ref();
     const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
-    try {
+    if(selectedOption){
+      try {
 
-      await userPhotoRef.put(formData.user_photo[0]);
-
-      // Get the download URL of the uploaded photo
-      const downloadURL = await userPhotoRef.getDownloadURL();
-      console.log('Download URL:', downloadURL);
-
-      // Update the formData with the download URL
-      formData.user_photo = downloadURL;
-
-
-      firestore.collection('candidate-info').add(formData)
-        .then((docRef) => {
-          console.log('Document written with ID: ', docRef.id);
-        })
-        .catch((error) => {
-          console.error('Error adding document: ', error);
+        await userPhotoRef.put(formData.user_photo[0]);
+  
+        // Get the download URL of the uploaded photo
+        const downloadURL = await userPhotoRef.getDownloadURL();
+        console.log('Download URL:', downloadURL);
+  
+        // Update the formData with the download URL
+        formData.user_photo = downloadURL;
+  
+  
+        firestore.collection('candidate-info').add(formData)
+          .then((docRef) => {
+            toggle();
+            console.log('Document written with ID: ', docRef.id);
+          })
+          .catch((error) => {
+            console.error('Error adding document: ', error);
+          });
+  
+  
+        // Create a new jsPDF instance
+        const pdf = new jsPDF({
+          unit: 'mm',
+          format: 'a4',
         });
-
-
-      // Create a new jsPDF instance
-      const pdf = new jsPDF({
-        unit: 'mm',
-        format: 'a4',
-      });
-      pdf.setFontSize(10);
-
-      // Assuming imageRef.current is correctly defined
-      const canvas = await html2canvas(imageRef.current);
-
-        // const imageSrc = canvas.toDataURL('image/png');
-        // pdf.addImage(imageSrc, 'PNG', 10, 10, 190, 270);
-
-        // // Add a new page for the questions
-        // pdf.addPage();
-
-      // Assuming question is correctly defined and selectedOption is set
-
-      const questions = selectedOption === 'option1' ? shuffleArray(questionsSet1) : shuffleArray(questionsSet2);
-      let currentYPosition = 10;  // Initialize Y-coordinate for the new page
-
-      questions.forEach((q, index) => {
-        // Check if we need to add a new page
-        if (currentYPosition > 270) { // Check if Y-coordinate is beyond page's limit
-          pdf.addPage();
-          currentYPosition = 10; // Reset Y-coordinate for the new page
-        }
-        // testing
-        pdf.text(`Question ${index + 1}: ${q.question}`, 10, currentYPosition);
-        currentYPosition += 10;
-
-        pdf.text(`A) ${q.a}`, 10, currentYPosition);
-        currentYPosition += 10;
-
-        pdf.text(`B) ${q.b}`, 10, currentYPosition);
-        currentYPosition += 10;
-
-        pdf.text(`C) ${q.c}`, 10, currentYPosition);
-        currentYPosition += 10;
-
-        pdf.text(`D) ${q.d}`, 10, currentYPosition);
-        currentYPosition += 20;  // Add more space before the next question
-      });
-
-      pdf.save('generated.pdf');
-
-      setSubmitted(false)
-    } catch (error) {
-      console.error('An error occurred:', error);
-      alert('An error occurred while generating the PDF. Please try again.');
+        pdf.setFontSize(10);
+  
+        // Assuming imageRef.current is correctly defined
+        const canvas = await html2canvas(imageRef.current);
+  
+          // const imageSrc = canvas.toDataURL('image/png');
+          // pdf.addImage(imageSrc, 'PNG', 10, 10, 190, 270);
+  
+          // // Add a new page for the questions
+          // pdf.addPage();
+  
+        // Assuming question is correctly defined and selectedOption is set
+  
+        const questions = selectedOption === 'electrical' ? shuffleArray(questionsSet1) : shuffleArray(questionsSet2);
+        let currentYPosition = 10;  // Initialize Y-coordinate for the new page
+  
+        questions.forEach((q, index) => {
+          // Check if we need to add a new page
+          if (currentYPosition > 270) { // Check if Y-coordinate is beyond page's limit
+            pdf.addPage();
+            currentYPosition = 10; // Reset Y-coordinate for the new page
+          }
+          // testing
+          pdf.text(`Question ${index + 1}: ${q.question}`, 10, currentYPosition);
+          currentYPosition += 10;
+          if(q.a || q.b || q.c || q.d){
+            pdf.text(`A) ${q.a}`, 10, currentYPosition);
+            currentYPosition += 10;
+    
+            pdf.text(`B) ${q.b}`, 10, currentYPosition);
+            currentYPosition += 10;
+    
+            pdf.text(`C) ${q.c}`, 10, currentYPosition);
+            currentYPosition += 10;
+            pdf.text(`D) ${q.d}`, 10, currentYPosition);
+            currentYPosition += 20;  // Add more space before the next question
+          } else {
+            pdf.text(`Ans:`, 10, currentYPosition)
+            currentYPosition += 60
+          }
+      
+  
+         
+        });
+  
+        pdf.save('generated.pdf');
+  
+        setSubmitted(false)
+      } catch (error) { 
+        console.error('An error occurred:', error);
+        alert('An error occurred while generating the PDF. Please try again.');
+      }
+    } else {
+      setTesttypeError("Please select a examination type to continue!")
     }
+   
   };
 
   // for submit buton
@@ -741,6 +756,7 @@ function Home() {
                   required
                   type="radio"
                   id="option1"
+                  onClick={handleRadioChange}
                   value="electrical"
                   name="test_type"
                   {...register('test_type', { required: false })}
@@ -758,6 +774,7 @@ function Home() {
                   id="option2"
                   value="instrumentation"
                   name="test_type"
+                  onClick={handleRadioChange}
                   {...register('test_type', { required: false })}
                   className={`form-check-input ${errors.test_type ? 'error-input' : ''
                     }`}
@@ -767,16 +784,19 @@ function Home() {
                 </label>
               </div>
             </div>
+            {testtypeError ? <small style={{ color:"red"}}>{testtypeError}</small>:<></>}
           </ModalBody>
           <ModalFooter>
             <Button
               color="primary"
               className='rounned-0'
+              
               onClick={() => {
-                toggle();
+                
                 handleGeneratePDF();
                 setSubmitted(true)
               }}
+             
             // Disable the button when no option is selected
             >
               Submit
