@@ -265,7 +265,7 @@ function Home() {
         
         <button type="button" className="btn btn-info m-2">
                   <Link to={`/admin`} style={{ color: 'white', textDecoration: 'none' }}>
-                    User List
+                    All Users
                   </Link>
                 </button>
         
