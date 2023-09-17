@@ -1,3 +1,5 @@
+import React, { useRef, useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useUserAuth } from "../../context/UserAuthContext";
@@ -252,7 +254,15 @@ function Home() {
   return (
     <div className="container my-3">
       <div className='navbar bg-body-tertiary  d-flex justify-content-between  py-2 px-3 '>
+        
         <span className='fs-5'>Welcome,&nbsp;<i className="bi bi-person-circle text-secondary "></i>&nbsp;<span className='text-success fw-bold text-decoration-underline'>{user && user.firstName}</span></span>
+        
+        <button type="button" className="btn btn-info m-2">
+                  <Link to={`/admin`} style={{ color: 'white', textDecoration: 'none' }}>
+                    User List
+                  </Link>
+                </button>
+        
         <span><button className="btn btn-outline-danger px-3 rounded-0" onClick={handleLogout}>
           <i class="bi bi-box-arrow-in-left "></i>&nbsp;Log Out
         </button></span>
@@ -673,7 +683,7 @@ function Home() {
               <th>FROM</th>
               <th>TILL</th>
               <th></th>
-              <th></th>
+              <th><button type="button" className='btn btn-primary ml-5'  onClick={handleAddIndex}>Add +</button></th>
             </tr>
           </thead>
 
@@ -715,21 +725,19 @@ function Home() {
                 </td>
                 <td>
                 {isButtonVisible && (
-                <button type="button" className='mt-2 button-color ml-5'  onClick={handleAddIndex}>Add +</button>
+                <button type="button" className='mt-1 btn btn-primary ml-5'  onClick={handleAddIndex}>Add +</button>
                  )}
                 </td>
                 <td>
                 {isButtonVisible && (
-                <button type="button" className='mt-2'  onClick={handleClearIndex}>Clear</button>
+                <button type="button" className='mt-1 btn btn-danger'  onClick={handleClearIndex}>Clear</button>
                  )}
                 </td>
                 
               </tr>
             ))}
           </tbody>
-         
         </table>
-
         {/* FOR OFFICE USE */}
         <table>
           <tbody>
@@ -739,7 +747,6 @@ function Home() {
             </tr>
           </tbody>
         </table>
-
         {/* SUBMIT BUTTON */}
         <div className='d-flex justify-content-center w-100 '><button type="submit" className="btn btn-outline-secondary shadow border-1 rounded-2 px-4 py-2">
           Submit <span class="bi bi-send"></span>
@@ -760,8 +767,7 @@ function Home() {
                   value="electrical"
                   name="test_type"
                   {...register('test_type', { required: false })}
-                  className={` form-check-input ${errors.test_type ? 'error-input' : ''
-                    }`}
+                  className={` form-check-input ${errors.test_type ? 'error-input' : ''}`}
                 />
                 <label className="form-check-label" htmlFor="option1">
                   Electrical
