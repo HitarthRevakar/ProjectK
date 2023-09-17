@@ -5,10 +5,11 @@ import { useForm } from 'react-hook-form';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import './home.css' 
+import './home.css'
 import questionsSet1 from '../QuestionPaper/Electrical.json';
 import questionsSet2 from '../QuestionPaper/Instrumentation.json';
-import { firestore,storage } from '../../firebase';
+import { firestore, storage } from '../../firebase';
+
 
 
 
@@ -23,7 +24,10 @@ function Home() {
  
   
   const [modal, setModal] = useState(false);
-  const [submitted , setSubmitted] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+  const [isButtonVisible, setIsButtonVisible] = useState(true);
+  const [indexCount, setIndexCount] = useState(1);
+  const lastIndex = useRef(1);
   const navigate = useNavigate();
   let imageRef = useRef();
   const {
@@ -33,8 +37,8 @@ function Home() {
   } = useForm();
 
   const initialFormData = {
-    contractor_name:'',
-    trade:'',
+    contractor_name: '',
+    trade: '',
     discipline: '',
     candidate_name: '',
     user_photo: null,
@@ -116,7 +120,7 @@ function Home() {
       setSelectedPhoto(null);
     }
   }
- 
+
   const [selectedOption, setSelectedOption] = useState(null);
 
   const handleRadioChange = (value) => {
@@ -134,81 +138,84 @@ function Home() {
 
 
   const handleGeneratePDF = async () => {
-      // Upload the user's photo to Firebase Storage
-
-      const storageRef = storage.ref();
-      const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
+    // Upload the user's photo to Firebase Storage
+    setIsButtonVisible(false);
+    const storageRef = storage.ref();
+    const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
     try {
 
       await userPhotoRef.put(formData.user_photo[0]);
-  
+
       // Get the download URL of the uploaded photo
       const downloadURL = await userPhotoRef.getDownloadURL();
       console.log('Download URL:', downloadURL);
-  
+
       // Update the formData with the download URL
       formData.user_photo = downloadURL;
-    
+
+
       firestore.collection('candidate-info').add(formData)
-      .then((docRef) => {
-        console.log('Document written with ID: ', docRef.id);
-      })
-      .catch((error) => {
-        console.error('Error adding document: ', error);
-      });
-  
+        .then((docRef) => {
+          console.log('Document written with ID: ', docRef.id);
+        })
+        .catch((error) => {
+          console.error('Error adding document: ', error);
+        });
+
 
       // Create a new jsPDF instance
-      const pdf = new jsPDF({unit: 'mm',
-      format: 'a4',});
-      pdf.setFontSize(10); 
+      const pdf = new jsPDF({
+        unit: 'mm',
+        format: 'a4',
+      });
+      pdf.setFontSize(10);
 
       // Assuming imageRef.current is correctly defined
       const canvas = await html2canvas(imageRef.current);
 
-      const imageSrc = canvas.toDataURL('image/png');
-      pdf.addImage(imageSrc, 'PNG', 10, 10, 190, 270);
-  
-      // Add a new page for the questions
-      pdf.addPage();
-  
+        // const imageSrc = canvas.toDataURL('image/png');
+        // pdf.addImage(imageSrc, 'PNG', 10, 10, 190, 270);
+
+        // // Add a new page for the questions
+        // pdf.addPage();
+
       // Assuming question is correctly defined and selectedOption is set
-  
-        const questions = selectedOption === 'option1' ? shuffleArray(questionsSet1) : shuffleArray(questionsSet2);
-        let currentYPosition = 10;  // Initialize Y-coordinate for the new page
-  
-        questions.forEach((q, index) => {
-          // Check if we need to add a new page
-          if (currentYPosition > 270) { // Check if Y-coordinate is beyond page's limit
-            pdf.addPage();
-            currentYPosition = 10; // Reset Y-coordinate for the new page
-          }
-  // testing
-          pdf.text(`Question ${index + 1}: ${q.question}`, 10, currentYPosition);
-          currentYPosition += 10;
-  
-          pdf.text(`A) ${q.a}`, 10, currentYPosition);
-          currentYPosition += 10;
-  
-          pdf.text(`B) ${q.b}`, 10, currentYPosition);
-          currentYPosition += 10;
-  
-          pdf.text(`C) ${q.c}`, 10, currentYPosition);
-          currentYPosition += 10;
-  
-          pdf.text(`D) ${q.d}`, 10, currentYPosition);
-          currentYPosition += 20;  // Add more space before the next question
-        });
-  
-        pdf.save('generated.pdf');
-   
-setSubmitted(false)
+
+      const questions = selectedOption === 'option1' ? shuffleArray(questionsSet1) : shuffleArray(questionsSet2);
+      let currentYPosition = 10;  // Initialize Y-coordinate for the new page
+
+      questions.forEach((q, index) => {
+        // Check if we need to add a new page
+        if (currentYPosition > 270) { // Check if Y-coordinate is beyond page's limit
+          pdf.addPage();
+          currentYPosition = 10; // Reset Y-coordinate for the new page
+        }
+        // testing
+        pdf.text(`Question ${index + 1}: ${q.question}`, 10, currentYPosition);
+        currentYPosition += 10;
+
+        pdf.text(`A) ${q.a}`, 10, currentYPosition);
+        currentYPosition += 10;
+
+        pdf.text(`B) ${q.b}`, 10, currentYPosition);
+        currentYPosition += 10;
+
+        pdf.text(`C) ${q.c}`, 10, currentYPosition);
+        currentYPosition += 10;
+
+        pdf.text(`D) ${q.d}`, 10, currentYPosition);
+        currentYPosition += 20;  // Add more space before the next question
+      });
+
+      pdf.save('generated.pdf');
+
+      setSubmitted(false)
     } catch (error) {
       console.error('An error occurred:', error);
       alert('An error occurred while generating the PDF. Please try again.');
     }
   };
-  
+
   // for submit buton
   const toggle = () => setModal(!modal);
 
@@ -218,40 +225,46 @@ setSubmitted(false)
     setFormData(data)
     setModal(!modal)
   };
-  function GoToProfilePage(){
-    navigate("/user-profile")
-  }
+
+  const handleAddIndex = () => {
+    lastIndex.current += 1;
+    setIndexCount(lastIndex.current);
+  };
+  const handleClearIndex = () => {
+    lastIndex.current -= 1;
+    setIndexCount(lastIndex.current);
+  };
   return (
     <div className="container my-3">
-    <div className='navbar bg-body-tertiary  d-flex justify-content-between  py-2 px-3 '>
-            <span className='fs-5 d-flex'>Welcome,&nbsp;<div onClick={GoToProfilePage}><i className="bi bi-person-circle text-secondary "></i>&nbsp;<span className='text-success fw-bold text-decoration-underline'>{userData && userData.fullName}</span></div></span>
-            <span><button className="btn btn-outline-danger px-3 rounded-0" onClick={handleLogout}>
-            <i class="bi bi-box-arrow-in-left "></i>&nbsp;Log Out
+      <div className='navbar bg-body-tertiary  d-flex justify-content-between  py-2 px-3 '>
+        <span className='fs-5'>Welcome,&nbsp;<i className="bi bi-person-circle text-secondary "></i>&nbsp;<span className='text-success fw-bold text-decoration-underline'>{user && user.firstName}</span></span>
+        <span><button className="btn btn-outline-danger px-3 rounded-0" onClick={handleLogout}>
+          <i class="bi bi-box-arrow-in-left "></i>&nbsp;Log Out
         </button></span>
-          </div>
-          <div className='text-center'>
-         
-          </div>
+      </div>
+      <div className='text-center'>
+
+      </div>
       <form ref={imageRef} onSubmit={handleSubmit(onSubmit)}>
         <div className="table-responsive" >
           <table className="table table-striped table-responsive">
             <tbody>
-            <tr className='text-center align-items-center' style={{height:"140px", backgroundColor:"white"}}>
+              <tr className='text-center align-items-center' style={{ height: "140px", backgroundColor: "white" }}>
                 <td className="" colSpan="1">
-                  <img src={process.env.PUBLIC_URL + '/logo.jpg'} style={{border:"none"}}  className='mt-2'  alt="Logo" />
+                  <img src={process.env.PUBLIC_URL + '/logo.jpg'} style={{ border: "none" }} className='mt-2' alt="Logo" />
                 </td>
-                <td style={{fontFamily:"Times New Roman", fontWeight:"bolder", color:"#0060B0"}} colSpan="2" className='mt-1 pt-2 align-items-center'>
-               <div className='align-items-center mt-5 '><h4 className='fw-bold'>TECHNO CONCEPTS INSTRUMENTS PRIVATE LIMITED VALIDATION CENTER, JAMNAGAR</h4>  </div>
+                <td style={{ fontFamily: "Times New Roman", fontWeight: "bolder", color: "#0060B0" }} colSpan="2" className='mt-1 pt-2 align-items-center'>
+                  <div className='align-items-center mt-5 '><h4 className='fw-bold'>TECHNO CONCEPTS INSTRUMENTS PRIVATE LIMITED VALIDATION CENTER, JAMNAGAR</h4>  </div>
                 </td>
                 <td colSpan="1">
-                <div className='my-3 img-fluid ' id="photo-container">
-                {selectedPhoto ? (
-                  <img src={selectedPhoto} className='border-dark' alt="User Photo" width="160" height="160" />
-                ) : (
-                  <div className='text-center align-items-center'><p>PHOTO</p></div>
-                  
-                )}
-                </div>
+                  <div className='my-3 img-fluid ' id="photo-container">
+                    {selectedPhoto ? (
+                      <img src={selectedPhoto} className='border-dark' alt="User Photo" width="160" height="160" />
+                    ) : (
+                      <div className='text-center align-items-center'><p>PHOTO</p></div>
+
+                    )}
+                  </div>
                 </td>
               </tr>
               <tr>
@@ -261,9 +274,8 @@ setSubmitted(false)
                     type="text"
                     name="contractor_name"
                     {...register('contractor_name', { required: true })}
-                    className={`form-control ${
-                      errors.contractor_name ? 'error-input' : ''
-                    }`}
+                    className={`form-control ${errors.contractor_name ? 'error-input' : ''
+                      }`}
                   />
                 </td>
               </tr>
@@ -274,10 +286,10 @@ setSubmitted(false)
                     type="text"
                     name="trade"
                     className='form-control'
-                    // {...register('trade', { required: true })}
-                    // className={`form-control ${
-                    //   errors.trade ? 'error-input' : ''
-                    // }`}
+                  // {...register('trade', { required: true })}
+                  // className={`form-control ${
+                  //   errors.trade ? 'error-input' : ''
+                  // }`}
                   />
                 </td>
               </tr>
@@ -288,10 +300,10 @@ setSubmitted(false)
                     type="text"
                     name="discipline"
                     className='form-control'
-                    // {...register('discipline', { required: true })}
-                    // className={`form-control ${
-                    //   errors.discipline ? 'error-input' : ''
-                    // }`}
+                  // {...register('discipline', { required: true })}
+                  // className={`form-control ${
+                  //   errors.discipline ? 'error-input' : ''
+                  // }`}
                   />
                 </td>
               </tr>
@@ -307,39 +319,36 @@ setSubmitted(false)
                     type="text"
                     name="candidate_name"
                     {...register('candidate_name', { required: true })}
-                    className={`form-control  ${
-                      errors.candidate_name ? 'error-input' : ''
-                    }`}
+                    className={`form-control  ${errors.candidate_name ? 'error-input' : ''
+                      }`}
                   />
                 </td>
-                {!submitted ?<>
-                <td colSpan="1">UPLOAD PHOTO:</td>
-                <td colSpan="1">
-                  <input
-                    accept="image/*"
-                    type="file"
-                    name="user_photo"
-                    {...register('user_photo', { required: true })}
-                    className={`form-control ${
-                      errors.user_photo ? 'error-input' : ''
-                    }`}
-                    onChange={(e) => displayUserPhoto(e)}
-                  />
-                </td></>:<></>}
+               <>
+                  <td colSpan="1">UPLOAD PHOTO:</td>
+                  <td colSpan="1">
+                    <input
+                      accept="image/*"
+                      type="file"
+                      name="user_photo"
+                      {...register('user_photo', { required: true })}
+                      className={`form-control ${errors.user_photo ? 'error-input' : ''
+                        }`}
+                      onChange={(e) => displayUserPhoto(e)}
+                    />
+                  </td></> 
               </tr>
               {/* Add more PERSONAL DETAILS fields here */}
 
               {/* CONTACT INFORMATION */}
               <tr>
-                <td>I.D NUMBER <br/>(ANY GOVT. APPROVED):</td>
+                <td>I.D NUMBER <br />(ANY GOVT. APPROVED):</td>
                 <td>
                   <input
                     type="text"
                     name="id_number"
                     {...register('id_number', { required: true })}
-                    className={`form-control ${
-                      errors.id_number ? 'error-input' : ''
-                    }`}
+                    className={`form-control ${errors.id_number ? 'error-input' : ''
+                      }`}
                   />
                 </td>
                 <td>CONTACT NO:</td>
@@ -348,9 +357,8 @@ setSubmitted(false)
                     type="text"
                     name="contact"
                     {...register('contact', { required: true })}
-                    className={`form-control ${
-                      errors.contact ? 'error-input' : ''
-                    }`}
+                    className={`form-control ${errors.contact ? 'error-input' : ''
+                      }`}
                   />
                 </td>
               </tr>
@@ -364,9 +372,8 @@ setSubmitted(false)
                     type="email"
                     name="email"
                     {...register('email', { required: true })}
-                    className={`form-control ${
-                      errors.email ? 'error-input' : ''
-                    }`}
+                    className={`form-control ${errors.email ? 'error-input' : ''
+                      }`}
                   />
                 </td>
                 <td>NATIONALITY:</td>
@@ -375,9 +382,8 @@ setSubmitted(false)
                     type="text"
                     name="nationality"
                     {...register('nationality', { required: true })}
-                    className={`form-control ${
-                      errors.nationality ? 'error-input' : ''
-                    }`}
+                    className={`form-control ${errors.nationality ? 'error-input' : ''
+                      }`}
                   />
                 </td>
               </tr>
@@ -388,9 +394,8 @@ setSubmitted(false)
                     type="text"
                     name="state"
                     {...register('state', { required: true })}
-                    className={`form-control ${
-                      errors.state ? 'error-input' : ''
-                    }`}
+                    className={`form-control ${errors.state ? 'error-input' : ''
+                      }`}
                   />
                 </td>
                 <td>MARITAL STATUS:</td>
@@ -398,9 +403,8 @@ setSubmitted(false)
                   <select
                     name="marital_status"
                     {...register('marital_status', { required: true })}
-                    className={`form-select ${
-                      errors.marital_status ? 'error-input' : ''
-                    }`}
+                    className={`form-select ${errors.marital_status ? 'error-input' : ''
+                      }`}
                   >
                     <option value="">Select an option</option>
                     <option value="single">Single</option>
@@ -415,9 +419,8 @@ setSubmitted(false)
                     type="date"
                     name="dob"
                     {...register('dob', { required: true })}
-                    className={`form-control ${
-                      errors.dob ? 'error-input' : ''
-                    }`}
+                    className={`form-control ${errors.dob ? 'error-input' : ''
+                      }`}
                   />
                 </td>
               </tr>
@@ -428,9 +431,9 @@ setSubmitted(false)
 
         {/* LANGUAGES KNOWN */}
         <table className="table table-responsive">
-        
+
           <thead>
-          
+
             <tr>
               <th colSpan="5">LANGUAGES KNOWN:</th>
             </tr>
@@ -451,8 +454,7 @@ setSubmitted(false)
                   value="english"
                   name="read"
                   {...register('read', { required: true })}
-                  className={` ${
-                      errors.read ? 'error-input' : ''
+                  className={` ${errors.read ? 'error-input' : ''
                     }`}
                 />
               </td>
@@ -463,8 +465,7 @@ setSubmitted(false)
                   value="hindi"
 
                   {...register('read', { required: true })}
-                  className={` ${
-                      errors.read ? 'error-input' : ''
+                  className={` ${errors.read ? 'error-input' : ''
                     }`}
                 />
               </td>
@@ -474,8 +475,7 @@ setSubmitted(false)
                   value="gujarati"
                   name="language"
                   {...register('read', { required: true })}
-                  className={` ${
-                      errors.read ? 'error-input' : ''
+                  className={` ${errors.read ? 'error-input' : ''
                     }`}
                 />
               </td>
@@ -485,8 +485,7 @@ setSubmitted(false)
                   value="other"
                   name="language"
                   {...register('read', { required: true })}
-                  className={` ${
-                      errors.read ? 'error-input' : ''
+                  className={` ${errors.read ? 'error-input' : ''
                     }`}
                 />
               </td>
@@ -502,8 +501,7 @@ setSubmitted(false)
                   value="english"
                   name="language"
                   {...register('write', { required: true })}
-                  className={` ${
-                      errors.write ? 'error-input' : ''
+                  className={` ${errors.write ? 'error-input' : ''
                     }`}
                 />
               </td>
@@ -514,8 +512,7 @@ setSubmitted(false)
                   value="hindi"
 
                   {...register('write', { required: true })}
-                  className={` ${
-                      errors.write ? 'error-input' : ''
+                  className={` ${errors.write ? 'error-input' : ''
                     }`}
                 />
               </td>
@@ -525,8 +522,7 @@ setSubmitted(false)
                   value="gujarati"
                   name="language"
                   {...register('write', { required: true })}
-                  className={` ${
-                      errors.write ? 'error-input' : ''
+                  className={` ${errors.write ? 'error-input' : ''
                     }`}
                 />
               </td>
@@ -536,8 +532,7 @@ setSubmitted(false)
                   value="other"
                   name="language"
                   {...register('write', { required: true })}
-                  className={` ${
-                      errors.write ? 'error-input' : ''
+                  className={` ${errors.write ? 'error-input' : ''
                     }`}
                 />
               </td>
@@ -553,8 +548,7 @@ setSubmitted(false)
                   value="english"
                   name="language"
                   {...register('speak', { required: true })}
-                  className={` ${
-                      errors.speak ? 'error-input' : ''
+                  className={` ${errors.speak ? 'error-input' : ''
                     }`}
                 />
               </td>
@@ -565,8 +559,7 @@ setSubmitted(false)
                   value="hindi"
 
                   {...register('speak', { required: true })}
-                  className={` ${
-                      errors.speak ? 'error-input' : ''
+                  className={` ${errors.speak ? 'error-input' : ''
                     }`}
                 />
               </td>
@@ -576,8 +569,7 @@ setSubmitted(false)
                   value="gujarati"
                   name="language"
                   {...register('speak', { required: true })}
-                  className={` ${
-                      errors.speak ? 'error-input' : ''
+                  className={` ${errors.speak ? 'error-input' : ''
                     }`}
                 />
               </td>
@@ -587,8 +579,7 @@ setSubmitted(false)
                   value="other"
                   name="language"
                   {...register('speak', { required: true })}
-                  className={` ${
-                      errors.speak ? 'error-input' : ''
+                  className={` ${errors.speak ? 'error-input' : ''
                     }`}
                 />
               </td>
@@ -612,8 +603,7 @@ setSubmitted(false)
                   type="text"
                   name="academic_qualification"
                   {...register('academic_qualification', { required: true })}
-                  className={`form-control ${
-                      errors.academic_qualification ? 'error-input' : ''
+                  className={`form-control ${errors.academic_qualification ? 'error-input' : ''
                     }`}
                 />
               </td>
@@ -625,7 +615,7 @@ setSubmitted(false)
                   type="text"
                   name="other_qualification"
                   {...register('other_qualification')}
-                  
+
                 />
               </td>
             </tr>
@@ -650,8 +640,7 @@ setSubmitted(false)
                   type="text"
                   name="total_experience"
                   {...register('total_experience', { required: true })}
-                  className={`form-control ${
-                      errors.total_experience ? 'error-input' : ''
+                  className={`form-control ${errors.total_experience ? 'error-input' : ''
                     }`}
                 />
               </td>
@@ -668,13 +657,16 @@ setSubmitted(false)
               <th>DESIGNATION</th>
               <th>FROM</th>
               <th>TILL</th>
+              <th></th>
+              <th></th>
             </tr>
           </thead>
+
           <tbody>
-            {[1, 2, 3, 4, 5, 6].map((index) => (
-        <tr key={index}>
+            {[...Array(indexCount)].map((_, index) => (
+              <tr key={index}>
                 <td>
-                 <input
+                  <input
                     type="text"
                     name={`company_name_${index}`}
                     {...register(`company_name_${index}`)}
@@ -704,10 +696,23 @@ setSubmitted(false)
                       {...register(`till_date_${index}`)}
                     />
                   </center>
+                  
                 </td>
-              </tr> 
+                <td>
+                {isButtonVisible && (
+                <button type="button" className='mt-2 button-color ml-5'  onClick={handleAddIndex}>Add +</button>
+                 )}
+                </td>
+                <td>
+                {isButtonVisible && (
+                <button type="button" className='mt-2'  onClick={handleClearIndex}>Clear</button>
+                 )}
+                </td>
+                
+              </tr>
             ))}
           </tbody>
+         
         </table>
 
         {/* FOR OFFICE USE */}
@@ -725,76 +730,74 @@ setSubmitted(false)
           Submit <span class="bi bi-send"></span>
         </button></div>
         <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>MCQ Examination Test</ModalHeader>
-        <ModalBody>
-          <p className='mb-3'>
-            <span className="text-danger">Please Select Your Examination Subject Carefully*</span>
-          </p>
-          <div className="d-flex gap-4">
-            <div className="form-check">
-              <input
-                required
-                type="radio"
-                id="option1"
-                value="electrical"
-                name="test_type"
-                {...register('test_type', { required: false })}
-                className={` form-check-input ${
-                  errors.test_type ? 'error-input' : ''
-                   }`}
-              />
-              <label className="form-check-label" htmlFor="option1">
-                Electrical
-              </label>
-            </div>
-            <div className="form-check">
-              <input
-                required
-                type="radio"
-                id="option2"
-                value="instrumentation"
-                name="test_type"
-                    {...register('test_type', { required: false })}
-                    className={`form-check-input ${
-                      errors.test_type ? 'error-input' : ''
+          <ModalHeader toggle={toggle}>MCQ Examination Test</ModalHeader>
+          <ModalBody>
+            <p className='mb-3'>
+              <span className="text-danger">Please Select Your Examination Subject Carefully*</span>
+            </p>
+            <div className="d-flex gap-4">
+              <div className="form-check">
+                <input
+                  required
+                  type="radio"
+                  id="option1"
+                  value="electrical"
+                  name="test_type"
+                  {...register('test_type', { required: false })}
+                  className={` form-check-input ${errors.test_type ? 'error-input' : ''
                     }`}
-              />
-              <label className="form-check-label" htmlFor="option2">
-                Instrumentation
-              </label>
+                />
+                <label className="form-check-label" htmlFor="option1">
+                  Electrical
+                </label>
+              </div>
+              <div className="form-check">
+                <input
+                  required
+                  type="radio"
+                  id="option2"
+                  value="instrumentation"
+                  name="test_type"
+                  {...register('test_type', { required: false })}
+                  className={`form-check-input ${errors.test_type ? 'error-input' : ''
+                    }`}
+                />
+                <label className="form-check-label" htmlFor="option2">
+                  Instrumentation
+                </label>
+              </div>
             </div>
-          </div>
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            color="primary"
-            className='rounned-0'
-            onClick={() => {
-              toggle();
-              handleGeneratePDF();
-              setSubmitted(true)
-            }}
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              color="primary"
+              className='rounned-0'
+              onClick={() => {
+                toggle();
+                handleGeneratePDF();
+                setSubmitted(true)
+              }}
             // Disable the button when no option is selected
-          >
-            Submit
-          </Button>
-          <Button color="secondary" onClick={toggle}>
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Modal>
+            >
+              Submit
+            </Button>
+            <Button color="secondary" onClick={toggle}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </Modal>
       </form>
 
-    <div class="container my-4 text-start">
+      <div class="container my-4 text-start">
         <h4>NOTE:</h4>
-      <ul>
-        <li>CANDIDATE SHOULD REPORT WITH BASIC PPE'S</li>
-        <li>ATTACH ALL RELEVANT EDUCATIONAL AND EXPERIENCE CERTIFICATES WITH THIS FORM</li>
-        <li>CANDIDATE ARE REQUESTED TO STAY WITHIN THE SITE PREMISES FOR THE WHOLE DAY</li>
-      </ul>
-    </div>
+        <ul>
+          <li>CANDIDATE SHOULD REPORT WITH BASIC PPE'S</li>
+          <li>ATTACH ALL RELEVANT EDUCATIONAL AND EXPERIENCE CERTIFICATES WITH THIS FORM</li>
+          <li>CANDIDATE ARE REQUESTED TO STAY WITHIN THE SITE PREMISES FOR THE WHOLE DAY</li>
+        </ul>
+      </div>
 
-  </div>
+    </div>
 
   );
 }

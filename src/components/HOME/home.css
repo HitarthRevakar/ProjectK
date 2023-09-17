@@ -60,33 +60,12 @@ input[type="email"],
 input[type="date"],
 select {
     width: 100%;
-    padding: 5px;
+    padding: 3px;
     margin: 5px 0;
 }
-
+.button-color{
+    color: rgb(255, 255, 255);
+    background-color:  #0061b0d9;
+}
 /* Style for checkboxes and radio buttons */
-input[type="checkbox"],
-input[type="radio"] {
-    margin: 0;
-}
-table.GeneratedTable {
-    width: 100%;
-    background-color: #ffffff;
-    border-collapse: collapse;
-    border-width: 0px;
-}
 
-table.GeneratedTable td,
-table.GeneratedTable th {
-    border-width: 1px;
-    border-color: #a0a29e;
-    border-style: outset;
-    padding: 8px;
-}
-
-/* Responsive table */
-@media screen and (max-width: 600px) {
-    table, th, td {
-        font-size: 14px;
-    }
-}

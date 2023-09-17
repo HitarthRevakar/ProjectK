@@ -24,20 +24,20 @@ const AdminApp = () => {
 debugger
         // Set the forms state with the fetched data
         setForms(formsData);
+        debugger
 
-
-        // add images of candidates in admin below code is code to get the images from firebase 
-        const storageRef = storage.ref();
-        const userPhotoRef = storageRef.child(`user_photos/${formsData.user_photo[0].name}`);
+        // // add images of candidates in admin below code is code to get the images from firebase 
+        // const storageRef = storage.ref();
+        // const userPhotoRef = storageRef.child(`user_photos/${formsData.user_photo[0].name}`);
       
-        await userPhotoRef.put(formsData.user_photo[0]);
+        // await userPhotoRef.put(formsData.user_photo[0]);
       
-        // Get the download URL of the uploaded photo
-        const downloadURL = await userPhotoRef.getDownloadURL();
-        console.log('Download URL:', downloadURL);
+        // // Get the download URL of the uploaded photo
+        // const downloadURL = await userPhotoRef.getDownloadURL();
+        // console.log('Download URL:', downloadURL);
       
-        // Update the formData with the download URL
-        formsData.user_photo = downloadURL;
+        // // Update the formData with the download URL
+        // formsData.user_photo = downloadURL;
 
       } catch (error) {
         console.error('Error fetching forms: ', error);
@@ -87,7 +87,10 @@ debugger
                 <Link to={`/edit/${form.id}`} className=" text-decoration-none">
                   <p className='border-bottom text-dark'>{form.email}</p>
                 </Link>
-              </div>       
+              </div>   
+              <div>
+                
+                </div>    
             </div>
           ))}
 

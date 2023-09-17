@@ -20,7 +20,8 @@ const EditForm = () => {
   });
 
   useEffect(()=>{
-let userId = id;
+    let userId = id;
+    debugger
       const resultRef = firestore.collection('candidate-marks')
     async  function fetchResult(){
       const snapshot = await resultRef.get();
@@ -95,10 +96,10 @@ let userId = id;
 
   }
   useEffect(() => {
-    setValue('written', result.written);
-    setValue('oral', result.oral);
-    setValue('practical', result.practical);
-    setValue('total', result.total);
+    setValue('written', result?.written);
+    setValue('oral', result?.oral);
+    setValue('practical', result?.practical);
+    setValue('total', result?.total);
 
   }, [ result]);
   // Function to handle form submission (update candidate data)
@@ -120,7 +121,6 @@ let userId = id;
   //   }
   // };
 
-  document.addEventListener("DOMContentLoaded", function () {
     function calculateTotal() {
       debugger
       // Define your fields by their 'name' attributes
@@ -142,11 +142,11 @@ let userId = id;
     }
 
     // Attach event listeners to each input field
-    document.querySelectorAll(".marks").forEach(function (input) {
-      input.addEventListener("input", calculateTotal);
-    });
+   
+  
+  document.querySelectorAll(".marks").forEach(function (input) {
+    input.addEventListener("input", calculateTotal);
   });
-
   return (
     <div className="my-4" id="editCandidate">
       <div className="container">
