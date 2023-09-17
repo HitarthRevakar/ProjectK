@@ -1,7 +1,6 @@
-import React, { useRef, useState } from 'react';
+
 import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from "react-router-dom";
 import { useUserAuth } from "../../context/UserAuthContext";
 import { useForm } from 'react-hook-form';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
@@ -36,6 +35,7 @@ function Home() {
   const {
     register,
     handleSubmit,
+    getValues ,
     formState: { errors },
   } = useForm();
 
@@ -221,7 +221,7 @@ function Home() {
         });
   
         pdf.save('generated.pdf');
-  
+        debugger
         setSubmitted(false)
       } catch (error) { 
         console.error('An error occurred:', error);
@@ -244,8 +244,10 @@ function Home() {
   };
 
   const handleAddIndex = () => {
-    lastIndex.current += 1;
-    setIndexCount(lastIndex.current);
+   
+     lastIndex.current += 1;
+      setIndexCount(lastIndex.current);
+
   };
   const handleClearIndex = () => {
     lastIndex.current -= 1;
@@ -725,7 +727,17 @@ function Home() {
                 </td>
                 <td>
                 {isButtonVisible && (
-                <button type="button" className='mt-1 btn btn-primary ml-5'  onClick={handleAddIndex}>Add +</button>
+                <button type="button" className='mt-1 btn btn-primary ml-5' 
+                onClick={() => {
+                  
+                  const companyName = getValues(`company_name_${index}`);
+                  debugger
+                  if (companyName) {
+                    debugger
+                    handleAddIndex();
+                  }
+                }}
+                >Add +</button>
                  )}
                 </td>
                 <td>

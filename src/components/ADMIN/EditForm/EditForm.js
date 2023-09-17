@@ -59,6 +59,8 @@ const EditForm = () => {
 
         // Check if the candidate exists
         if (doc.exists) {
+          console.log(doc.data());
+          
           debugger;
           // Set the formData state with the fetched data
           setFormData(doc.data());
@@ -83,8 +85,10 @@ const EditForm = () => {
 
   };
   const onSubmit = (data) => {
+    debugger
     // Update Firestore
     data.userId = id
+    debugger
     firestore.collection('candidate-marks').add(data)
     .then((docRef) => {
       console.log('Document written with ID: ', docRef.id);
@@ -136,7 +140,7 @@ const EditForm = () => {
 
       // Calculate the totals
       let total1 = written1 + oral1 + practical1;
-
+      setValue('total', total1)
       // Update the total fields
       document.querySelector("input[name='total']").value = total1;
     }
