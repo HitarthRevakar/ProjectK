@@ -1,6 +1,7 @@
 
 import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useRef, useState } from 'react';
+
 import { useUserAuth } from "../../context/UserAuthContext";
 import { useForm } from 'react-hook-form';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
@@ -147,6 +148,7 @@ function Home() {
     setIsButtonVisible(false);
     const storageRef = storage.ref();
     const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
+    debugger
     if(selectedOption){
       try {
 
@@ -187,7 +189,7 @@ function Home() {
           // pdf.addPage();
   
         // Assuming question is correctly defined and selectedOption is set
-  
+        debugger
         const questions = selectedOption === 'electrical' ? shuffleArray(questionsSet1) : shuffleArray(questionsSet2);
         let currentYPosition = 10;  // Initialize Y-coordinate for the new page
   
@@ -778,8 +780,8 @@ function Home() {
                   onClick={handleRadioChange}
                   value="electrical"
                   name="test_type"
-                  {...register('test_type', { required: false })}
-                  className={` form-check-input ${errors.test_type ? 'error-input' : ''}`}
+                 
+                  className={` form-check-input`}
                 />
                 <label className="form-check-label" htmlFor="option1">
                   Electrical
@@ -793,9 +795,8 @@ function Home() {
                   value="instrumentation"
                   name="test_type"
                   onClick={handleRadioChange}
-                  {...register('test_type', { required: false })}
-                  className={`form-check-input ${errors.test_type ? 'error-input' : ''
-                    }`}
+                 
+                  className={`form-check-input`}
                 />
                 <label className="form-check-label" htmlFor="option2">
                   Instrumentation
