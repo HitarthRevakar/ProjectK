@@ -164,10 +164,12 @@ function Home() {
   
         firestore.collection('candidate-info').add(formData)
           .then((docRef) => {
+            debugger
             toggle();
             console.log('Document written with ID: ', docRef.id);
           })
           .catch((error) => {
+            debugger
             console.error('Error adding document: ', error);
           });
   
@@ -733,8 +735,11 @@ function Home() {
                 onClick={() => {
                   
                   const companyName = getValues(`company_name_${index}`);
+                  const designation = getValues(`designation_${index}`);
+                  const from_date = getValues(`from_date_${index}`);
+                  const till_date = getValues(`till_date_${index}`);
                   debugger
-                  if (companyName) {
+                  if (companyName && designation && from_date) {
                     debugger
                     handleAddIndex();
                   }
