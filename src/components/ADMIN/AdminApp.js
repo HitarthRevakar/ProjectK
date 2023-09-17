@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { firestore, storage } from '../../firebase';
 import { Link } from 'react-router-dom';
 import '../ADMIN/Admin.css';
+import {Row , Col} from 'reactstrap'
 
 const AdminApp = () => {
   const [forms, setForms] = useState([]);
@@ -21,7 +22,7 @@ const AdminApp = () => {
           id: doc.id, // Document ID
           ...doc.data(), // Data inside the document
         }));
-debugger
+        debugger
         // Set the forms state with the fetched data
         setForms(formsData);
         debugger
@@ -29,13 +30,13 @@ debugger
         // // add images of candidates in admin below code is code to get the images from firebase 
         // const storageRef = storage.ref();
         // const userPhotoRef = storageRef.child(`user_photos/${formsData.user_photo[0].name}`);
-      
+
         // await userPhotoRef.put(formsData.user_photo[0]);
-      
+
         // // Get the download URL of the uploaded photo
         // const downloadURL = await userPhotoRef.getDownloadURL();
         // console.log('Download URL:', downloadURL);
-      
+
         // // Update the formData with the download URL
         // formsData.user_photo = downloadURL;
 
@@ -51,55 +52,55 @@ debugger
 
 
   return (
-  <>
-      
+    <>
+
       <div className='my-4'>
         <div className="container">
+          <Row>
           <div className='text-center my-5'>
             <h1>List Of Registered Forms</h1>
           </div>
+          </Row>
+          <button type="button" className="btn btn-info m-2">
+                  <Link to={`/home`} style={{ color: 'white', textDecoration: 'none' }}>
+                    Home
+                    </Link>
+                </button>
 
-          <div className=' d-flex py-4'>
-            <div className='col-lg-4 col-md-4 col-sm-4 col-5 text-start ' >
-              <h4 className='text-danger fw-bold'>ID Number</h4>
-            </div>
-            <div className='col-lg-4 col-md-4 col-sm-4 col-5 text-start' >
-              <h4 className='text-danger fw-bold'>Candidate Name</h4>
-            </div>
-            <div className='col-lg-4 col-md-4 col-sm-4 col-5 text-start' >
-              <h4 className='text-danger fw-bold'>Email</h4>
-            </div>
-          </div>
-          
-          {forms.map((form) => (
-            <div className='d-flex' key={form.id}>
-              <div className='col-lg-4 col-md-4 col-sm-4 col-5'>
-                <Link to={`/edit/${form.id}`} className=" text-decoration-none">
-                  <p className='border-bottom text-dark'>{form.id_number}</p>
-                </Link>
-              </div>
-              <div className='col-lg-4 col-md-4 col-sm-4 col-5'>
-                <Link to={`/edit/${form.id}`} className=" text-decoration-none">
-                  <p className='border-bottom text-dark'>{form.candidate_name}</p>
-                </Link>
-              </div>
-              <div className='col-lg-4 col-md-4 col-sm-4 col-5'>
-                <Link to={`/edit/${form.id}`} className=" text-decoration-none">
-                  <p className='border-bottom text-dark'>{form.email}</p>
-                </Link>
-              </div>   
-              <div>
-                
-                </div>    
-            </div>
-          ))}
+          <table className="table m-3">
+  <thead>
+    <tr className='col-lg-4 col-md-4 col-sm-4 col-5 text-start '>
+      <th className='text-danger fw-bold fs-4'>ID Number</th>
+      <th className='text-danger fw-bold fs-4'>Candidate Name</th>
+      <th className='text-danger fw-bold fs-4'>Email</th>
+      <th className='text-danger fw-bold fs-4'></th>
+    </tr>
+  </thead>
+  <tbody>
+    {forms.map((form) => (
+      <tr key={form.id}>
+        <td>{form.id_number}</td>
+        <td>{form.candidate_name}</td>
+        <td>{form.email}</td>
+        <td>
+          <button type="button" className="btn btn-primary">
+            <Link to={`/edit/${form.id}`} style={{ color: 'white', textDecoration: 'none' }}>
+              Evaluate
+            </Link>
+          </button>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
 
         </div>
       </div>
 
-  </>
+    </>
 
-   
+
   );
 };
 
