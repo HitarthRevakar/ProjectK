@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { firestore } from "../../../firebase";
+import { firestore ,storage } from "../../../firebase";
 import "../EditForm/EditForm.css";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from 'react-hot-toast';
+import { async } from "q";
+import firebase from 'firebase/compat/app';
+
 
 const EditForm = () => {
   const { id } = useParams();
   const [result, setResult] = useState();
   const [percentage, setPercentage] = useState();
   const [evaluation, setEvaluation] = useState("")
+  const [fileUrls, setFileUrls] = useState({});
 
   /*
   90+
@@ -23,12 +27,7 @@ Below		0-49 */
     setValue,
     formState: { errors },
   } = useForm();
-  const [formData, setFormData] = useState({
-    candidate_name: "",
-    email: "",
-    contractor_name: "",
-    // Add other form fields here and initialize them as needed
-  });
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
     let userId = id;
@@ -74,7 +73,10 @@ Below		0-49 */
 
           debugger;
           // Set the formData state with the fetched data
-          setFormData(doc.data());
+          setFormData({
+            id: doc.id
+            , ...doc.data()
+          });
         } else {
           console.log("No such document!");
         }
@@ -95,46 +97,138 @@ Below		0-49 */
     });
 
   };
-  const onSubmit = (data) => {
-    debugger
+  const onSubmit = async (data) => {
+    debugger;
     // Update Firestore
     data.userId = id;
 
     let percentage = (data.total / 300) * 100;
     data.percentage = percentage;
 
-    debugger
-    firestore.collection('candidate-marks').add(data)
-      .then((docRef) => {
-        toast.success('Data added Successfully!')
-        console.log('Document written with ID: ', docRef.id);
-      })
-      .catch((error) => {
-        console.error('Error adding document: ', error);
-      });
+    const storageRef = firebase.storage().ref();
 
-  }
+    // Example: Upload written_photo
+    let files = {}
+    if (data.written_photo[0]) {
+      const writtenPhotoRef = storageRef.child(`written_photos/${data.written_photo[0].name}`);
+      await writtenPhotoRef.put(data.written_photo[0]);
+      const writtenPhotoUrl = await writtenPhotoRef.getDownloadURL();
+      debugger
+      files.written_photo=writtenPhotoUrl;
+      debugger
+    }
+    if (data.oral_video[0]) {
+      const oral_videoref = storageRef.child(`oral_video/${data.oral_video[0].name}`);
+      await oral_videoref.put(data.oral_video[0]);
+      const oral_videorefUrl = await oral_videoref.getDownloadURL();
+      debugger
+      files.oral_video=oral_videorefUrl;
+      debugger
+    }
+    if (data.practical_photo[0]) {
+      const practical_photoref = storageRef.child(`practical_photos/${data.practical_photo[0].name}`);
+      await practical_photoref.put(data.practical_photo[0]);
+      const practical_photoUrl = await practical_photoref.getDownloadURL();
+      debugger
+      files.practical_photo=practical_photoUrl;
+      debugger
+    }
+    // Repeat this process for other file inputs (e.g., oral_video, practical_photo)
+
+    // Now, you have the download URLs for all uploaded files
+    // Add the data along with file URLs to Firestore
+    const firestore = firebase.firestore();
+    try {
+      await firestore.collection('candidate-marks').add({
+        ...data,
+        written_photo: files.written_photo,
+        oral_video: files.oral_video,
+        practical_photo: files.practical_photo
+
+        // Add other file URLs here
+      });
+      debugger
+      console.log('Data added to Firestore successfully');
+    } catch (error) {
+      console.error('Error adding data to Firestore', error);
+    }
+    debugger;
+
+    // Check if a document with the same user ID exists
+    const querySnapshot = await firestore
+      .collection('candidate-marks')
+      .where('userId', '==', id)
+      .get();
+
+    if (!querySnapshot.empty) {
+      // If a document exists, update it
+      const docRef = querySnapshot.docs[0]; // Assuming there's only one matching document
+      await docRef.ref.update(data);
+      toast.success('Data updated Successfully!');
+      console.log('Document updated with ID: ', docRef.id);
+
+    } else {
+      // If no document exists, add a new one
+      console.log('Document: ', data);
+
+      firestore
+        .collection('candidate-marks')
+        .add(data)
+        .then(async (docRef) => {
+          toast.success('Data added Successfully!');
+          console.log('Document written with ID: ', docRef.id);
+          const querySnapshot = firestore
+            .collection('candidate-info').doc(id)
+          // let formData1 = formData;
+          // formData1.marksId = docRef.id
+          const newData = {
+            // Define the fields and new values you want to update
+            // For example:
+            marksId:  docRef.id
+            // Add more fields as needed
+          };
+          querySnapshot
+            .update(newData)
+            .then(() => {
+              console.log('Document successfully updated!');
+            })
+            .catch((error) => {
+              console.error('Error updating document: ', error);
+            });
+          // debugger
+          // const docRef1 = querySnapshot.docs[0]; 
+          // debugger
+          // await docRef1.ref.update(formData1);
+          // debugger
+
+        })
+        .catch((error) => {
+          console.error('Error adding document: ', error);
+        });
+    }
+  };
+
   useEffect(() => {
     setValue('written', result?.written);
     setValue('oral', result?.oral);
     setValue('practical', result?.practical);
     setValue('total', result?.total);
 
-    if(result?.percentage){
+    if (result?.percentage) {
 
-    if(result.percentage>=90){
-      setEvaluation("Outstanding")
-    } else if(result.percentage<90 && result.percentage>=76){
-      setEvaluation("Excellent")
-    } else if(result.percentage<76 && result.percentage >=60){
-      setEvaluation("Good")
-    } else if(result.percentage<60 && result.percentage >= 50){
-      setEvaluation("Average")
-    } else if(result.percentage < 50){
-      setEvaluation("Below")
+      if (result.percentage >= 90) {
+        setEvaluation("Outstanding")
+      } else if (result.percentage < 90 && result.percentage >= 76) {
+        setEvaluation("Excellent")
+      } else if (result.percentage < 76 && result.percentage >= 60) {
+        setEvaluation("Good")
+      } else if (result.percentage < 60 && result.percentage >= 50) {
+        setEvaluation("Average")
+      } else if (result.percentage < 50) {
+        setEvaluation("Below")
+      }
     }
-    }
-    
+
   }, [result]);
   // Function to handle form submission (update candidate data)
   // const handleSubmit = async (e) => {
@@ -172,15 +266,15 @@ Below		0-49 */
     let total1 = written1 + oral1 + practical1;
     let percentage = (total1 / 300) * 100;
     // setPercentage(percentage1.toFixed(2));
-    if(percentage>=90){
+    if (percentage >= 90) {
       setEvaluation("Outstanding")
-    } else if(percentage<90 && percentage>=76){
+    } else if (percentage < 90 && percentage >= 76) {
       setEvaluation("Excellent")
-    } else if(percentage<76 && percentage >=60){
+    } else if (percentage < 76 && percentage >= 60) {
       setEvaluation("Good")
-    } else if(percentage<60 && percentage >= 50){
+    } else if (percentage < 60 && percentage >= 50) {
       setEvaluation("Average")
-    } else if(percentage < 50){
+    } else if (percentage < 50) {
       setEvaluation("Below")
     }
     debugger
@@ -193,10 +287,10 @@ Below		0-49 */
   document.querySelectorAll(".marks").forEach(function (input) {
     input.addEventListener("input", calculateTotal);
   });
-  
+
   return (
     <div className="my-4" id="editCandidate">
-      <div><Toaster/></div>
+      <div><Toaster /></div>
       <div className="container">
         <div className="row">
           <form onSubmit={handleSubmit(onSubmit)} className="userDetail">
@@ -253,6 +347,9 @@ Below		0-49 */
                         Marks Obtained
                       </th>
                       <th scope="col" className="text-center">
+                       Upload Documents
+                      </th>
+                      <th scope="col" className="text-center">
                         Marks Allocate
                       </th>
                       <th scope="col" className="text-center">
@@ -276,6 +373,15 @@ Below		0-49 */
                           />
                         </div>
                       </td>
+                      <td >
+                      <div className="r1">
+                      <input  type="file" accept="image/*" 
+                      name="written_photo"
+                      {...register('written_photo', { required: false })}
+                      />
+
+                        </div>
+                      </td>
                       <td className="text-center">
                         <div className="r1">
                           <p>100</p>
@@ -297,6 +403,15 @@ Below		0-49 */
                           />
                         </div>
                       </td>
+                      <td>
+                      <div className="r1">
+                      <input type="file" accept="video/*"  
+                       name="oral_video"
+                       {...register('oral_video', { required: false })}
+                      />
+
+                        </div>
+                      </td>
                       <td className="text-center">
                         <div className="r1">
                           <p>100</p>
@@ -316,6 +431,15 @@ Below		0-49 */
                             className={`form-control text-center marks ${errors.practical ? "error-input" : ""
                               }`}
                           />
+                        </div>
+                      </td>
+                      <td>
+                      <div className="r1">
+                      <input type="file" accept="image/*"  
+                      name="practical_photo"
+                      {...register('practical_photo', { required: false })}
+                      />
+
                         </div>
                       </td>
                       <td className="text-center">
@@ -363,27 +487,27 @@ Below		0-49 */
                   <tbody className="text-center">
                     <tr className="">
                       <td scope="row">Outstanding</td>
-                      <td><input type="checkbox" name="Outstanding" checked={evaluation=="Outstanding"} /></td>
+                      <td><input type="checkbox" name="Outstanding" checked={evaluation == "Outstanding"} /></td>
                       <td>90+</td>
                     </tr>
                     <tr className="">
                       <td scope="row">Excellent</td>
-                      <td><input type="checkbox" name="Excellent" checked={evaluation=="Excellent"}/></td>
+                      <td><input type="checkbox" name="Excellent" checked={evaluation == "Excellent"} /></td>
                       <td>76-89</td>
                     </tr>
                     <tr className="">
                       <td scope="row">Good</td>
-                      <td><input type="checkbox" name="Good"checked={evaluation=="Good"} /></td>
+                      <td><input type="checkbox" name="Good" checked={evaluation == "Good"} /></td>
                       <td>60-75</td>
                     </tr>
                     <tr className="">
                       <td scope="row">Average</td>
-                      <td><input type="checkbox" name="Average" checked={evaluation=="Average"}/></td>
+                      <td><input type="checkbox" name="Average" checked={evaluation == "Average"} /></td>
                       <td>50-59</td>
                     </tr>
                     <tr className="">
                       <td scope="row">Below</td>
-                      <td><input type="checkbox" name="Below"checked={evaluation=="Below"} /></td>
+                      <td><input type="checkbox" name="Below" checked={evaluation == "Below"} /></td>
                       <td>0-49</td>
                     </tr>
                   </tbody>

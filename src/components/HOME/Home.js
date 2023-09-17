@@ -182,6 +182,8 @@ function Home() {
         pdf.setFontSize(10);
   
         // Assuming imageRef.current is correctly defined
+
+  
         const canvas = await html2canvas(imageRef.current);
   
           // const imageSrc = canvas.toDataURL('image/png');
