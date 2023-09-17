@@ -3,9 +3,20 @@ import { useParams } from "react-router-dom";
 import { firestore } from "../../../firebase";
 import "../EditForm/EditForm.css";
 import { useForm } from "react-hook-form";
+import toast, { Toaster } from 'react-hot-toast';
+
 const EditForm = () => {
   const { id } = useParams();
   const [result, setResult] = useState();
+  const [percentage, setPercentage] = useState();
+  const [evaluation, setEvaluation] = useState("")
+
+  /*
+  90+
+Excellent		76-89
+Good		60-75
+Average		50-59
+Below		0-49 */
   const {
     register,
     handleSubmit,
@@ -19,11 +30,11 @@ const EditForm = () => {
     // Add other form fields here and initialize them as needed
   });
 
-  useEffect(()=>{
+  useEffect(() => {
     let userId = id;
     debugger
-      const resultRef = firestore.collection('candidate-marks')
-    async  function fetchResult(){
+    const resultRef = firestore.collection('candidate-marks')
+    async function fetchResult() {
       const snapshot = await resultRef.get();
       const formsData = snapshot.docs.map((doc) => ({
         id: doc.id, // Document ID
@@ -31,14 +42,14 @@ const EditForm = () => {
       }));
 
       const result1 = formsData.find(user => user.userId == id)
-      
+
       // Set the forms state with the fetched data
-      setResult(result1);  
+      setResult(result1);
       // setValue(result)
       debugger
-      }
-      fetchResult();
-  },[])
+    }
+    fetchResult();
+  }, [])
 
   // useEffect(()=>{
   //   if(result){
@@ -59,6 +70,8 @@ const EditForm = () => {
 
         // Check if the candidate exists
         if (doc.exists) {
+          console.log(doc.data());
+
           debugger;
           // Set the formData state with the fetched data
           setFormData(doc.data());
@@ -83,16 +96,22 @@ const EditForm = () => {
 
   };
   const onSubmit = (data) => {
+    debugger
     // Update Firestore
-    data.userId = id
-    firestore.collection('candidate-marks').add(data)
-    .then((docRef) => {
-      console.log('Document written with ID: ', docRef.id);
-    })
-    .catch((error) => {
-      console.error('Error adding document: ', error);
-    });
+    data.userId = id;
 
+    let percentage = (data.total / 300) * 100;
+    data.percentage = percentage;
+
+    debugger
+    firestore.collection('candidate-marks').add(data)
+      .then((docRef) => {
+        toast.success('Data added Successfully!')
+        console.log('Document written with ID: ', docRef.id);
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
+      });
 
   }
   useEffect(() => {
@@ -101,7 +120,22 @@ const EditForm = () => {
     setValue('practical', result?.practical);
     setValue('total', result?.total);
 
-  }, [ result]);
+    if(result?.percentage){
+
+    if(result.percentage>=90){
+      setEvaluation("Outstanding")
+    } else if(result.percentage<90 && result.percentage>=76){
+      setEvaluation("Excellent")
+    } else if(result.percentage<76 && result.percentage >=60){
+      setEvaluation("Good")
+    } else if(result.percentage<60 && result.percentage >= 50){
+      setEvaluation("Average")
+    } else if(result.percentage < 50){
+      setEvaluation("Below")
+    }
+    }
+    
+  }, [result]);
   // Function to handle form submission (update candidate data)
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
@@ -121,34 +155,48 @@ const EditForm = () => {
   //   }
   // };
 
-    function calculateTotal() {
-      debugger
-      // Define your fields by their 'name' attributes
-      let written1 =
-        parseFloat(document.querySelector("input[name='written']").value) || 0;
+  function calculateTotal() {
+    debugger
+    // Define your fields by their 'name' attributes
+    let written1 =
+      parseFloat(document.querySelector("input[name='written']").value) || 0;
 
-      let oral1 =
-        parseFloat(document.querySelector("input[name='oral']").value) || 0;
+    let oral1 =
+      parseFloat(document.querySelector("input[name='oral']").value) || 0;
 
-      let practical1 =
-        parseFloat(document.querySelector("input[name='practical']").value) ||
-        0;
+    let practical1 =
+      parseFloat(document.querySelector("input[name='practical']").value) ||
+      0;
 
-      // Calculate the totals
-      let total1 = written1 + oral1 + practical1;
-
-      // Update the total fields
-      document.querySelector("input[name='total']").value = total1;
+    // Calculate the totals
+    let total1 = written1 + oral1 + practical1;
+    let percentage = (total1 / 300) * 100;
+    // setPercentage(percentage1.toFixed(2));
+    if(percentage>=90){
+      setEvaluation("Outstanding")
+    } else if(percentage<90 && percentage>=76){
+      setEvaluation("Excellent")
+    } else if(percentage<76 && percentage >=60){
+      setEvaluation("Good")
+    } else if(percentage<60 && percentage >= 50){
+      setEvaluation("Average")
+    } else if(percentage < 50){
+      setEvaluation("Below")
     }
+    debugger
+    setValue('total', total1)
+    // Update the total fields
+    document.querySelector("input[name='total']").value = total1;
+  }
 
-    // Attach event listeners to each input field
-   
-  
+
   document.querySelectorAll(".marks").forEach(function (input) {
     input.addEventListener("input", calculateTotal);
   });
+  
   return (
     <div className="my-4" id="editCandidate">
+      <div><Toaster/></div>
       <div className="container">
         <div className="row">
           <form onSubmit={handleSubmit(onSubmit)} className="userDetail">
@@ -223,9 +271,8 @@ const EditForm = () => {
                             type="text"
                             name="written"
                             {...register("written", { required: true })}
-                            className={`form-control text-center marks ${
-                              errors.written ? "error-input" : ""
-                            }`}
+                            className={`form-control text-center marks ${errors.written ? "error-input" : ""
+                              }`}
                           />
                         </div>
                       </td>
@@ -245,9 +292,8 @@ const EditForm = () => {
                             type="text"
                             name="oral"
                             {...register("oral", { required: true })}
-                            className={`form-control text-center marks ${
-                              errors.oral ? "error-input" : ""
-                            }`}
+                            className={`form-control text-center marks ${errors.oral ? "error-input" : ""
+                              }`}
                           />
                         </div>
                       </td>
@@ -267,9 +313,8 @@ const EditForm = () => {
                             type="text"
                             name="practical"
                             {...register("practical", { required: true })}
-                            className={`form-control text-center marks ${
-                              errors.practical ? "error-input" : ""
-                            }`}
+                            className={`form-control text-center marks ${errors.practical ? "error-input" : ""
+                              }`}
                           />
                         </div>
                       </td>
@@ -289,9 +334,8 @@ const EditForm = () => {
                             type="text"
                             name="total"
                             {...register("total", { required: false })}
-                            className={`form-control text-center marks ${
-                              errors.total ? "error-input" : ""
-                            }`}
+                            className={`form-control text-center marks ${errors.total ? "error-input" : ""
+                              }`}
                           />
                         </div>
                       </td>
@@ -317,32 +361,33 @@ const EditForm = () => {
                     </tr>
                   </thead>
                   <tbody className="text-center">
-                    <tr class="">
+                    <tr className="">
                       <td scope="row">Outstanding</td>
-                      <td></td>
+                      <td><input type="checkbox" name="Outstanding" checked={evaluation=="Outstanding"} /></td>
                       <td>90+</td>
                     </tr>
-                    <tr class="">
+                    <tr className="">
                       <td scope="row">Excellent</td>
-                      <td>Item</td>
+                      <td><input type="checkbox" name="Excellent" checked={evaluation=="Excellent"}/></td>
                       <td>76-89</td>
                     </tr>
-                    <tr class="">
+                    <tr className="">
                       <td scope="row">Good</td>
-                      <td>Item</td>
+                      <td><input type="checkbox" name="Good"checked={evaluation=="Good"} /></td>
                       <td>60-75</td>
                     </tr>
-                    <tr class="">
+                    <tr className="">
                       <td scope="row">Average</td>
-                      <td>Item</td>
+                      <td><input type="checkbox" name="Average" checked={evaluation=="Average"}/></td>
                       <td>50-59</td>
                     </tr>
-                    <tr class="">
+                    <tr className="">
                       <td scope="row">Below</td>
-                      <td>Item</td>
+                      <td><input type="checkbox" name="Below"checked={evaluation=="Below"} /></td>
                       <td>0-49</td>
                     </tr>
                   </tbody>
+
                 </table>
               </div>
             </div>

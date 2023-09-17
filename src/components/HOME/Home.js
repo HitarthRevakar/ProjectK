@@ -36,6 +36,7 @@ function Home() {
   const {
     register,
     handleSubmit,
+    getValues ,
     formState: { errors },
   } = useForm();
 
@@ -163,10 +164,12 @@ function Home() {
   
         firestore.collection('candidate-info').add(formData)
           .then((docRef) => {
+            debugger
             toggle();
             console.log('Document written with ID: ', docRef.id);
           })
           .catch((error) => {
+            debugger
             console.error('Error adding document: ', error);
           });
   
@@ -222,7 +225,7 @@ function Home() {
         });
   
         pdf.save('generated.pdf');
-  
+        debugger
         setSubmitted(false)
       } catch (error) { 
         console.error('An error occurred:', error);
@@ -245,8 +248,10 @@ function Home() {
   };
 
   const handleAddIndex = () => {
-    lastIndex.current += 1;
-    setIndexCount(lastIndex.current);
+   
+     lastIndex.current += 1;
+      setIndexCount(lastIndex.current);
+
   };
   const handleClearIndex = () => {
     lastIndex.current -= 1;
@@ -726,7 +731,20 @@ function Home() {
                 </td>
                 <td>
                 {isButtonVisible && (
-                <button type="button" className='mt-1 btn btn-primary ml-5'  onClick={handleAddIndex}>Add +</button>
+                <button type="button" className='mt-1 btn btn-primary ml-5' 
+                onClick={() => {
+                  
+                  const companyName = getValues(`company_name_${index}`);
+                  const designation = getValues(`designation_${index}`);
+                  const from_date = getValues(`from_date_${index}`);
+                  const till_date = getValues(`till_date_${index}`);
+                  debugger
+                  if (companyName && designation && from_date) {
+                    debugger
+                    handleAddIndex();
+                  }
+                }}
+                >Add +</button>
                  )}
                 </td>
                 <td>
