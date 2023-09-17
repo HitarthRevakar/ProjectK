@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import GoogleButton from 'react-google-button'
 import { useUserAuth } from '../context/UserAuthContext';
+import { firestore } from '../firebase';
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -15,8 +16,18 @@ const Login = () => {
       setError("");
       try {
      let user = await logIn(email, password);
-     
-    localStorage.setItem("user", JSON.stringify(user.user))
+     const query = firestore.collection("users")
+  .where("email", "==", email);
+  debugger
+ await query.get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+        debugger
+      // Access and work with the filtered documents here
+      console.log(doc.id, " => ", doc.data());
+      localStorage.setItem("user", JSON.stringify({id:doc.id,...doc.data()}))
+    });
+})
+   
      debugger
         navigate("/home");
       } catch (err) {

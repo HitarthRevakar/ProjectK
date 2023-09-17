@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useUserAuth } from "../../context/UserAuthContext";
 import { useForm } from 'react-hook-form';
@@ -14,6 +14,14 @@ import { firestore,storage } from '../../firebase';
 
 function Home() {
   const { logOut, user } = useUserAuth();
+  let [userData, setUserData] = useState()
+  let userData1 = localStorage.getItem("user");
+  useEffect(()=>{
+   debugger
+    setUserData(JSON.parse(userData1))
+  },[userData1])
+ 
+  
   const [modal, setModal] = useState(false);
   const [submitted , setSubmitted] = useState(false)
   const navigate = useNavigate();
@@ -140,8 +148,7 @@ function Home() {
   
       // Update the formData with the download URL
       formData.user_photo = downloadURL;
-  
-
+    
       firestore.collection('candidate-info').add(formData)
       .then((docRef) => {
         console.log('Document written with ID: ', docRef.id);
@@ -211,11 +218,13 @@ setSubmitted(false)
     setFormData(data)
     setModal(!modal)
   };
-
+  function GoToProfilePage(){
+    navigate("/user-profile")
+  }
   return (
     <div className="container my-3">
     <div className='navbar bg-body-tertiary  d-flex justify-content-between  py-2 px-3 '>
-            <span className='fs-5'>Welcome,&nbsp;<i className="bi bi-person-circle text-secondary "></i>&nbsp;<span className='text-success fw-bold text-decoration-underline'>{user && user.firstName}</span></span>
+            <span className='fs-5 d-flex'>Welcome,&nbsp;<div onClick={GoToProfilePage}><i className="bi bi-person-circle text-secondary "></i>&nbsp;<span className='text-success fw-bold text-decoration-underline'>{userData && userData.fullName}</span></div></span>
             <span><button className="btn btn-outline-danger px-3 rounded-0" onClick={handleLogout}>
             <i class="bi bi-box-arrow-in-left "></i>&nbsp;Log Out
         </button></span>

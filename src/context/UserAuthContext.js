@@ -54,8 +54,8 @@ export function UserAuthContextProvider({ children }) {
         await userDocRef.set({
           firstName: firstName,
           lastName: lastName,
-        fullName: firstName + " " + lastName
-
+        fullName: firstName + " " + lastName,
+          email:email
         });
       setUser(userCredential.user); // Set the user in your context
       return userCredential.user; // Return the user object

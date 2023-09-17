@@ -18,6 +18,7 @@ function App() {
           <Route path='/signup' element={<Signup />} />       
           <Route path='/admin' element={<AdminApp />} />
           <Route path='/edit/:id' element={<EditForm />} />
+          <Route path='/user-profile' element={<ProfilePage/>} />
           {/* <ProtectedRoute> */}
           <Route path='/home' element={<Home /> } /> 
           

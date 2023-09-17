@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 
 function ProfilePage() {
@@ -11,7 +11,12 @@ function ProfilePage() {
     address: '',
     user_photo: '', // Add user_photo in the initial state
   });
-
+  let [userData, setUserData] = useState()
+  let userData1 = JSON.parse(localStorage.getItem("user"));
+  useEffect(()=>{
+   
+    setFormData(userData1)
+  },[userData1])
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({
@@ -38,15 +43,28 @@ function ProfilePage() {
       </div>
       <form onSubmit={handleSubmit}>
         <div className="row mt-3">
-          <div className="col-md-12">
+          <div className="col-md-6">
             <div className="form-group">
-              <label htmlFor="firstName">User Name:</label>
+              <label htmlFor="firstName">First Name:</label>
               <input
                 type="text"
                 className="form-control"
                 id="firstName"
                 name="firstName"
-                value={formData.candidate_name}
+                value={formData.firstName}
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="form-group">
+              <label htmlFor="lastName">Last Name:</label>
+              <input
+                type="text"
+                className="form-control"
+                id="lastName"
+                name="lastName"
+                value={formData.lastName}
                 onChange={handleInputChange}
               />
             </div>
