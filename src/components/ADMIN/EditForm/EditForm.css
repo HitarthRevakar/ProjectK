@@ -1,0 +1,34 @@
+
+
+.userDetail{
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size: 23px;font-weight: 400;
+    
+}
+
+.user-photo{
+    max-width: 180px !important;
+    margin: auto;
+}
+
+.marksTable tr, th, td{
+    padding: 5px !important;
+}
+
+.r1{
+    display: flex !important;
+    justify-content: center !important;
+}
+
+.marks{
+    width: 50px !important;
+    font-size: 18px !important;
+    border: 0;
+    border-radius: 0 !important; /* Optional: Remove border-radius if you want sharp corners */
+    box-shadow: none !important;
+    border-bottom: 1px solid #b4b1b1;
+
+}
+
+@media (max-width: 575px) {
+
+ }

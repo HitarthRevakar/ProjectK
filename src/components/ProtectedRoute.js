@@ -13,22 +13,25 @@
 // };
 
 // export default ProtectedRoute;
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useUserAuth } from "../context/UserAuthContext";
 
 const ProtectedRoute = ({ children }) => {
-  const { user } = useUserAuth();
+  const { user, isLoading } = useUserAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     console.log("Check user in Private: ", user);
-    if (!user) {
+    if (isLoading) {
+      // You can optionally show a loading spinner or message here.
+
+    } else if (!user) {
       navigate('/'); // Redirect to the home page
     }
-  }, [user, navigate]);
+  }, [user, isLoading, navigate]);
 
-  return user ? children : null;
+  // return isLoading ? <LoadingSpinner /> : user ? children : null;
 };
 
 export default ProtectedRoute;

@@ -1,0 +1,247 @@
+[
+    {
+      "question": "Transformer breaths in when",
+      "a": "Load Increases",
+      "b": "Load Decreases",
+      "c": "Load remains constant",
+      "d": "None of the above"
+    },
+    {
+      "question": "The hum in a transformer is mainly attributed to",
+      "a": "Load Changes",
+      "b": "Oil in the transformer",
+      "c": "Magnetostriction",
+      "d": "Mechanical vibrations"
+    },
+    {
+      "question": "The dielectric strength of transformer oil is expected to be",
+      "a": "1 KVs",
+      "b": "33 KV",
+      "c": "100 KV",
+      "d": "330 KV"
+    },
+    {
+      "question": "The dielectric strength of transformer oil is expected to be",
+      "a": "1 KVs",
+      "b": "33 KV",
+      "c": "100 KV",
+      "d": "330 KV"
+    },
+    {
+      "question": "The basic function of a transformer is to change",
+      "a": "The level of the voltage",
+      "b": "The power levels",
+      "c": "The power factor",
+      "d": "The frequency"
+    },
+    {
+      "question": "The efficiency of a power transformer is around",
+      "a": "50%",
+      "b": "60%",
+      "c": "80%",
+      "d": "95%"
+    },
+    {
+      "question": "GENERALLY IN INDUSTRIES WHICH DUTY TYPE INDUCTION MOTOR ARE IN USE?",
+      "a": "S 3",
+      "b": "S 2",
+      "c": "S1",
+      "d": "S0"
+    },
+    {
+      "question": "An induction motor is identical to",
+      "a": "d.c compound motor",
+      "b": "d.c series motor",
+      "c": "Synchronous motor",
+      "d": "Asynchronous motor"
+    },
+    {
+      "question": "The number of slip rings on a squirrel cage induction motor is usually",
+      "a": "Two",
+      "b": "Three",
+      "c": "Four",
+      "d": "None"
+    },
+    {
+      "question": "The starting torque of a 3 phase squirrel cage induction motor is",
+      "a": "Twice the full load torque",
+      "b": "1.5 times the full load torque",
+      "c": "Equal to full load torque",
+      "d": "Any of the above"
+    },
+    {
+      "question": "Star-delta starting of motors is not possible in case of",
+      "a": "Single phase motor",
+      "b": "Variable speed motors",
+      "c": "Low horse power motors",
+      "d": "High speed motors"
+    },
+    {
+      "question": "REF Protection is use for",
+      "a": "HT motor",
+      "b": "LT motor",
+      "c": "Transformer",
+      "d": "DC motor"
+    },
+    {
+      "question": "WHICH IS THE CORRECT FORMULA TO FIND NEUTRAL CURRENT?",
+      "a": "R square - Y square + b square + R*Y - Y*b - R*b",
+      "b": "R square + Y square + b square + R*Y - Y*b - R*b",
+      "c": "R square + Y square + b square + R*Y + Y*b - R*b",
+      "d": "R square + Y square + b square - R*Y - Y*b - R*b"
+    },
+    {
+      "question": "IN STAR CONNECTION WHICH ARE CORRECT?",
+      "a": "VL= V ph",
+      "b": "VL = ✓3 Vph",
+      "c": "VL=1.1 V ph",
+      "d": "VL = ✓2 Vph"
+    },
+    {
+      "question": "HOW WE CALCULATE THREE PHASE SQ MOTOR SPEED?",
+      "a": "Ns = 120f/2P",
+      "b": "Ns = 120f/P",
+      "c": "Ns = 120fv/P",
+      "d": "Ns-Na = 120f/P"
+    },
+    {
+      "question": "TRANSFORMER RATING IS ALWAYS IN",
+      "a": "KVA",
+      "b": "KW",
+      "c": "KVAR",
+      "d": "No one correct"
+    },
+    {
+      "question": "Hazardous area zone zero which elect equipment can be used",
+      "a": "EXD",
+      "b": "EX-N",
+      "c": "Safe",
+      "d": "No elect Equipment allowed"
+    },
+    {
+      "question": "WHICH MOTOR WORK ON BOTH AC AND DC?",
+      "a": "SQ Motor",
+      "b": "Slip ring motor",
+      "c": "DC Shunt motor",
+      "d": "Universal Motor"
+    },
+    {
+      "question": "Which gas is explosive &amp; in Gas group –IIC",
+      "a": "Nitrogen",
+      "b": "Oxygen",
+      "c": "Ethane",
+      "d": "Hydrogen"
+    },
+    {
+      "question": "What is the function of a transformer?",
+      "a": "Transformer is used to step down or up the AC voltages and currents",
+      "b": "Transformer is used to step down or up the DC voltages and currents",
+      "c": "Transformer converts DC to AC voltages",
+      "d": "Transformer converts AC to DC voltages"
+    },
+    {
+      "question": "Which is correct formula for single phase AC Power?",
+      "a": "P=1.734 *V*I*pf",
+      "b": "P=V*I*P. F",
+      "c": "P=V*I",
+      "d": "None of above"
+    },
+    {
+      "question": "Power factor is always in lagging in",
+      "a": "Capacitor Load",
+      "b": "Inductive Load",
+      "c": "Capacitor Load & Inductive Load",
+      "d": "Resistive load"
+    },
+    {
+      "question": "What is the working principle of DC motor?",
+      "a": "Fleming’s right hand rule",
+      "b": "Fleming’s left hand rule",
+      "c": "Maxwell’s second law",
+      "d": "Maxwell’s third law"
+    },
+    {
+      "question": "What is the current transformer?",
+      "a": "transformer used with an a.c. voltmeter",
+      "b": "transformer used with an a.c. ammeter",
+      "c": "transformer used with an d.c. voltmeter",
+      "d": "transformer used with an d.c. ammeter"
+    },
+    {
+      "question": "WHAT IS MINIMUM IR VALUE IS ACCEPTABLE FOR LT MOTOR?",
+      "a": "2K Ohm",
+      "b": "4 K ohm",
+      "c": "2 M ohm",
+      "d": "4 G ohm"
+    },
+    {
+      "question": "What is MSDS?",
+      "a": "Material safety data sheet",
+      "b": "Material safety danger sheet",
+      "c": "Material show data sheet",
+      "d": "All of above"
+    },
+    {
+      "question": "How many kg lift the material by manual material handling?",
+      "a": "30 kg",
+      "b": "35 kg",
+      "c": "25 kg",
+      "d": "18 kg"
+    },
+    {
+      "question": "From where start work at height activity",
+      "a": "2m",
+      "b": "1.8m",
+      "c": "1.5m",
+      "d": "1.2m"
+    },
+    {
+      "question": "What is work at height hazards?",
+      "a": "Fall of person",
+      "b": "Fall of material",
+      "c": "Collapse temporary platform",
+      "d": "All of the above"
+    },
+    {
+      "question": "When Scaffolding material certified?",
+      "a": "2 years",
+      "b": "3 years",
+      "c": "6 years",
+      "d": "1 years"
+    },
+    {
+      "question": "Fire extinguish method?",
+      "a": "Smothering",
+      "b": "Starvation",
+      "c": "Cooling",
+      "d": "All of the above"
+    },
+    {
+      "question": "What is class B confined space?",
+      "a": "Present of Inert gas",
+      "b": "Presence of toxic or flammable",
+      "c": "Non process equipment",
+      "d": "Deep above 1.2 meter"
+    },
+    {
+      "question": "IN SUBSTATION WHICH TYPE OF FIRE EXTINGUISHER ARE USED?",
+      "a": "Dry chemical powder",
+      "b": "CO2",
+      "c": "Both type",
+      "d": "None of above"
+    },
+    {
+      "question": "Line of fire example?",
+      "a": "",
+      "b": "",
+      "c": "",
+      "d": ""
+    },
+    {
+      "question": "What is Instrument department LOTO Color?",
+      "a": "Blue",
+      "b": "Red",
+      "c": "Yellow",
+      "d": "Black"
+    }
+  ]

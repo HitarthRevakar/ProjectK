@@ -2,12 +2,13 @@ body{
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 18px;
 }
-
+.error-input {
+    border:1.5px red solid !important;
+    outline: 1px solid red;
+}
 img{
-    padding: 10px;
-    border: .5px solid #b9b3b3db;
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-    border-radius: 15px;
+
+    border-radius: 8px;
 }
 
 #form-2 .navbar{
@@ -30,7 +31,15 @@ table {
     border-collapse: collapse;
     margin-bottom: 20px;
 }
-
+tr:nth-child(1) {
+    background-color: #fff !important; /* Change this to your desired color */
+  }
+  
+  /* Style even rows */
+  tr:nth-child(2) {
+    background-color: #f2f2f2 !important; /* Change this to your desired color */
+  }
+  
 table, th, td {
     border: 1px solid #a0a29e;
 }
@@ -41,7 +50,7 @@ th, td {
 
 /* Style for section headers */
 .section-header {
-    background-color: #f0f0f0;
+    background-color: white;
     font-weight: bold;
 }
 
@@ -54,6 +63,9 @@ select {
     padding: 3px;
     margin: 5px 0;
 }
-
+.button-color{
+    color: rgb(255, 255, 255);
+    background-color:  #0061b0d9;
+}
 /* Style for checkboxes and radio buttons */
 

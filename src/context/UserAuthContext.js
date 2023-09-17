@@ -6,20 +6,64 @@ import {
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase";
+import { firestore, storage } from '../firebase';
 
 const userAuthContext = createContext();
 
 export function UserAuthContextProvider({ children }) {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState();
 
   function logIn(email, password) {
-    return auth.signInWithEmailAndPassword(email, password);
+    return signInWithEmailAndPassword(auth, email, password);
   }
-  function signUp(email, password) {
-    return auth.createUserWithEmailAndPassword(email, password);
+
+  // function signUp(fName, email, password) {
+  //   // Create a new user with email and password
+  //   createUserWithEmailAndPassword(auth, email, password, )
+  //     .then((userCredential) => {
+  //       // Once the user is created, update their display name
+  //       return updateProfile(userCredential.user, {
+  //         displayName: fName
+  //       })
+  //         .then(() => {
+  //           // Display name updated successfully
+  //           console.log('Display name updated successfully');
+  //         })
+  //         .catch((error) => {
+  //           // Handle errors updating display name
+  //           console.error('Error updating display name:', error);
+  //         });
+  //     })
+  //     .catch((error) => {
+  //       // Handle errors creating user
+  //       console.error('Error creating user:', error);
+  //     });
+  // }
+  async function signUp(email, password, firstName, lastName) {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      // Update the user's profile with the full name
+      await updateProfile(userCredential.user, {
+        displayName: firstName + " " + lastName
+      });
+      const userDocRef = firestore.collection('users').doc(userCredential.user.uid);
+
+        await userDocRef.set({
+          firstName: firstName,
+          lastName: lastName,
+        fullName: firstName + " " + lastName
+
+        });
+      setUser(userCredential.user); // Set the user in your context
+      return userCredential.user; // Return the user object
+    } catch (error) {
+      throw error;
+    }
   }
+  
   function logOut() {
     return signOut(auth);
   }
@@ -30,14 +74,21 @@ export function UserAuthContextProvider({ children }) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log("Auth", user);
+      // Update the user state when authentication state changes
       setUser(user);
     });
+
+    // Check for the current user when the app loads
+    const initialUser = auth.currentUser;
+    if (initialUser) {
+      setUser(initialUser);
+    }
 
     return () => {
       unsubscribe();
     };
   }, []);
+
 
   return (
     <userAuthContext.Provider

@@ -1,334 +1,797 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useUserAuth } from "../../context/UserAuthContext";
-import { firestore } from "../../firebase";
-import '.././HOME/home.css';
+import { useForm } from 'react-hook-form';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import './home.css'
+import questionsSet1 from '../QuestionPaper/Electrical.json';
+import questionsSet2 from '../QuestionPaper/Instrumentation.json';
+import { firestore, storage } from '../../firebase';
 
-const Home = () => {
+
+
+
+function Home() {
   const { logOut, user } = useUserAuth();
+  const [modal, setModal] = useState(false);
+  const [submitted, setSubmitted] = useState(false)
+  const [isButtonVisible, setIsButtonVisible] = useState(true);
+  const [indexCount, setIndexCount] = useState(1);
+  const lastIndex = useRef(1);
   const navigate = useNavigate();
+  let imageRef = useRef();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const [formData, setFormData] = useState({
-    fullname: "",
-    idnumber: "",
-    nation: "",
-    dob: "",
-    email: "",
-    mobile: "",
-    state: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+  const initialFormData = {
+    contractor_name: '',
+    trade: '',
+    discipline: '',
+    candidate_name: '',
+    user_photo: null,
+    id_number: '',
+    contact: '',
+    email: '',
+    nationality: '',
+    state: '',
+    marital_status: '',
+    dob: '',
+    english_read: false,
+    hindi_read: false,
+    gujarati_read: false,
+    others_read: false,
+    english_write: false,
+    hindi_write: false,
+    gujarati_write: false,
+    others_write: false,
+    english_speak: 'no',
+    hindi_speak: 'no',
+    gujarati_speak: 'no',
+    others_speak: 'no',
+    academic_qualification: '',
+    other_qualification: '',
+    total_experience: '',
+    company_name_1: '',
+    designation_1: '',
+    from_date_1: '',
+    till_date_1: '',
+    company_name_2: '',
+    designation_2: '',
+    from_date_2: '',
+    till_date_2: '',
+    company_name_3: '',
+    designation_3: '',
+    from_date_3: '',
+    till_date_3: '',
+    company_name_4: '',
+    designation_4: '',
+    from_date_4: '',
+    till_date_4: '',
+    company_name_5: '',
+    designation_5: '',
+    from_date_5: '',
+    till_date_5: '',
+    company_name_6: '',
+    designation_6: '',
+    from_date_6: '',
+    till_date_6: '',
   };
 
-  const form2 = async (e) => {
-    e.preventDefault();
-
-    try {
-      const response = await firestore.collection('FormData').add(formData);
-      window.alert(" Thank You! Best of Luck", response.id);
-      setFormData({
-        fullname: "",
-        idnumber: "",
-        nation: "",
-        dob: "",
-        email: "",
-        mobile: "",
-        state: "",
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  const [formData, setFormData] = useState(initialFormData);
 
 
   const handleLogout = async () => {
     try {
       await logOut();
+      localStorage.clear()
       navigate("/");
     } catch (error) {
       console.log(error.message);
     }
   };
 
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+
+  function displayUserPhoto(event) {
+    const photo = event.target.files[0];
+
+    if (photo) {
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        setSelectedPhoto(e.target.result);
+      };
+
+      reader.readAsDataURL(photo);
+    } else {
+      setSelectedPhoto(null);
+    }
+  }
+
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  const handleRadioChange = (value) => {
+    setSelectedOption(value);
+  };
+
+  const shuffleArray = (array) => {
+    const shuffledArray = [...array];
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+    }
+    return shuffledArray;
+  };
+
+
+  const handleGeneratePDF = async () => {
+    // Upload the user's photo to Firebase Storage
+    setIsButtonVisible(false);
+    const storageRef = storage.ref();
+    const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
+    try {
+
+      await userPhotoRef.put(formData.user_photo[0]);
+
+      // Get the download URL of the uploaded photo
+      const downloadURL = await userPhotoRef.getDownloadURL();
+      console.log('Download URL:', downloadURL);
+
+      // Update the formData with the download URL
+      formData.user_photo = downloadURL;
+
+
+      firestore.collection('candidate-info').add(formData)
+        .then((docRef) => {
+          console.log('Document written with ID: ', docRef.id);
+        })
+        .catch((error) => {
+          console.error('Error adding document: ', error);
+        });
+
+
+      // Create a new jsPDF instance
+      const pdf = new jsPDF({
+        unit: 'mm',
+        format: 'a4',
+      });
+      pdf.setFontSize(10);
+
+      // Assuming imageRef.current is correctly defined
+      const canvas = await html2canvas(imageRef.current);
+
+        // const imageSrc = canvas.toDataURL('image/png');
+        // pdf.addImage(imageSrc, 'PNG', 10, 10, 190, 270);
+
+        // // Add a new page for the questions
+        // pdf.addPage();
+
+      // Assuming question is correctly defined and selectedOption is set
+
+      const questions = selectedOption === 'option1' ? shuffleArray(questionsSet1) : shuffleArray(questionsSet2);
+      let currentYPosition = 10;  // Initialize Y-coordinate for the new page
+
+      questions.forEach((q, index) => {
+        // Check if we need to add a new page
+        if (currentYPosition > 270) { // Check if Y-coordinate is beyond page's limit
+          pdf.addPage();
+          currentYPosition = 10; // Reset Y-coordinate for the new page
+        }
+        // testing
+        pdf.text(`Question ${index + 1}: ${q.question}`, 10, currentYPosition);
+        currentYPosition += 10;
+
+        pdf.text(`A) ${q.a}`, 10, currentYPosition);
+        currentYPosition += 10;
+
+        pdf.text(`B) ${q.b}`, 10, currentYPosition);
+        currentYPosition += 10;
+
+        pdf.text(`C) ${q.c}`, 10, currentYPosition);
+        currentYPosition += 10;
+
+        pdf.text(`D) ${q.d}`, 10, currentYPosition);
+        currentYPosition += 20;  // Add more space before the next question
+      });
+
+      pdf.save('generated.pdf');
+
+      setSubmitted(false)
+    } catch (error) {
+      console.error('An error occurred:', error);
+      alert('An error occurred while generating the PDF. Please try again.');
+    }
+  };
+
+  // for submit buton
+  const toggle = () => setModal(!modal);
+
+  const onSubmit = async (data) => {
+    // Handle form submission
+    console.log(data);
+    setFormData(data)
+    setModal(!modal)
+  };
+
+  const handleAddIndex = () => {
+    lastIndex.current += 1;
+    setIndexCount(lastIndex.current);
+  };
+  const handleClearIndex = () => {
+    lastIndex.current -= 1;
+    setIndexCount(lastIndex.current);
+  };
   return (
-    <>
-      <div className='form2 ' id='form-2'>
-        <div className='container-fluid'>
-          <div className='navbar  d-flex justify-content-between  py-2 px-3 '>
-            <span className='fs-5'>Welcome,&nbsp;<span className='text-success fw-bold text-decoration-underline'>{user && user.email}</span></span>
-            <span><button className="btn btn-outline-danger px-3 rounded-0" onClick={handleLogout}>
-              <i class="bi bi-box-arrow-in-left "></i>&nbsp;Log Out
-            </button></span>
-          </div>
-          <div className='text-center'>
-            <img src={process.env.PUBLIC_URL + '/TCIPL.jpg'} className='img-fluid' alt="Logo" />
-          </div>
-          <div className='my-2'>
-            {/* <div class="container ">
-              <form class="row g-3 my-5" onSubmit={form2} >
-                <div class="col-md-6">
-                  <h4>Candidate Information</h4>
-                  <table class="table">
-                    <tr>
-                      <td><label for="exampleInputName1" class="form-label">Candidate Name:</label></td>
-                      <td><input type="text" name='fullname' value={formData.fullname} onChange={(e) => { handleChange(e) }} class="form-control" placeholder="Full Name" id="exampleInputName1" required/></td>
-                    </tr>
-                    <tr>
-                      <td><label for="exampleInputId1" class="form-label">ID Number</label></td>
-                      <td><input type="number" name='idnumber' value={formData.idnumber} onChange={(e) => { handleChange(e) }} class="form-control" id="exampleInputId1" required/></td>
-                    </tr>
-                    <tr>
-                      <td><label for="exampleInputNation1" class="form-label">Nationality</label></td>
-                      <td><input type="text" name='nation'  value={formData.nation} onChange={(e) => { handleChange(e) }} class="form-control" placeholder="Your Country Name" id="exampleInputNation1" /></td>
-                    </tr>
-                    <tr>
-                      <td><label for="exampleInputDob1" class="form-label">Date Of Birth</label></td>
-                      <td><input type="date" name='dob'  value={formData.dob} onChange={(e) => { handleChange(e) }} class="form-control" id="exampleInputDob1" /></td>
-                    </tr>
-                  </table>
-                </div>
-                <div class="col-md-6">
-                  <h4>Contact Information</h4>
-                  <table class="table">
-                    <tr>
-                      <td><label for="exampleInputEmail1" class="form-label">Email Address</label></td>
-                      <td><input type="email" name='email' value={formData.email} onChange={(e) => { handleChange(e) }} class="form-control" placeholder="eg. name@mail.com" id="exampleInputEmail1" aria-describedby="emailHelp" /></td>
-                    </tr>
-                    <tr>
-                      <td><label for="exampleInputMobile1" class="form-label">Contact No.</label></td>
-                      <td><input type="text" name='mobile'  value={formData.mobile} onChange={(e) => { handleChange(e) }} class="form-control" placeholder="Your Mobile Number" id="exampleInputMobile1" /></td>
-                    </tr>
-                    <tr>
-                      <td><label for="exampleInputState1" class="form-label">State</label></td>
-                      <td><input type="text" name='state' value={formData.state} onChange={(e) => { handleChange(e) }} class="form-control" id="exampleInputState1" /></td>
-                    </tr>
-                  </table>
-                </div>
-                <div class="col-12 float-end">
-                  <button class="btn btn-outline-dark rounded-0" type="submit">Submit</button>
-                </div>
-              </form>
-            </div> */}
-            <div class="container my-5">
-              <form>
-                <div class="table-responsive">
-                  <table class="table table-striped ">
-                    <tr>
-                      <td class="section-header" colspan="4">PERSONAL DETAILS:</td>
-                    </tr>
-                    <tr>
-                      <td rowspan="1">CANDIDATE NAME:</td>
-                      <td rowspan="1" className='align-items-center'>
-                        <input class="form-control" name="candidate_name" type="text" value="" />
-                        <br />
-                        <br />
-                        <img alt="Preview" id="preview" src="#" style={{ maxWidth: "100px", maxHeight: "100px", display: "none" }} />
-                      </td>
-                      <td colSpan={1}>UPLOAD PASSPORT SIZE PHOTO:</td>
-                      <td colSpan={1}><input accept="image/*" class="form-control" name="user_photo" onchange="previewImage(this);" type="file" /></td>
-                    </tr>
-                    <tr className=''>
-                      <td>I.D NUMBER (GOVT APPROVED):</td>
-                      <td><input class="form-control" name="id_number" type="text" value="" /></td>
-                      <td>CONTACT NO: </td><td><input class="form-control" name="contact" type="text" value="" /></td>
-                    </tr>
-                    <tr>
-                      <td>EMAIL ID:</td><td><input class="form-control" name="email" type="email" value="" /></td>
-                      <td>NATIONALITY:</td><td><input class="form-control" name="nationality" type="text" value="" /></td>
-                    </tr>
-                    <tr>
-                      <td>STATE: </td><td><input class="form-control" name="state" type="text" value="" /></td>
-                      <td>MARITAL STATUS:</td>
-                      <td>
-                        <select class="form-select dropdown-toggle" name="marital_status">
-                          <option value="">Select an option</option>
+    <div className="container my-3">
+      <div className='navbar bg-body-tertiary  d-flex justify-content-between  py-2 px-3 '>
+        <span className='fs-5'>Welcome,&nbsp;<i className="bi bi-person-circle text-secondary "></i>&nbsp;<span className='text-success fw-bold text-decoration-underline'>{user && user.firstName}</span></span>
+        <span><button className="btn btn-outline-danger px-3 rounded-0" onClick={handleLogout}>
+          <i class="bi bi-box-arrow-in-left "></i>&nbsp;Log Out
+        </button></span>
+      </div>
+      <div className='text-center'>
 
-                          <option value="single">Single</option>
-                          <option value="married">Married</option>
-                        </select>
-                      </td>
-                    </tr>
-                    <tr>
+      </div>
+      <form ref={imageRef} onSubmit={handleSubmit(onSubmit)}>
+        <div className="table-responsive" >
+          <table className="table table-striped table-responsive">
+            <tbody>
+              <tr className='text-center align-items-center' style={{ height: "140px", backgroundColor: "white" }}>
+                <td className="" colSpan="1">
+                  <img src={process.env.PUBLIC_URL + '/logo.jpg'} style={{ border: "none" }} className='mt-2' alt="Logo" />
+                </td>
+                <td style={{ fontFamily: "Times New Roman", fontWeight: "bolder", color: "#0060B0" }} colSpan="2" className='mt-1 pt-2 align-items-center'>
+                  <div className='align-items-center mt-5 '><h4 className='fw-bold'>TECHNO CONCEPTS INSTRUMENTS PRIVATE LIMITED VALIDATION CENTER, JAMNAGAR</h4>  </div>
+                </td>
+                <td colSpan="1">
+                  <div className='my-3 img-fluid ' id="photo-container">
+                    {selectedPhoto ? (
+                      <img src={selectedPhoto} className='border-dark' alt="User Photo" width="160" height="160" />
+                    ) : (
+                      <div className='text-center align-items-center'><p>PHOTO</p></div>
 
-                      <td>DATE OF BIRTH:</td><td><input class="form-control" name="dob" type="date" value="" /></td>
-                    </tr>
-                  </table>
-                </div>
+                    )}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td rowSpan="1" colSpan="1"><p className='mt-2'>CONTRACTOR NAME :</p> </td>
+                <td rowSpan="1" colSpan="3" className="align-items-center">
+                  <input
+                    type="text"
+                    name="contractor_name"
+                    {...register('contractor_name', { required: true })}
+                    className={`form-control ${errors.contractor_name ? 'error-input' : ''
+                      }`}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td rowSpan="1" colSpan="1"><p className='mt-2'>TRADE :</p> </td>
+                <td rowSpan="1" colSpan="3" className="align-items-center">
+                  <input
+                    type="text"
+                    name="trade"
+                    className='form-control'
+                  // {...register('trade', { required: true })}
+                  // className={`form-control ${
+                  //   errors.trade ? 'error-input' : ''
+                  // }`}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td rowSpan="1" colSpan="1"><p className='mt-2'>DISCIPLINE :</p> </td>
+                <td rowSpan="1" colSpan="3" className="align-items-center">
+                  <input
+                    type="text"
+                    name="discipline"
+                    className='form-control'
+                  // {...register('discipline', { required: true })}
+                  // className={`form-control ${
+                  //   errors.discipline ? 'error-input' : ''
+                  // }`}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td className="section-header" colSpan="4">
+                  PERSONAL DETAILS:
+                </td>
+              </tr>
+              <tr>
+                <td rowSpan="1">CANDIDATE NAME:</td>
+                <td rowSpan="1" className="align-items-center">
+                  <input
+                    type="text"
+                    name="candidate_name"
+                    {...register('candidate_name', { required: true })}
+                    className={`form-control  ${errors.candidate_name ? 'error-input' : ''
+                      }`}
+                  />
+                </td>
+               <>
+                  <td colSpan="1">UPLOAD PHOTO:</td>
+                  <td colSpan="1">
+                    <input
+                      accept="image/*"
+                      type="file"
+                      name="user_photo"
+                      {...register('user_photo', { required: true })}
+                      className={`form-control ${errors.user_photo ? 'error-input' : ''
+                        }`}
+                      onChange={(e) => displayUserPhoto(e)}
+                    />
+                  </td></> 
+              </tr>
+              {/* Add more PERSONAL DETAILS fields here */}
 
-                <table>
-                  <thead className=''>
-                    <tr>
-                      <th class="section-header" colspan="5">LANGUAGES KNOWN:</th>
-                    </tr>
-                    <tr className="text-center">
-                      <th></th>
-                      <th>ENGLISH</th>
-                      <th>HINDI</th>
-                      <th>GUJARATI</th>
-                      <th>OTHERS</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="text-center">
-                      <td className="text-center" >READ</td>
-                      <td><input class="form-check-input" type="checkbox" name="english_read" /></td>
-                      <td><input class="form-check-input" type="checkbox" name="hindi_read" /></td>
-                      <td><input class="form-check-input" type="checkbox" name="gujarati_read" /></td>
-                      <td><input class="form-check-input" type="checkbox" name="others_read" /></td>
-                    </tr>
-                    <tr className="text-center">
-                      <td className="text-center">WRITE</td>
-                      <td><input class="form-check-input" type="checkbox" name="english_write" /></td>
-                      <td><input class="form-check-input" type="checkbox" name="hindi_write" /></td>
-                      <td><input class="form-check-input" type="checkbox" name="gujarati_write" /></td>
-                      <td><input class="form-check-input" type="checkbox" name="others_write" /></td>
-                    </tr>
-                    <tr>
-                      <td className="text-center">SPEAK</td>
-                      <td>
-                        <select class="form-select" name="english_speak">
-                          <option value="">Select Here</option>
-                          <option value="yes">Yes</option>
-                          <option value="no">No</option>
-                        </select>
-                      </td>
-                      <td>
-                        <select class="form-select" name="hindi_speak">
-                          <option value="">Select Here</option>
-                          <option value="yes">Yes</option>
-                          <option value="no">No</option>
-                        </select>
-                      </td>
-                      <td>
-                        <select class="form-select" name="gujarati_speak">
-                          <option value="">Select Here</option>
-                          <option value="yes">Yes</option>
-                          <option value="no">No</option>
-                        </select>
-                      </td>
-                      <td>
-                        <select class="form-select" name="others_speak">
-                          <option value="">Select Here</option>
-                          <option value="yes">Yes</option>
-                          <option value="no">No</option>
-                        </select>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+              {/* CONTACT INFORMATION */}
+              <tr>
+                <td>I.D NUMBER <br />(ANY GOVT. APPROVED):</td>
+                <td>
+                  <input
+                    type="text"
+                    name="id_number"
+                    {...register('id_number', { required: true })}
+                    className={`form-control ${errors.id_number ? 'error-input' : ''
+                      }`}
+                  />
+                </td>
+                <td>CONTACT NO:</td>
+                <td>
+                  <input
+                    type="text"
+                    name="contact"
+                    {...register('contact', { required: true })}
+                    className={`form-control ${errors.contact ? 'error-input' : ''
+                      }`}
+                  />
+                </td>
+              </tr>
+              {/* Add more CONTACT INFORMATION fields here */}
 
-                <table class="editable-table" colspan="">
-                  <tr>
-                    <td class="section-header" colspan="2">EDUCATIONAL QUALIFICATION:</td>
-                  </tr>
-                  <tr>
-                    <td class="sub-header">ACADEMIC:<input class="form-control" name="candidate_name" type="text" value="" /></td>
-                  </tr>
-                  <tr>
-                    <td>OTHERS:<input class="form-control" name="candidate_name" type="text" value="" /></td>
-                  </tr>
-                </table>
-
-                <table class="editable-table">
-                  <thead>
-                    <tr>
-                      <th class="section-header" colspan="4">EXPERIENCE DETAILS:</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td colspan="">TOTAL YEARS OF EXPERIENCE:&nbsp;<input class="form-control" name="candidate_name" type="text" value="" />   </td>
-                  
-                    </tr>
-                  </tbody>
-                </table>
-
-                <table class="GeneratedTable">
-                  <thead>
-                    <tr>
-                      <th>NAME OF THE COMPANY</th>
-                      <th>DESIGNATION</th>
-                      <th>FROM</th>
-                      <th>TILL</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><input class="form-control" name="company_name_1" type="text" /></td>
-                      <td><input class="form-control" name="designation_1" type="text" /></td>
-                      <td><input class="form-control" name="from_date_1" type="date" /></td>
-                      <td><input class="form-control" name="till_date_1" type="date" /></td>
-                    </tr>
-
-                    <tr>
-                      <td><input class="form-control" name="company_name_2" type="text" /></td>
-                      <td><input class="form-control" name="designation_2" type="text" /></td>
-                      <td><input class="form-control" name="from_date_2" type="date" /></td>
-                      <td><input class="form-control" name="till_date_2" type="date" /></td>
-                    </tr>
-
-                    <tr>
-                      <td><input class="form-control" name="company_name_3" type="text" /></td>
-                      <td><input class="form-control" name="designation_3" type="text" /></td>
-                      <td><input class="form-control" name="from_date_3" type="date" /></td>
-                      <td><input class="form-control" name="till_date_3" type="date" /></td>
-                    </tr>
-
-                    <tr>
-                      <td><input class="form-control" name="company_name_4" type="text" /></td>
-                      <td><input class="form-control" name="designation_4" type="text" /></td>
-                      <td><input class="form-control" name="from_date_4" type="date" /></td>
-                      <td><input class="form-control" name="till_date_4" type="date" /></td>
-                    </tr>
-
-                    <tr>
-                      <td><input class="form-control" name="company_name_5" type="text" /></td>
-                      <td><input class="form-control" name="designation_5" type="text" /></td>
-                      <td><input class="form-control" name="from_date_5" type="date" /></td>
-                      <td><input class="form-control" name="till_date_5" type="date" /></td>
-                    </tr>
-
-                    <tr>
-                      <td>FOR OFFICE USE:</td>
-                      <td colspan="3">CANDIDATE VERIFIED AND SCREENED BY:</td>
-                    </tr>
-                  </tbody>
-                </table>
-
-                <button class="btn btn-outline-primary rounded-0" type="submit">Submit Form</button>
-              </form>
-            </div>
-
-            <div class="container">
-              <h4>NOTE:</h4>
-              <ul>
-                <li>CANDIDATE SHOULD REPORT WITH BASIC PPE'S</li>
-                <li>ATTACH ALL RELEVANT EDUCATIONAL AND EXPERIENCE CERTIFICATES WITH THIS FORM</li>
-                <li>CANDIDATE ARE REQUESTED TO STAY WITHIN THE SITE PREMISES FOR THE WHOLE DAY</li>
-              </ul>
-            </div>
-          </div>
+              {/* EMAIL, NATIONALITY, STATE */}
+              <tr>
+                <td>EMAIL ID:</td>
+                <td>
+                  <input
+                    type="email"
+                    name="email"
+                    {...register('email', { required: true })}
+                    className={`form-control ${errors.email ? 'error-input' : ''
+                      }`}
+                  />
+                </td>
+                <td>NATIONALITY:</td>
+                <td>
+                  <input
+                    type="text"
+                    name="nationality"
+                    {...register('nationality', { required: true })}
+                    className={`form-control ${errors.nationality ? 'error-input' : ''
+                      }`}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>STATE:</td>
+                <td>
+                  <input
+                    type="text"
+                    name="state"
+                    {...register('state', { required: true })}
+                    className={`form-control ${errors.state ? 'error-input' : ''
+                      }`}
+                  />
+                </td>
+                <td>MARITAL STATUS:</td>
+                <td>
+                  <select
+                    name="marital_status"
+                    {...register('marital_status', { required: true })}
+                    className={`form-select ${errors.marital_status ? 'error-input' : ''
+                      }`}
+                  >
+                    <option value="">Select an option</option>
+                    <option value="single">Single</option>
+                    <option value="married">Married</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>DATE OF BIRTH:</td>
+                <td>
+                  <input
+                    type="date"
+                    name="dob"
+                    {...register('dob', { required: true })}
+                    className={`form-control ${errors.dob ? 'error-input' : ''
+                      }`}
+                  />
+                </td>
+              </tr>
+              {/* Add more EMAIL, NATIONALITY, STATE fields here */}
+            </tbody>
+          </table>
         </div>
+
+        {/* LANGUAGES KNOWN */}
+        <table className="table table-responsive">
+
+          <thead>
+
+            <tr>
+              <th colSpan="5">LANGUAGES KNOWN:</th>
+            </tr>
+            <tr>
+              <th></th>
+              <th>ENGLISH</th>
+              <th>HINDI</th>
+              <th>GUJARATI</th>
+              <th>OTHERS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>READ</td>
+              <td>
+                <input
+                  type="checkbox"
+                  value="english"
+                  name="read"
+                  {...register('read', { required: true })}
+                  className={` ${errors.read ? 'error-input' : ''
+                    }`}
+                />
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  name="language"
+                  value="hindi"
+
+                  {...register('read', { required: true })}
+                  className={` ${errors.read ? 'error-input' : ''
+                    }`}
+                />
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  value="gujarati"
+                  name="language"
+                  {...register('read', { required: true })}
+                  className={` ${errors.read ? 'error-input' : ''
+                    }`}
+                />
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  value="other"
+                  name="language"
+                  {...register('read', { required: true })}
+                  className={` ${errors.read ? 'error-input' : ''
+                    }`}
+                />
+              </td>
+            </tr>
+            {/* Add more LANGUAGES KNOWN fields here */}
+          </tbody>
+          <tbody>
+            <tr>
+              <td>WRITE</td>
+              <td>
+                <input
+                  type="checkbox"
+                  value="english"
+                  name="language"
+                  {...register('write', { required: true })}
+                  className={` ${errors.write ? 'error-input' : ''
+                    }`}
+                />
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  name="language"
+                  value="hindi"
+
+                  {...register('write', { required: true })}
+                  className={` ${errors.write ? 'error-input' : ''
+                    }`}
+                />
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  value="gujarati"
+                  name="language"
+                  {...register('write', { required: true })}
+                  className={` ${errors.write ? 'error-input' : ''
+                    }`}
+                />
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  value="other"
+                  name="language"
+                  {...register('write', { required: true })}
+                  className={` ${errors.write ? 'error-input' : ''
+                    }`}
+                />
+              </td>
+            </tr>
+            {/* Add more LANGUAGES KNOWN fields here */}
+          </tbody>
+          <tbody>
+            <tr>
+              <td>SPEAK</td>
+              <td>
+                <input
+                  type="checkbox"
+                  value="english"
+                  name="language"
+                  {...register('speak', { required: true })}
+                  className={` ${errors.speak ? 'error-input' : ''
+                    }`}
+                />
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  name="language"
+                  value="hindi"
+
+                  {...register('speak', { required: true })}
+                  className={` ${errors.speak ? 'error-input' : ''
+                    }`}
+                />
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  value="gujarati"
+                  name="language"
+                  {...register('speak', { required: true })}
+                  className={` ${errors.speak ? 'error-input' : ''
+                    }`}
+                />
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  value="other"
+                  name="language"
+                  {...register('speak', { required: true })}
+                  className={` ${errors.speak ? 'error-input' : ''
+                    }`}
+                />
+              </td>
+            </tr>
+            {/* Add more LANGUAGES KNOWN fields here */}
+          </tbody>
+        </table>
+
+        {/* EDUCATIONAL QUALIFICATION */}
+        <table className="editable-table" colSpan="">
+          <tbody>
+            <tr>
+              <td className="section-header" colSpan="2">
+                EDUCATIONAL QUALIFICATION:
+              </td>
+            </tr>
+            <tr>
+              <td className="sub-header">ACADEMIC:</td>
+              <td>
+                <input
+                  type="text"
+                  name="academic_qualification"
+                  {...register('academic_qualification', { required: true })}
+                  className={`form-control ${errors.academic_qualification ? 'error-input' : ''
+                    }`}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>OTHERS:</td>
+              <td>
+                <input
+                  type="text"
+                  name="other_qualification"
+                  {...register('other_qualification')}
+
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        {/* EXPERIENCE DETAILS */}
+        <table className="editable-table">
+          <colgroup width="116"></colgroup>
+          <colgroup width="150"></colgroup>
+          <colgroup width="133"></colgroup>
+          <tbody>
+            <tr>
+              <td className="section-header" colSpan="3">
+                EXPERIENCE DETAILS:
+              </td>
+            </tr>
+            <tr>
+              <td>TOTAL YEARS OF EXPERIENCE:</td>
+              <td colSpan="2">
+                <input
+                  type="text"
+                  name="total_experience"
+                  {...register('total_experience', { required: true })}
+                  className={`form-control ${errors.total_experience ? 'error-input' : ''
+                    }`}
+                />
+              </td>
+            </tr>
+            {/* Add more EXPERIENCE DETAILS fields here */}
+          </tbody>
+        </table>
+
+        {/* TABLE FOR COMPANY DETAILS */}
+        <table className="table GeneratedTable">
+          <thead>
+            <tr>
+              <th>NAME OF THE COMPANY</th>
+              <th>DESIGNATION</th>
+              <th>FROM</th>
+              <th>TILL</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {[...Array(indexCount)].map((_, index) => (
+              <tr key={index}>
+                <td>
+                  <input
+                    type="text"
+                    name={`company_name_${index}`}
+                    {...register(`company_name_${index}`)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name={`designation_${index}`}
+                    {...register(`designation_${index}`)}
+                  />
+                </td>
+                <td>
+                  <center>
+                    <input
+                      type="date"
+                      name={`from_date_${index}`}
+                      {...register(`from_date_${index}`)}
+                    />
+                  </center>
+                </td>
+                <td>
+                  <center>
+                    <input
+                      type="date"
+                      name={`till_date_${index}`}
+                      {...register(`till_date_${index}`)}
+                    />
+                  </center>
+                  
+                </td>
+                <td>
+                {isButtonVisible && (
+                <button type="button" className='mt-2 button-color ml-5'  onClick={handleAddIndex}>Add +</button>
+                 )}
+                </td>
+                <td>
+                {isButtonVisible && (
+                <button type="button" className='mt-2'  onClick={handleClearIndex}>Clear</button>
+                 )}
+                </td>
+                
+              </tr>
+            ))}
+          </tbody>
+         
+        </table>
+
+        {/* FOR OFFICE USE */}
+        <table>
+          <tbody>
+            <tr>
+              <td>FOR OFFICE USE:</td>
+              <td>CANDIDATE VERIFIED AND SCREENED BY:</td>
+            </tr>
+          </tbody>
+        </table>
+
+        {/* SUBMIT BUTTON */}
+        <div className='d-flex justify-content-center w-100 '><button type="submit" className="btn btn-outline-secondary shadow border-1 rounded-2 px-4 py-2">
+          Submit <span class="bi bi-send"></span>
+        </button></div>
+        <Modal isOpen={modal} toggle={toggle}>
+          <ModalHeader toggle={toggle}>MCQ Examination Test</ModalHeader>
+          <ModalBody>
+            <p className='mb-3'>
+              <span className="text-danger">Please Select Your Examination Subject Carefully*</span>
+            </p>
+            <div className="d-flex gap-4">
+              <div className="form-check">
+                <input
+                  required
+                  type="radio"
+                  id="option1"
+                  value="electrical"
+                  name="test_type"
+                  {...register('test_type', { required: false })}
+                  className={` form-check-input ${errors.test_type ? 'error-input' : ''
+                    }`}
+                />
+                <label className="form-check-label" htmlFor="option1">
+                  Electrical
+                </label>
+              </div>
+              <div className="form-check">
+                <input
+                  required
+                  type="radio"
+                  id="option2"
+                  value="instrumentation"
+                  name="test_type"
+                  {...register('test_type', { required: false })}
+                  className={`form-check-input ${errors.test_type ? 'error-input' : ''
+                    }`}
+                />
+                <label className="form-check-label" htmlFor="option2">
+                  Instrumentation
+                </label>
+              </div>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              color="primary"
+              className='rounned-0'
+              onClick={() => {
+                toggle();
+                handleGeneratePDF();
+                setSubmitted(true)
+              }}
+            // Disable the button when no option is selected
+            >
+              Submit
+            </Button>
+            <Button color="secondary" onClick={toggle}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </form>
+
+      <div class="container my-4 text-start">
+        <h4>NOTE:</h4>
+        <ul>
+          <li>CANDIDATE SHOULD REPORT WITH BASIC PPE'S</li>
+          <li>ATTACH ALL RELEVANT EDUCATIONAL AND EXPERIENCE CERTIFICATES WITH THIS FORM</li>
+          <li>CANDIDATE ARE REQUESTED TO STAY WITHIN THE SITE PREMISES FOR THE WHOLE DAY</li>
+        </ul>
       </div>
 
+    </div>
 
-
-
-
-
-
-
-
-    </>
-  )
+  );
 }
 
 export default Home;
-
-

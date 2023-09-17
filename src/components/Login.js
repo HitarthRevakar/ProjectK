@@ -2,7 +2,6 @@ import React, {useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import GoogleButton from 'react-google-button'
 import { useUserAuth } from '../context/UserAuthContext';
-import '../App.css'
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -15,7 +14,10 @@ const Login = () => {
       e.preventDefault();
       setError("");
       try {
-        await logIn(email, password);
+     let user = await logIn(email, password);
+     
+    localStorage.setItem("user", JSON.stringify(user.user))
+     debugger
         navigate("/home");
       } catch (err) {
         setError(err.message);
@@ -88,13 +90,10 @@ const Login = () => {
                                 <hr className="line" />
                             </div>
                             <GoogleButton  className='' type='dark' onClick={handleGoogleSignIn}/>
-                            {/* <button title="Sign In" type="submit" className="sign-in_ggl">
-                                <span>Sign In with Google</span>
-                            </button> */}
-                            {/* <button title="Sign In" type="submit" className="sign-in_apl">
-                                <span>Sign In with Apple</span>
-                            </button> */}
-                            <div>For New Account&nbsp;<Link to="/signup" className='text-decoration-none text-danger fw-bold'>Register Now !</Link></div>
+
+                            {/* <a href="../components/ADMIN/AdminApp.js" className='text-underline-none text-secondary'>For Admin</a> */}
+                            <Link to="/admin" className='text-decoration-none text-secondary fw-bold'>For Admin</Link>
+                            <div>For New Account&nbsp;<Link to="/signup" className='text-decoration-none text-primary fw-bold'>Register Now !</Link></div>
                             <p className="note">Terms of use &amp; Conditions</p>
                         </form>
                 </div>
