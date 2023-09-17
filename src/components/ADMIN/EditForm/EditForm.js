@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { firestore ,storage } from "../../../firebase";
 import "../EditForm/EditForm.css";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from 'react-hot-toast';
 import { async } from "q";
 import firebase from 'firebase/compat/app';
-
+import { Hourglass } from 'react-loader-spinner'
 
 const EditForm = () => {
   const { id } = useParams();
@@ -14,7 +14,7 @@ const EditForm = () => {
   const [percentage, setPercentage] = useState();
   const [evaluation, setEvaluation] = useState("")
   const [fileUrls, setFileUrls] = useState({});
-
+  const [loading, setLoading] = useState(false)
   /*
   90+
 Excellent		76-89
@@ -41,7 +41,7 @@ Below		0-49 */
       }));
 
       const result1 = formsData.find(user => user.userId == id)
-
+debugger
       // Set the forms state with the fetched data
       setResult(result1);
       // setValue(result)
@@ -97,11 +97,17 @@ Below		0-49 */
     });
 
   };
+let navigate = useNavigate()
+
   const onSubmit = async (data) => {
+    setLoading(true)
     debugger;
     // Update Firestore
     data.userId = id;
-
+    const querySnapshot = await firestore
+    .collection('candidate-marks')
+    .where('userId', '==', id)
+    .get();
     let percentage = (data.total / 300) * 100;
     data.percentage = percentage;
 
@@ -113,7 +119,7 @@ Below		0-49 */
       const writtenPhotoRef = storageRef.child(`written_photos/${data.written_photo[0].name}`);
       await writtenPhotoRef.put(data.written_photo[0]);
       const writtenPhotoUrl = await writtenPhotoRef.getDownloadURL();
-      debugger
+      
       files.written_photo=writtenPhotoUrl;
       debugger
     }
@@ -121,60 +127,37 @@ Below		0-49 */
       const oral_videoref = storageRef.child(`oral_video/${data.oral_video[0].name}`);
       await oral_videoref.put(data.oral_video[0]);
       const oral_videorefUrl = await oral_videoref.getDownloadURL();
-      debugger
+      
       files.oral_video=oral_videorefUrl;
-      debugger
+      
     }
     if (data.practical_photo[0]) {
       const practical_photoref = storageRef.child(`practical_photos/${data.practical_photo[0].name}`);
       await practical_photoref.put(data.practical_photo[0]);
       const practical_photoUrl = await practical_photoref.getDownloadURL();
-      debugger
+      
       files.practical_photo=practical_photoUrl;
-      debugger
+      
     }
+    
     // Repeat this process for other file inputs (e.g., oral_video, practical_photo)
 
     // Now, you have the download URLs for all uploaded files
     // Add the data along with file URLs to Firestore
-    const firestore = firebase.firestore();
-    try {
-      await firestore.collection('candidate-marks').add({
-        ...data,
-        written_photo: files.written_photo,
-        oral_video: files.oral_video,
-        practical_photo: files.practical_photo
-
-        // Add other file URLs here
-      });
-      debugger
-      console.log('Data added to Firestore successfully');
-    } catch (error) {
-      console.error('Error adding data to Firestore', error);
-    }
-    debugger;
-
-    // Check if a document with the same user ID exists
-    const querySnapshot = await firestore
-      .collection('candidate-marks')
-      .where('userId', '==', id)
-      .get();
-
-    if (!querySnapshot.empty) {
-      // If a document exists, update it
-      const docRef = querySnapshot.docs[0]; // Assuming there's only one matching document
-      await docRef.ref.update(data);
-      toast.success('Data updated Successfully!');
-      console.log('Document updated with ID: ', docRef.id);
-
-    } else {
-      // If no document exists, add a new one
-      console.log('Document: ', data);
-
-      firestore
-        .collection('candidate-marks')
-        .add(data)
-        .then(async (docRef) => {
+    if(querySnapshot.empty){
+        
+      const firestore = firebase.firestore();
+      try {
+        debugger
+        delete data.written_photo;
+        delete data.oral_video;
+        delete data.practical_photo
+        await firestore.collection('candidate-marks').add({
+          ...data,
+          ...files
+  
+          // Add other file URLs here
+        }).then(async (docRef)=>{
           toast.success('Data added Successfully!');
           console.log('Document written with ID: ', docRef.id);
           const querySnapshot = firestore
@@ -190,11 +173,51 @@ Below		0-49 */
           querySnapshot
             .update(newData)
             .then(() => {
+              setTimeout(() => {
+                navigate('/admin')
+              }, 2000);
               console.log('Document successfully updated!');
             })
             .catch((error) => {
               console.error('Error updating document: ', error);
             });
+        })
+        setLoading(false)
+        debugger
+        console.log('Data added to Firestore successfully');
+      } catch (error) {
+        console.error('Error adding data to Firestore', error);
+      }
+    }
+   
+    debugger;
+
+    // Check if a document with the same user ID exists
+  
+    if (!querySnapshot.empty) {
+      // If a document exists, update it
+      const docRef = querySnapshot.docs[0];
+       // Assuming there's only one matching document
+       delete data.written_photo;
+       delete data.oral_video;
+       delete data.practical_photo
+      await docRef.ref.update({...data, ...files});
+      toast.success('Data updated Successfully!');
+      setTimeout(() => {
+        navigate('/admin')
+      }, 2000);
+      setLoading(false)
+      console.log('Document updated with ID: ', docRef.id);
+
+    } else {
+      // If no document exists, add a new one
+      console.log('Document: ', data);
+
+      firestore
+        .collection('candidate-marks')
+        .add(data)
+        .then(async (docRef) => {
+      
           // debugger
           // const docRef1 = querySnapshot.docs[0]; 
           // debugger
@@ -213,7 +236,7 @@ Below		0-49 */
     setValue('oral', result?.oral);
     setValue('practical', result?.practical);
     setValue('total', result?.total);
-
+    
     if (result?.percentage) {
 
       if (result.percentage >= 90) {
@@ -352,9 +375,7 @@ Below		0-49 */
                       <th scope="col" className="text-center">
                         Marks Allocate
                       </th>
-                      <th scope="col" className="text-center">
-                        QR Code
-                      </th>
+                  
                     </tr>
                   </thead>
                   <tbody>
@@ -373,11 +394,12 @@ Below		0-49 */
                           />
                         </div>
                       </td>
-                      <td >
+                      <td style={{width:"fit-content"}}>
                       <div className="r1">
-                      <input  type="file" accept="image/*" 
+                     {/* {result?.written_photo ?  */}
+                     <input  type="file" accept="image/*" 
                       name="written_photo"
-                      {...register('written_photo', { required: false })}
+                      {...register('written_photo', { required: true })}
                       />
 
                         </div>
@@ -407,7 +429,7 @@ Below		0-49 */
                       <div className="r1">
                       <input type="file" accept="video/*"  
                        name="oral_video"
-                       {...register('oral_video', { required: false })}
+                       {...register('oral_video', { required: true })}
                       />
 
                         </div>
@@ -437,7 +459,7 @@ Below		0-49 */
                       <div className="r1">
                       <input type="file" accept="image/*"  
                       name="practical_photo"
-                      {...register('practical_photo', { required: false })}
+                      {...register('practical_photo', { required: true })}
                       />
 
                         </div>
@@ -452,6 +474,7 @@ Below		0-49 */
                       <td scope="row" className="text-center">
                         Total
                       </td>
+                      
                       <td className="text-center">
                         <div className="r1">
                           <input
@@ -463,6 +486,7 @@ Below		0-49 */
                           />
                         </div>
                       </td>
+                      <td></td>
                       <td className="text-center">
                         <div className="r1">
                           <p>300</p>
@@ -515,10 +539,20 @@ Below		0-49 */
                 </table>
               </div>
             </div>
-
+<div className="d-flex row-xl-6 justify-content-between">
             <button type="submit" className="btn btn-primary">
               Save Changes
             </button>
+           {loading ? <Hourglass
+  visible={true}
+  height="40"
+  width="40"
+  ariaLabel="hourglass-loading"
+  wrapperStyle={{}}
+  wrapperClass=""
+  colors={['#306cce', '#72a1ed']}
+/>:<></>}
+</div>
           </form>
         </div>
       </div>
