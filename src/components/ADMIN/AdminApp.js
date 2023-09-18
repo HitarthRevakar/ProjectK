@@ -158,7 +158,14 @@ const AdminApp = () => {
               Start Evaluation
             </Link>
           </button>
-          :<></>
+          
+          :<>
+           <button type="button" className="btn btn-success">
+            <Link to={`/edit/${form.id}`} style={{ color: 'white', textDecoration: 'none' }}>
+              Edit Evaluation
+            </Link>
+          </button>
+          </>
         }
         </td>
       </tr>
