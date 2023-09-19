@@ -38,6 +38,7 @@ function Home() {
     handleSubmit,
     getValues,
     formState: { errors },
+    reset
   } = useForm();
 
   const stateOptions = [
@@ -195,7 +196,9 @@ function Home() {
     firestore.collection('candidate-info').add(formData)
       .then((docRef) => {
         debugger
+        toast.success('Data added Successfully!');
         // toggle();
+        reset();
         console.log('Document written with ID: ', docRef.id);
       })
       .catch((error) => {
