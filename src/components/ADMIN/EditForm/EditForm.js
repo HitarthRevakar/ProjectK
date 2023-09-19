@@ -438,7 +438,7 @@ Below		0-49 */
                       <td style={{ width: "fit-content" }}>
                         <div className="r1">
                           <td>
-                            {result?.written_photo ? (
+                            {result && result?.written_photo ? (
                               // Display the download URL if result.written_photo exists
                               <a href={result.written_photo} target="_blank" rel="noopener noreferrer">
                                 Download Photo
@@ -480,13 +480,13 @@ Below		0-49 */
                       </td>
                       <td>
                         <div className="r1">
-                          {result.oral_video ? (
-                            // If result.oral_video has a value, show a download link
+                          {result && result.oral_video ? (
+                            // If result is defined and result.oral_video has a value, show a download link
                             <a href={result.oral_video} target="_blank" rel="noopener noreferrer">
                               Download Video
                             </a>
                           ) : (
-                            // If result.oral_video is empty, show an upload input
+                            // If result is undefined or result.oral_video is empty, show an upload input
                             <input
                               type="file"
                               accept="video/*"
@@ -494,6 +494,7 @@ Below		0-49 */
                               {...register('oral_video', { required: true })}
                             />
                           )}
+
 
 
                         </div>
@@ -521,8 +522,8 @@ Below		0-49 */
                       </td>
                       <td>
                         <div className="r1">
-                          {result.practical_photo ? (
-                            <div> 
+                          {result && result.practical_photo ? (
+                            <div>
                               <a href={result.practical_photo} target="_blank" rel="noopener noreferrer">
                                 Download Practical Photo
                               </a>
