@@ -301,6 +301,7 @@ function Home() {
     // Handle form submission
     console.log(data);
     setFormData(data)
+    handleGeneratePDF();
     // setModal(!modal)
   };
 

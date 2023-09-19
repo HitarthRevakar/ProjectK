@@ -530,7 +530,7 @@ Below		0-49 */
                             </div>
                           ) : (
                             <div>
-                              <p>Upload:</p>
+                              {/* <p>Upload:</p> */}
                               <input
                                 type="file"
                                 accept="image/*"

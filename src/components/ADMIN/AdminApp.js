@@ -13,6 +13,12 @@ const AdminApp = () => {
   const navigate = useNavigate();
   const [forms, setForms] = useState([]);
   const [modal, setModal] = useState(false);
+  const [currentFormId, setCurrentFormId] = useState(null); // State to store the current form ID
+  const handleStartEvaluationClick = (formId) => {
+    onSubmit();
+    setCurrentFormId(formId); // Set the current form ID in the state
+    setModal(true); // Open the modal
+  };
   let [testtypeError, setTesttypeError] = useState("")
   let imageRef = useRef();
   const [submitted, setSubmitted] = useState(false)
@@ -288,7 +294,7 @@ const AdminApp = () => {
        
         <td>
         {!form.marksId?
-          <><button type="button" className="btn btn-primary" ref={imageRef} onClick={onSubmit}>
+          <><button type="button" className="btn btn-primary" ref={imageRef}  onClick={() => handleStartEvaluationClick(form.id)}>
               {/* <Link to={`/edit/${form.id}`} style={{ color: 'white', textDecoration: 'none' }}> */}
                 Start Evaluation
               {/* </Link> */}
@@ -338,7 +344,7 @@ const AdminApp = () => {
                     onClick={() => {
                       handleGeneratePDF();
                       setSubmitted(true);
-                      navigate(`/edit/${form.id}`);
+                      navigate(`/edit/${currentFormId}`);
                     } }
 
                   >
