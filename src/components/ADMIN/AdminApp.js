@@ -1,11 +1,21 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { firestore, storage } from '../../firebase';
-import { Link } from 'react-router-dom';
+import { Link ,useNavigate} from 'react-router-dom';
 import '../ADMIN/Admin.css';
 import {Row , Col} from 'reactstrap'
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
+import questionsSet1 from '../QuestionPaper/Electrical.json';
+import questionsSet2 from '../QuestionPaper/Instrumentation.json';
 const AdminApp = () => {
+  const navigate = useNavigate();
   const [forms, setForms] = useState([]);
+  const [modal, setModal] = useState(false);
+  let [testtypeError, setTesttypeError] = useState("")
+  let imageRef = useRef();
+  const [submitted, setSubmitted] = useState(false)
   let searchTxtRef = useRef()
   const searchUser = async () =>{
     let searchTxt = searchTxtRef.current.value;
@@ -105,6 +115,131 @@ const AdminApp = () => {
   };
 
 
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  const handleRadioChange = (e) => {
+    debugger
+    setTesttypeError("")
+    setSelectedOption(e.target.value);
+  };
+
+  const shuffleArray = (array) => {
+    const shuffledArray = [...array];
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+    }
+    return shuffledArray;
+  };
+
+
+  const handleGeneratePDF = async () => {
+    // Upload the user's photo to Firebase Storage
+   
+    // const storageRef = storage.ref();
+    // const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
+    debugger
+    if(selectedOption){
+      try {
+
+        // await userPhotoRef.put(formData.user_photo[0]);
+  
+        // // Get the download URL of the uploaded photo
+        // const downloadURL = await userPhotoRef.getDownloadURL();
+        // console.log('Download URL:', downloadURL);
+  
+        // // Update the formData with the download URL
+        // formData.user_photo = downloadURL;
+  
+  
+        // firestore.collection('candidate-info').add(formData)
+        //   .then((docRef) => {
+        //     debugger
+        //     toggle();
+        //     console.log('Document written with ID: ', docRef.id);
+        //   })
+        //   .catch((error) => {
+        //     debugger
+        //     console.error('Error adding document: ', error);
+        //   });
+  
+  
+        // Create a new jsPDF instance
+        const pdf = new jsPDF({
+          unit: 'mm',
+          format: 'a4',
+        });
+        pdf.setFontSize(10);
+  
+        // Assuming imageRef.current is correctly defined
+
+  
+        const canvas = await html2canvas(imageRef.current);
+  
+          // const imageSrc = canvas.toDataURL('image/png');
+          // pdf.addImage(imageSrc, 'PNG', 10, 10, 190, 270);
+  
+          // // Add a new page for the questions
+          // pdf.addPage();
+  
+        // Assuming question is correctly defined and selectedOption is set
+        debugger
+        const questions = selectedOption === 'electrical' ? shuffleArray(questionsSet1) : shuffleArray(questionsSet2);
+        let currentYPosition = 10;  // Initialize Y-coordinate for the new page
+  
+        questions.forEach((q, index) => {
+          // Check if we need to add a new page
+          if (currentYPosition > 270) { // Check if Y-coordinate is beyond page's limit
+            pdf.addPage();
+            currentYPosition = 10; // Reset Y-coordinate for the new page
+          }
+          // testing
+          pdf.text(`Question ${index + 1}: ${q.question}`, 10, currentYPosition);
+          currentYPosition += 10;
+          if(q.a || q.b || q.c || q.d){
+            pdf.text(`A) ${q.a}`, 10, currentYPosition);
+            currentYPosition += 10;
+    
+            pdf.text(`B) ${q.b}`, 10, currentYPosition);
+            currentYPosition += 10;
+    
+            pdf.text(`C) ${q.c}`, 10, currentYPosition);
+            currentYPosition += 10;
+            pdf.text(`D) ${q.d}`, 10, currentYPosition);
+            currentYPosition += 20;  // Add more space before the next question
+          } else {
+            pdf.text(`Ans:`, 10, currentYPosition)
+            currentYPosition += 60
+          }
+      
+  
+         
+        });
+  
+        pdf.save('generated.pdf');
+        debugger
+        setSubmitted(false)
+      } catch (error) { 
+        console.error('An error occurred:', error);
+        alert('An error occurred while generating the PDF. Please try again.');
+      }
+    } else {
+      setTesttypeError("Please select a examination type to continue!")
+    }
+   
+  };
+
+  // for submit buton
+  const toggle = () => setModal(!modal);
+
+  const onSubmit = async (data) => {
+    // Handle form submission
+    console.log(data);
+    // setFormData(data)
+    setModal(!modal)
+    
+  };
+
   return (
     <>
 
@@ -153,12 +288,67 @@ const AdminApp = () => {
        
         <td>
         {!form.marksId?
-          <button type="button" className="btn btn-primary">
-            <Link to={`/edit/${form.id}`} style={{ color: 'white', textDecoration: 'none' }}>
-              Start Evaluation
-            </Link>
-          </button>
-          
+          <><button type="button" className="btn btn-primary" ref={imageRef} onClick={onSubmit}>
+              {/* <Link to={`/edit/${form.id}`} style={{ color: 'white', textDecoration: 'none' }}> */}
+                Start Evaluation
+              {/* </Link> */}
+            </button><Modal isOpen={modal} toggle={toggle}>
+                <ModalHeader toggle={toggle}>MCQ Examination Test</ModalHeader>
+                <ModalBody>
+                  <p className='mb-3'>
+                    <span className="text-danger">Please Select Your Examination Subject Carefully*</span>
+                  </p>
+                  <div className="d-flex gap-4">
+                    <div className="form-check">
+                      <input
+                        required
+                        type="radio"
+                        id="option1"
+                        onClick={handleRadioChange}
+                        value="electrical"
+                        name="test_type"
+
+                        className={` form-check-input`} />
+                      <label className="form-check-label" htmlFor="option1">
+                        Electrical
+                      </label>
+                    </div>
+                    <div className="form-check">
+                      <input
+                        required
+                        type="radio"
+                        id="option2"
+                        value="instrumentation"
+                        name="test_type"
+                        onClick={handleRadioChange}
+
+                        className={`form-check-input`} />
+                      <label className="form-check-label" htmlFor="option2">
+                        Instrumentation
+                      </label>
+                    </div>
+                  </div>
+                  {testtypeError ? <small style={{ color: "red" }}>{testtypeError}</small> : <></>}
+                </ModalBody>
+                <ModalFooter>
+                  <Button
+                    color="primary"
+                    className='rounned-0'
+
+                    onClick={() => {
+                      handleGeneratePDF();
+                      setSubmitted(true);
+                      navigate(`/edit/${form.id}`);
+                    } }
+
+                  >
+                    Submit
+                  </Button>
+                  <Button color="secondary" onClick={toggle}>
+                    Cancel
+                  </Button>
+                </ModalFooter>
+              </Modal></>
           :<>
            <button type="button" className="btn btn-success">
             <Link to={`/edit/${form.id}`} style={{ color: 'white', textDecoration: 'none' }}>
