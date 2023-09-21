@@ -512,27 +512,27 @@ let navigate = useNavigate()
                     <tr className="">
                       <td scope="row">Outstanding</td>
                       <td><input type="checkbox" name="Outstanding" checked={evaluation == "Outstanding"} /></td>
-                      <td>90+</td>
+                   
                     </tr>
                     <tr className="">
                       <td scope="row">Excellent</td>
                       <td><input type="checkbox" name="Excellent" checked={evaluation == "Excellent"} /></td>
-                      <td>76-89</td>
+              
                     </tr>
                     <tr className="">
                       <td scope="row">Good</td>
                       <td><input type="checkbox" name="Good" checked={evaluation == "Good"} /></td>
-                      <td>60-75</td>
+                      
                     </tr>
                     <tr className="">
                       <td scope="row">Average</td>
                       <td><input type="checkbox" name="Average" checked={evaluation == "Average"} /></td>
-                      <td>50-59</td>
+         
                     </tr>
                     <tr className="">
                       <td scope="row">Below</td>
                       <td><input type="checkbox" name="Below" checked={evaluation == "Below"} /></td>
-                      <td>0-49</td>
+                  
                     </tr>
                   </tbody>
 
