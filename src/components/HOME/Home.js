@@ -1,7 +1,7 @@
 
 import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useRef, useState } from 'react';
-
+import toast, { Toaster } from 'react-hot-toast';
 import { useUserAuth } from "../../context/UserAuthContext";
 import { useForm } from 'react-hook-form';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
@@ -19,12 +19,12 @@ function Home() {
   const { logOut, user } = useUserAuth();
   let [userData, setUserData] = useState()
   let userData1 = localStorage.getItem("user");
-  useEffect(()=>{
-   debugger
+  useEffect(() => {
+    debugger
     setUserData(JSON.parse(userData1))
-  },[userData1])
- 
-  
+  }, [userData1])
+
+
   const [modal, setModal] = useState(false);
   const [submitted, setSubmitted] = useState(false)
   const [isButtonVisible, setIsButtonVisible] = useState(true);
@@ -36,9 +36,42 @@ function Home() {
   const {
     register,
     handleSubmit,
-    getValues ,
+    getValues,
     formState: { errors },
+    reset
   } = useForm();
+
+  const stateOptions = [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+  ];
+
 
   const initialFormData = {
     contractor_name: '',
@@ -148,95 +181,120 @@ function Home() {
     setIsButtonVisible(false);
     const storageRef = storage.ref();
     const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
+    await userPhotoRef.put(formData.user_photo[0]);
+
+    // Get the download URL of the uploaded photo
+    const downloadURL = await userPhotoRef.getDownloadURL();
+    console.log('Download URL:', downloadURL);
+
+    // Update the formData with the download URL
+    formData.user_photo = downloadURL;
+
+
+
+
+    firestore.collection('candidate-info').add(formData)
+      .then((docRef) => {
+        debugger
+        toast.success('Data added Successfully!');
+        // toggle();
+        reset();
+        console.log('Document written with ID: ', docRef.id);
+      })
+      .catch((error) => {
+        debugger
+        console.error('Error adding document: ', error);
+      });
+
     debugger
-    if(selectedOption){
-      try {
+    // if(selectedOption){
+    //   try {
 
-        await userPhotoRef.put(formData.user_photo[0]);
-  
-        // Get the download URL of the uploaded photo
-        const downloadURL = await userPhotoRef.getDownloadURL();
-        console.log('Download URL:', downloadURL);
-  
-        // Update the formData with the download URL
-        formData.user_photo = downloadURL;
-  
-  
-        firestore.collection('candidate-info').add(formData)
-          .then((docRef) => {
-            debugger
-            toggle();
-            console.log('Document written with ID: ', docRef.id);
-          })
-          .catch((error) => {
-            debugger
-            console.error('Error adding document: ', error);
-          });
-  
-  
-        // Create a new jsPDF instance
-        const pdf = new jsPDF({
-          unit: 'mm',
-          format: 'a4',
-        });
-        pdf.setFontSize(10);
-  
-        // Assuming imageRef.current is correctly defined
+    //     await userPhotoRef.put(formData.user_photo[0]);
 
-  
-        const canvas = await html2canvas(imageRef.current);
-  
-          // const imageSrc = canvas.toDataURL('image/png');
-          // pdf.addImage(imageSrc, 'PNG', 10, 10, 190, 270);
-  
-          // // Add a new page for the questions
-          // pdf.addPage();
-  
-        // Assuming question is correctly defined and selectedOption is set
-        debugger
-        const questions = selectedOption === 'electrical' ? shuffleArray(questionsSet1) : shuffleArray(questionsSet2);
-        let currentYPosition = 10;  // Initialize Y-coordinate for the new page
-  
-        questions.forEach((q, index) => {
-          // Check if we need to add a new page
-          if (currentYPosition > 270) { // Check if Y-coordinate is beyond page's limit
-            pdf.addPage();
-            currentYPosition = 10; // Reset Y-coordinate for the new page
-          }
-          // testing
-          pdf.text(`Question ${index + 1}: ${q.question}`, 10, currentYPosition);
-          currentYPosition += 10;
-          if(q.a || q.b || q.c || q.d){
-            pdf.text(`A) ${q.a}`, 10, currentYPosition);
-            currentYPosition += 10;
-    
-            pdf.text(`B) ${q.b}`, 10, currentYPosition);
-            currentYPosition += 10;
-    
-            pdf.text(`C) ${q.c}`, 10, currentYPosition);
-            currentYPosition += 10;
-            pdf.text(`D) ${q.d}`, 10, currentYPosition);
-            currentYPosition += 20;  // Add more space before the next question
-          } else {
-            pdf.text(`Ans:`, 10, currentYPosition)
-            currentYPosition += 60
-          }
-      
-  
-         
-        });
-  
-        pdf.save('generated.pdf');
-        debugger
-        setSubmitted(false)
-      } catch (error) { 
-        console.error('An error occurred:', error);
-        alert('An error occurred while generating the PDF. Please try again.');
-      }
-    } else {
-      setTesttypeError("Please select a examination type to continue!")
-    }
-   
+    //     // Get the download URL of the uploaded photo
+    //     const downloadURL = await userPhotoRef.getDownloadURL();
+    //     console.log('Download URL:', downloadURL);
+
+    //     // Update the formData with the download URL
+    //     formData.user_photo = downloadURL;
+
+
+    //     firestore.collection('candidate-info').add(formData)
+    //       .then((docRef) => {
+    //         debugger
+    //         toggle();
+    //         console.log('Document written with ID: ', docRef.id);
+    //       })
+    //       .catch((error) => {
+    //         debugger
+    //         console.error('Error adding document: ', error);
+    //       });
+
+
+    //     // Create a new jsPDF instance
+    //     const pdf = new jsPDF({
+    //       unit: 'mm',
+    //       format: 'a4',
+    //     });
+    //     pdf.setFontSize(10);
+
+    //     // Assuming imageRef.current is correctly defined
+
+
+    //     const canvas = await html2canvas(imageRef.current);
+
+    //       // const imageSrc = canvas.toDataURL('image/png');
+    //       // pdf.addImage(imageSrc, 'PNG', 10, 10, 190, 270);
+
+    //       // // Add a new page for the questions
+    //       // pdf.addPage();
+
+    //     // Assuming question is correctly defined and selectedOption is set
+    //     debugger
+    //     const questions = selectedOption === 'electrical' ? shuffleArray(questionsSet1) : shuffleArray(questionsSet2);
+    //     let currentYPosition = 10;  // Initialize Y-coordinate for the new page
+
+    //     questions.forEach((q, index) => {
+    //       // Check if we need to add a new page
+    //       if (currentYPosition > 270) { // Check if Y-coordinate is beyond page's limit
+    //         pdf.addPage();
+    //         currentYPosition = 10; // Reset Y-coordinate for the new page
+    //       }
+    //       // testing
+    //       pdf.text(`Question ${index + 1}: ${q.question}`, 10, currentYPosition);
+    //       currentYPosition += 10;
+    //       if(q.a || q.b || q.c || q.d){
+    //         pdf.text(`A) ${q.a}`, 10, currentYPosition);
+    //         currentYPosition += 10;
+
+    //         pdf.text(`B) ${q.b}`, 10, currentYPosition);
+    //         currentYPosition += 10;
+
+    //         pdf.text(`C) ${q.c}`, 10, currentYPosition);
+    //         currentYPosition += 10;
+    //         pdf.text(`D) ${q.d}`, 10, currentYPosition);
+    //         currentYPosition += 20;  // Add more space before the next question
+    //       } else {
+    //         pdf.text(`Ans:`, 10, currentYPosition)
+    //         currentYPosition += 60
+    //       }
+
+
+
+    //     });
+
+    //     pdf.save('generated.pdf');
+    //     debugger
+    //     setSubmitted(false)
+    //   } catch (error) { 
+    //     console.error('An error occurred:', error);
+    //     alert('An error occurred while generating the PDF. Please try again.');
+    //   }
+    // } else {
+    //   setTesttypeError("Please select a examination type to continue!")
+    // }
+
   };
 
   // for submit buton
@@ -246,31 +304,34 @@ function Home() {
     // Handle form submission
     console.log(data);
     setFormData(data)
-    setModal(!modal)
+    handleGeneratePDF();
+    // setModal(!modal)
   };
 
   const handleAddIndex = () => {
-   
-     lastIndex.current += 1;
-      setIndexCount(lastIndex.current);
+
+    lastIndex.current += 1;
+    setIndexCount(lastIndex.current);
 
   };
   const handleClearIndex = () => {
     lastIndex.current -= 1;
     setIndexCount(lastIndex.current);
   };
+
   return (
     <div className="container my-3">
+      <div><Toaster /></div>
       <div className='navbar bg-body-tertiary  d-flex justify-content-between  py-2 px-3 '>
-        
+
         <span className='fs-5'>Welcome,&nbsp;<i className="bi bi-person-circle text-secondary "></i>&nbsp;<span className='text-success fw-bold text-decoration-underline'>{user && user.firstName}</span></span>
-        
+
         <button type="button" className="btn btn-info m-2">
-                  <Link to={`/admin`} style={{ color: 'white', textDecoration: 'none' }}>
-                    All candidate
-                  </Link>
-                </button>
-        
+          <Link to={`/admin`} style={{ color: 'white', textDecoration: 'none' }}>
+            All candidate
+          </Link>
+        </button>
+
         <span><button className="btn btn-outline-danger px-3 rounded-0" onClick={handleLogout}>
           <i class="bi bi-box-arrow-in-left "></i>&nbsp;Log Out
         </button></span>
@@ -356,7 +417,7 @@ function Home() {
                       }`}
                   />
                 </td>
-               <>
+                <>
                   <td colSpan="1">UPLOAD PHOTO:</td>
                   <td colSpan="1">
                     <input
@@ -368,7 +429,7 @@ function Home() {
                         }`}
                       onChange={(e) => displayUserPhoto(e)}
                     />
-                  </td></> 
+                  </td></>
               </tr>
               {/* Add more PERSONAL DETAILS fields here */}
 
@@ -389,7 +450,7 @@ function Home() {
                   <input
                     type="text"
                     name="contact"
-                    {...register('contact', { required: true })}
+                    {...register('contact', { required: true, maxLength: 10, pattern: /^[0-9]{10}$/ })}
                     className={`form-control ${errors.contact ? 'error-input' : ''
                       }`}
                   />
@@ -423,13 +484,18 @@ function Home() {
               <tr>
                 <td>STATE:</td>
                 <td>
-                  <input
-                    type="text"
+                  <select
                     name="state"
                     {...register('state', { required: true })}
-                    className={`form-control ${errors.state ? 'error-input' : ''
-                      }`}
-                  />
+                    className={`form-control ${errors.state ? 'error-input' : ''}`}
+                  >
+                    <option value="">Select a state</option>
+                    {stateOptions.map((state, index) => (
+                      <option key={index} value={state}>
+                        {state}
+                      </option>
+                    ))}
+                  </select>
                 </td>
                 <td>MARITAL STATUS:</td>
                 <td>
@@ -451,11 +517,26 @@ function Home() {
                   <input
                     type="date"
                     name="dob"
-                    {...register('dob', { required: true })}
-                    className={`form-control ${errors.dob ? 'error-input' : ''
-                      }`}
+                    {...register('dob', {
+                      required: true,
+                      validate: {
+                        ageCheck: (value) => {
+                          const currentDate = new Date();
+                          const selectedDate = new Date(value);
+                          const minDate = new Date();
+                          minDate.setFullYear(minDate.getFullYear() - 18);
+                          if (selectedDate >= minDate) {
+                            toast.error('Age should not be less than 18');
+                            return false; // Validation failed
+                          }
+                          return true; // Validation passed
+                        },
+                      },
+                    })}
+                    className={`form-control ${errors.dob ? 'error-input' : ''}`}
                   />
                 </td>
+
               </tr>
               {/* Add more EMAIL, NATIONALITY, STATE fields here */}
             </tbody>
@@ -486,9 +567,9 @@ function Home() {
                   type="checkbox"
                   value="english"
                   name="read"
-                  {...register('read', { required: true })}
-                  className={` ${errors.read ? 'error-input' : ''
-                    }`}
+                  {...register('read', { required: false })}
+                // className={` ${errors.read ? 'error-input' : ''
+                //   }`}
                 />
               </td>
               <td>
@@ -497,9 +578,9 @@ function Home() {
                   name="language"
                   value="hindi"
 
-                  {...register('read', { required: true })}
-                  className={` ${errors.read ? 'error-input' : ''
-                    }`}
+                  {...register('read', { required: false })}
+                // className={` ${errors.read ? 'error-input' : ''
+                //   }`}
                 />
               </td>
               <td>
@@ -507,9 +588,9 @@ function Home() {
                   type="checkbox"
                   value="gujarati"
                   name="language"
-                  {...register('read', { required: true })}
-                  className={` ${errors.read ? 'error-input' : ''
-                    }`}
+                  {...register('read', { required: false })}
+                // className={` ${errors.read ? 'error-input' : ''
+                //   }`}
                 />
               </td>
               <td>
@@ -517,9 +598,9 @@ function Home() {
                   type="checkbox"
                   value="other"
                   name="language"
-                  {...register('read', { required: true })}
-                  className={` ${errors.read ? 'error-input' : ''
-                    }`}
+                  {...register('read', { required: false })}
+                // className={` ${errors.read ? 'error-input' : ''
+                //   }`}
                 />
               </td>
             </tr>
@@ -544,9 +625,9 @@ function Home() {
                   name="language"
                   value="hindi"
 
-                  {...register('write', { required: true })}
-                  className={` ${errors.write ? 'error-input' : ''
-                    }`}
+                  {...register('write', { required: false })}
+                // className={` ${errors.write ? 'error-input' : ''
+                //   }`}
                 />
               </td>
               <td>
@@ -554,9 +635,9 @@ function Home() {
                   type="checkbox"
                   value="gujarati"
                   name="language"
-                  {...register('write', { required: true })}
-                  className={` ${errors.write ? 'error-input' : ''
-                    }`}
+                  {...register('write', { required: false })}
+                // className={` ${errors.write ? 'error-input' : ''
+                //   }`}
                 />
               </td>
               <td>
@@ -564,9 +645,9 @@ function Home() {
                   type="checkbox"
                   value="other"
                   name="language"
-                  {...register('write', { required: true })}
-                  className={` ${errors.write ? 'error-input' : ''
-                    }`}
+                  {...register('write', { required: false })}
+                // className={` ${errors.write ? 'error-input' : ''
+                //   }`}
                 />
               </td>
             </tr>
@@ -580,9 +661,9 @@ function Home() {
                   type="checkbox"
                   value="english"
                   name="language"
-                  {...register('speak', { required: true })}
-                  className={` ${errors.speak ? 'error-input' : ''
-                    }`}
+                  {...register('speak', { required: false })}
+                // className={` ${errors.speak ? 'error-input' : ''
+                //   }`}
                 />
               </td>
               <td>
@@ -591,9 +672,9 @@ function Home() {
                   name="language"
                   value="hindi"
 
-                  {...register('speak', { required: true })}
-                  className={` ${errors.speak ? 'error-input' : ''
-                    }`}
+                  {...register('speak', { required: false })}
+                // className={` ${errors.speak ? 'error-input' : ''
+                //   }`}
                 />
               </td>
               <td>
@@ -601,9 +682,9 @@ function Home() {
                   type="checkbox"
                   value="gujarati"
                   name="language"
-                  {...register('speak', { required: true })}
-                  className={` ${errors.speak ? 'error-input' : ''
-                    }`}
+                  {...register('speak', { required: false })}
+                // className={` ${errors.speak ? 'error-input' : ''
+                //   }`}
                 />
               </td>
               <td>
@@ -611,9 +692,9 @@ function Home() {
                   type="checkbox"
                   value="other"
                   name="language"
-                  {...register('speak', { required: true })}
-                  className={` ${errors.speak ? 'error-input' : ''
-                    }`}
+                  {...register('speak', { required: false })}
+                // className={` ${errors.speak ? 'error-input' : ''
+                //   }`}
                 />
               </td>
             </tr>
@@ -691,7 +772,7 @@ function Home() {
               <th>FROM</th>
               <th>TILL</th>
               <th></th>
-              <th><button type="button" className='btn btn-primary ml-5'  onClick={handleAddIndex}>Add +</button></th>
+              <th><button type="button" className='btn btn-primary ml-5' onClick={handleAddIndex}>Add +</button></th>
             </tr>
           </thead>
 
@@ -729,32 +810,32 @@ function Home() {
                       {...register(`till_date_${index}`)}
                     />
                   </center>
-                  
+
                 </td>
                 <td>
-                {isButtonVisible && (
-                <button type="button" className='mt-1 btn btn-primary ml-5' 
-                onClick={() => {
-                  
-                  const companyName = getValues(`company_name_${index}`);
-                  const designation = getValues(`designation_${index}`);
-                  const from_date = getValues(`from_date_${index}`);
-                  const till_date = getValues(`till_date_${index}`);
-                  debugger
-                  if (companyName && designation && from_date) {
-                    debugger
-                    handleAddIndex();
-                  }
-                }}
-                >Add +</button>
-                 )}
+                  {isButtonVisible && (
+                    <button type="button" className='mt-1 btn btn-primary ml-5'
+                      onClick={() => {
+
+                        const companyName = getValues(`company_name_${index}`);
+                        const designation = getValues(`designation_${index}`);
+                        const from_date = getValues(`from_date_${index}`);
+                        const till_date = getValues(`till_date_${index}`);
+                        debugger
+                        if (companyName && designation && from_date) {
+                          debugger
+                          handleAddIndex();
+                        }
+                      }}
+                    >Add +</button>
+                  )}
                 </td>
                 <td>
-                {isButtonVisible && (
-                <button type="button" className='mt-1 btn btn-danger'  onClick={handleClearIndex}>Clear</button>
-                 )}
+                  {isButtonVisible && (
+                    <button type="button" className='mt-1 btn btn-danger' onClick={handleClearIndex}>Clear</button>
+                  )}
                 </td>
-                
+
               </tr>
             ))}
           </tbody>
@@ -772,7 +853,7 @@ function Home() {
         <div className='d-flex justify-content-center w-100 '><button type="submit" className="btn btn-outline-secondary shadow border-1 rounded-2 px-4 py-2">
           Submit <span class="bi bi-send"></span>
         </button></div>
-        <Modal isOpen={modal} toggle={toggle}>
+        {/* <Modal isOpen={modal} toggle={toggle}>
           <ModalHeader toggle={toggle}>MCQ Examination Test</ModalHeader>
           <ModalBody>
             <p className='mb-3'>
@@ -817,8 +898,7 @@ function Home() {
               color="primary"
               className='rounned-0'
               
-              onClick={() => {
-                
+              onClick={() => {   
                 handleGeneratePDF();
                 setSubmitted(true)
               }}
@@ -831,7 +911,7 @@ function Home() {
               Cancel
             </Button>
           </ModalFooter>
-        </Modal>
+        </Modal> */}
       </form>
 
       <div class="container my-4 text-start">

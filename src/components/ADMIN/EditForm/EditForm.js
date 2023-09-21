@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { firestore ,storage } from "../../../firebase";
+import { firestore, storage } from "../../../firebase";
 import "../EditForm/EditForm.css";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from 'react-hot-toast';
 import { async } from "q";
 import firebase from 'firebase/compat/app';
 import { Hourglass } from 'react-loader-spinner'
-
+// import { saveAs } from 'file-saver'; // For downloading files
+// import { pdf } from '@react-pdf/renderer'; // For PDF generation
+// import XLSX from 'xlsx'; // For Excel generation
 const EditForm = () => {
   const { id } = useParams();
   const [result, setResult] = useState();
@@ -41,7 +43,7 @@ Below		0-49 */
       }));
 
       const result1 = formsData.find(user => user.userId == id)
-debugger
+      debugger
       // Set the forms state with the fetched data
       setResult(result1);
       // setValue(result)
@@ -97,7 +99,7 @@ debugger
     });
 
   };
-let navigate = useNavigate()
+  let navigate = useNavigate()
 
   const onSubmit = async (data) => {
     setLoading(true)
@@ -105,9 +107,9 @@ let navigate = useNavigate()
     // Update Firestore
     data.userId = id;
     const querySnapshot = await firestore
-    .collection('candidate-marks')
-    .where('userId', '==', id)
-    .get();
+      .collection('candidate-marks')
+      .where('userId', '==', id)
+      .get();
     let percentage = (data.total / 300) * 100;
     data.percentage = percentage;
 
@@ -119,33 +121,33 @@ let navigate = useNavigate()
       const writtenPhotoRef = storageRef.child(`written_photos/${data.written_photo[0].name}`);
       await writtenPhotoRef.put(data.written_photo[0]);
       const writtenPhotoUrl = await writtenPhotoRef.getDownloadURL();
-      
-      files.written_photo=writtenPhotoUrl;
+
+      files.written_photo = writtenPhotoUrl;
       debugger
     }
     if (data.oral_video[0]) {
       const oral_videoref = storageRef.child(`oral_video/${data.oral_video[0].name}`);
       await oral_videoref.put(data.oral_video[0]);
       const oral_videorefUrl = await oral_videoref.getDownloadURL();
-      
-      files.oral_video=oral_videorefUrl;
-      
+
+      files.oral_video = oral_videorefUrl;
+
     }
     if (data.practical_photo[0]) {
       const practical_photoref = storageRef.child(`practical_photos/${data.practical_photo[0].name}`);
       await practical_photoref.put(data.practical_photo[0]);
       const practical_photoUrl = await practical_photoref.getDownloadURL();
-      
-      files.practical_photo=practical_photoUrl;
-      
+
+      files.practical_photo = practical_photoUrl;
+
     }
-    
+
     // Repeat this process for other file inputs (e.g., oral_video, practical_photo)
 
     // Now, you have the download URLs for all uploaded files
     // Add the data along with file URLs to Firestore
-    if(querySnapshot.empty){
-        
+    if (querySnapshot.empty) {
+
       const firestore = firebase.firestore();
       try {
         debugger
@@ -155,9 +157,9 @@ let navigate = useNavigate()
         await firestore.collection('candidate-marks').add({
           ...data,
           ...files
-  
+
           // Add other file URLs here
-        }).then(async (docRef)=>{
+        }).then(async (docRef) => {
           toast.success('Data added Successfully!');
           console.log('Document written with ID: ', docRef.id);
           const querySnapshot = firestore
@@ -167,7 +169,7 @@ let navigate = useNavigate()
           const newData = {
             // Define the fields and new values you want to update
             // For example:
-            marksId:  docRef.id
+            marksId: docRef.id
             // Add more fields as needed
           };
           querySnapshot
@@ -189,19 +191,19 @@ let navigate = useNavigate()
         console.error('Error adding data to Firestore', error);
       }
     }
-   
+
     debugger;
 
     // Check if a document with the same user ID exists
-  
+
     if (!querySnapshot.empty) {
       // If a document exists, update it
       const docRef = querySnapshot.docs[0];
-       // Assuming there's only one matching document
-       delete data.written_photo;
-       delete data.oral_video;
-       delete data.practical_photo
-      await docRef.ref.update({...data, ...files});
+      // Assuming there's only one matching document
+      delete data.written_photo;
+      delete data.oral_video;
+      delete data.practical_photo
+      await docRef.ref.update({ ...data, ...files });
       toast.success('Data updated Successfully!');
       setTimeout(() => {
         navigate('/admin')
@@ -217,7 +219,7 @@ let navigate = useNavigate()
         .collection('candidate-marks')
         .add(data)
         .then(async (docRef) => {
-      
+
           // debugger
           // const docRef1 = querySnapshot.docs[0]; 
           // debugger
@@ -236,7 +238,7 @@ let navigate = useNavigate()
     setValue('oral', result?.oral);
     setValue('practical', result?.practical);
     setValue('total', result?.total);
-    
+
     if (result?.percentage) {
 
       if (result.percentage >= 90) {
@@ -311,6 +313,45 @@ let navigate = useNavigate()
     input.addEventListener("input", calculateTotal);
   });
 
+  // const generatePDF = async () => {
+  //   // Create a PDF document using react-pdf
+  //   const pdfDocument = (
+  //     <YourPDFComponent data={/* Data to be included in the PDF */} />
+  //   );
+
+  //   // Generate the PDF blob
+  //   const pdfBlob = await pdf(pdfDocument).toBlob();
+
+  //   // Download the PDF file
+  //   saveAs(pdfBlob, 'your-file-name.pdf');
+  // };
+
+  // // Function to generate an Excel file
+  // const generateExcel = () => {
+  //   // Prepare your data for Excel
+  //   const excelData = [
+  //     // ... Prepare your data as an array of arrays or objects
+  //   ];
+
+  //   // Create a new Excel Workbook
+  //   const workbook = XLSX.utils.book_new();
+
+  //   // Convert your data to an Excel sheet
+  //   const worksheet = XLSX.utils.json_to_sheet(excelData);
+
+  //   // Add the worksheet to the workbook
+  //   XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+
+  //   // Generate a binary Excel file and save it
+  //   const excelBinary = XLSX.write(workbook, {
+  //     bookType: 'xlsx',
+  //     type: 'blob',
+  //   });
+
+  //   // Download the Excel file
+  //   saveAs(excelBinary, 'your-file-name.xlsx');
+  // };
+
   return (
     <div className="my-4" id="editCandidate">
       <div><Toaster /></div>
@@ -370,12 +411,12 @@ let navigate = useNavigate()
                         Marks Obtained
                       </th>
                       <th scope="col" className="text-center">
-                       Upload Documents
+                        Upload Documents
                       </th>
                       <th scope="col" className="text-center">
                         Marks Allocate
                       </th>
-                  
+
                     </tr>
                   </thead>
                   <tbody>
@@ -394,13 +435,25 @@ let navigate = useNavigate()
                           />
                         </div>
                       </td>
-                      <td style={{width:"fit-content"}}>
-                      <div className="r1">
-                     {/* {result?.written_photo ?  */}
-                     <input  type="file" accept="image/*" 
-                      name="written_photo"
-                      {...register('written_photo', { required: true })}
-                      />
+                      <td style={{ width: "fit-content" }}>
+                        <div className="r1">
+                          <td>
+                            {result && result?.written_photo ? (
+                              // Display the download URL if result.written_photo exists
+                              <a href={result.written_photo} target="_blank" rel="noopener noreferrer">
+                                Download Photo
+                              </a>
+                            ) : (
+                              // Display the upload input if result.written_photo doesn't exist
+                              <input
+                                type="file"
+                                accept="image/*"
+                                name="written_photo"
+                                {...register('written_photo', { required: true })}
+                              />
+                            )}
+                          </td>
+
 
                         </div>
                       </td>
@@ -426,11 +479,23 @@ let navigate = useNavigate()
                         </div>
                       </td>
                       <td>
-                      <div className="r1">
-                      <input type="file" accept="video/*"  
-                       name="oral_video"
-                       {...register('oral_video', { required: true })}
-                      />
+                        <div className="r1">
+                          {result && result.oral_video ? (
+                            // If result is defined and result.oral_video has a value, show a download link
+                            <a href={result.oral_video} target="_blank" rel="noopener noreferrer">
+                              Download Video
+                            </a>
+                          ) : (
+                            // If result is undefined or result.oral_video is empty, show an upload input
+                            <input
+                              type="file"
+                              accept="video/*"
+                              name="oral_video"
+                              {...register('oral_video', { required: true })}
+                            />
+                          )}
+
+
 
                         </div>
                       </td>
@@ -456,11 +521,25 @@ let navigate = useNavigate()
                         </div>
                       </td>
                       <td>
-                      <div className="r1">
-                      <input type="file" accept="image/*"  
-                      name="practical_photo"
-                      {...register('practical_photo', { required: true })}
-                      />
+                        <div className="r1">
+                          {result && result.practical_photo ? (
+                            <div>
+                              <a href={result.practical_photo} target="_blank" rel="noopener noreferrer">
+                                Download Practical Photo
+                              </a>
+                            </div>
+                          ) : (
+                            <div>
+                              {/* <p>Upload:</p> */}
+                              <input
+                                type="file"
+                                accept="image/*"
+                                name="practical_photo"
+                                {...register('practical_photo', { required: true })}
+                              />
+                            </div>
+                          )}
+
 
                         </div>
                       </td>
@@ -474,7 +553,7 @@ let navigate = useNavigate()
                       <td scope="row" className="text-center">
                         Total
                       </td>
-                      
+
                       <td className="text-center">
                         <div className="r1">
                           <input
@@ -539,20 +618,20 @@ let navigate = useNavigate()
                 </table>
               </div>
             </div>
-<div className="d-flex row-xl-6 justify-content-between">
-            <button type="submit" className="btn btn-primary">
-              Save Changes
-            </button>
-           {loading ? <Hourglass
-  visible={true}
-  height="40"
-  width="40"
-  ariaLabel="hourglass-loading"
-  wrapperStyle={{}}
-  wrapperClass=""
-  colors={['#306cce', '#72a1ed']}
-/>:<></>}
-</div>
+            <div className="d-flex row-xl-6 justify-content-between">
+              <button type="submit" className="btn btn-primary">
+                Save Changes
+              </button>
+              {loading ? <Hourglass
+                visible={true}
+                height="40"
+                width="40"
+                ariaLabel="hourglass-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+                colors={['#306cce', '#72a1ed']}
+              /> : <></>}
+            </div>
           </form>
         </div>
       </div>
