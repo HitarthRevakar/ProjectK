@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+
 import './home.css'
 import questionsSet1 from '../QuestionPaper/Electrical.json';
 import questionsSet2 from '../QuestionPaper/Instrumentation.json';
@@ -180,6 +181,7 @@ function Home() {
     // Upload the user's photo to Firebase Storage
     setIsButtonVisible(false);
     const storageRef = storage.ref();
+    debugger
     const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
     await userPhotoRef.put(formData.user_photo[0]);
 
@@ -190,7 +192,7 @@ function Home() {
     // Update the formData with the download URL
     formData.user_photo = downloadURL;
 
-
+    formData.createdDate = new Date()
 
 
     firestore.collection('candidate-info').add(formData)

@@ -169,7 +169,8 @@ Below		0-49 */
           const newData = {
             // Define the fields and new values you want to update
             // For example:
-            marksId: docRef.id
+            marksId: docRef.id,
+            evaluation
             // Add more fields as needed
           };
           querySnapshot
