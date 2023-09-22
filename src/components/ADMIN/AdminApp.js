@@ -36,7 +36,7 @@ const AdminApp = () => {
       id: doc.id, // Document ID
       ...doc.data(), // Data inside the document
     }));
-    let newForms = formsData.filter(form =>form?.contractor_name?.includes(searchTxt) || form.candidate_name.includes(searchTxt) || form.email.includes(searchTxt))
+    let newForms = formsData.filter(form =>form?.contractor_name?.includes(searchTxt) || form?.discipline?.includes(searchTxt) || form.candidate_name.includes(searchTxt) || form.email.includes(searchTxt))
     debugger
     setForms(newForms)
     debugger
