@@ -3,17 +3,22 @@ import { firestore, storage } from '../../firebase';
 import { Link ,useNavigate} from 'react-router-dom';
 import '../ADMIN/Admin.css';
 import {Row , Col} from 'reactstrap'
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
+import * as XLSX from 'xlsx';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-
+import { BsDownload } from "react-icons/bs";
 import questionsSet1 from '../QuestionPaper/Electrical.json';
 import questionsSet2 from '../QuestionPaper/Instrumentation.json';
 const AdminApp = () => {
   const navigate = useNavigate();
   const [forms, setForms] = useState([]);
   const [modal, setModal] = useState(false);
-  const [currentFormId, setCurrentFormId] = useState(null); // State to store the current form ID
+  const [currentFormId, setCurrentFormId] = useState(null);
+   // State to store the current form ID
+   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+   const toggle1 = () => setDropdownOpen((prevState) => !prevState);
   const handleStartEvaluationClick = (formId) => {
     onSubmit();
     setCurrentFormId(formId); // Set the current form ID in the state
@@ -23,6 +28,15 @@ const AdminApp = () => {
   let imageRef = useRef();
   const [submitted, setSubmitted] = useState(false)
   let searchTxtRef = useRef()
+  let fromRef = useRef()
+  let toRef = useRef()
+
+  function exportToExcel(data) {
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, "user_data");
+  }
   const searchUser = async () =>{
     let searchTxt = searchTxtRef.current.value;
     // Reference the "forms" collection in Firestore
@@ -36,7 +50,25 @@ const AdminApp = () => {
       id: doc.id, // Document ID
       ...doc.data(), // Data inside the document
     }));
+<<<<<<< HEAD
     let newForms = formsData.filter(form =>form?.contractor_name?.includes(searchTxt) || form?.discipline?.includes(searchTxt) || form.candidate_name.includes(searchTxt) || form.email.includes(searchTxt))
+=======
+    let newForms = formsData;
+    if(searchTxt){
+      newForms = newForms.filter(form =>form?.contractor_name?.includes(searchTxt))
+    }
+    let fromDate = new Date(fromRef.current.value)
+    console.log(new Date(formsData[0].createdDate))
+    if(fromDate) {
+      newForms = newForms.filter(form => new Date(form.createdDate) >= fromDate)
+    }
+    debugger
+    let toDate = new Date(toRef.current.value)
+    if(toDate) {
+      newForms = newForms.filter(form => form.createdDate <= toDate)
+    }
+    
+>>>>>>> Kartik
     debugger
     setForms(newForms)
     debugger
@@ -253,10 +285,10 @@ const AdminApp = () => {
         <div className="container">
           <Row>
           <div className='text-center my-5'>
-            <h1>List Of Registered Forms</h1>
+            <h1>List of users</h1>
           </div>
           </Row>
-          <Row className='d-flex justify-content-between'>
+          <Row className='d-flex justify-content-between align-items-center'>
           <Col xl="1">
           <button type="button" className="btn btn-info m-2">
                   <Link to={`/home`} style={{ color: 'white', textDecoration: 'none' }}>
@@ -264,14 +296,38 @@ const AdminApp = () => {
                     </Link>
                 </button>
           </Col>
-         <Col xl="4" className='mt-1 d-flex'>
-          <input ref={searchTxtRef} placeholder='Search user by name,email...' className='form-control' />
+          <Col xl="2" >
+         <input ref={fromRef}  type='date' id='datepicker' className='form-control' />
+         </Col>
+         <Col xl="2" >
+         <input ref={toRef}  type='date' id='datepicker' className='form-control' />
+
+         </Col>
+         <Col xl="3 " className='d-flex p-5'>
+        <select className=''>
+          <option value="">Select a Grade</option>
+          <option value="Below">Below</option>
+          <option value="Average">Average</option>
+
+          <option value="Good">Good</option>
+          <option value="Excellent">Excellent</option>
+          <option value="Outstanding">Outstanding</option>
+
+
+        </select>
+         {/* <input ref={searchTxtRef} placeholder='Enter your ' className='form-control' /> */}
+          </Col>
+          <Col xl="2">
+          <input ref={searchTxtRef} placeholder='Enter contractor name' className='form-control' />
+          </Col>
+          <Col xl="12" className='d-flex justify-content-end'>
           <button type="button" onClick={searchUser} className="btn btn-info m-2 text-white">
                   Search
                 </button>
                 <button type="button" onClick={fetchData1} className="btn btn-secondary m-2 text-white">
                   Clear
                 </button>
+              <button className="btn btn-secondary m-2 text-white">Report  <BsDownload /></button>
          </Col>
           </Row>
        
@@ -282,6 +338,9 @@ const AdminApp = () => {
       <th className='text-danger fw-bold fs-4'>ID Number</th>
       <th className='text-danger fw-bold fs-4'>Candidate Name</th>
       <th className='text-danger fw-bold fs-4'>Email</th>
+      <th className='text-danger fw-bold fs-4'>Contractor</th>
+      <th className='text-danger fw-bold fs-4'>Evaluation</th>
+
       <th className='text-danger fw-bold fs-4'></th>
     </tr>
   </thead>
@@ -291,6 +350,10 @@ const AdminApp = () => {
         <td>{form.id_number}</td>
         <td>{form.candidate_name}</td>
         <td>{form.email}</td>
+        <td>{form.contractor_name}</td>
+        <td>{form.evaluation? form.evaluation:""}</td>
+
+
        
         <td>
         {!form.marksId?
