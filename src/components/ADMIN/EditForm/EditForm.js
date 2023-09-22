@@ -110,7 +110,7 @@ Below		0-49 */
       .collection('candidate-marks')
       .where('userId', '==', id)
       .get();
-    let percentage = (data.total / 300) * 100;
+    let percentage = (data.total / 100) * 100;
     data.percentage = percentage;
 
     const storageRef = firebase.storage().ref();
@@ -239,6 +239,7 @@ Below		0-49 */
     setValue('oral', result?.oral);
     setValue('practical', result?.practical);
     setValue('total', result?.total);
+    setValue('behaviour', result?.behaviour)
 
     if (result?.percentage) {
 
@@ -290,7 +291,7 @@ Below		0-49 */
 
     // Calculate the totals
     let total1 = written1 + oral1 + practical1;
-    let percentage = (total1 / 300) * 100;
+    let percentage = (total1 / 100) * 100;
     // setPercentage(percentage1.toFixed(2));
     if (percentage >= 90) {
       setEvaluation("Outstanding")
@@ -376,8 +377,8 @@ Below		0-49 */
                   </div>
                   <div className="mb-3">
                     <p>
-                      ID Number:{" "}
-                      <span className="fw-bold">{formData.id_number}</span>
+                      ID text:{" "}
+                      <span className="fw-bold">{formData.id_text}</span>
                     </p>
                   </div>
                   <div className="mb-3">
@@ -430,7 +431,8 @@ Below		0-49 */
                           <input
                             type="text"
                             name="written"
-                            {...register("written", { required: true })}
+                            required
+                            {...register("written", { required: true , max:35})}
                             className={`form-control text-center marks ${errors.written ? "error-input" : ""
                               }`}
                           />
@@ -450,6 +452,7 @@ Below		0-49 */
                                 type="file"
                                 accept="image/*"
                                 name="written_photo"
+                                required
                                 {...register('written_photo', { required: true })}
                               />
                             )}
@@ -460,7 +463,7 @@ Below		0-49 */
                       </td>
                       <td className="text-center">
                         <div className="r1">
-                          <p>100</p>
+                          <p>35</p>
                         </div>
                       </td>
                     </tr>
@@ -473,7 +476,8 @@ Below		0-49 */
                           <input
                             type="text"
                             name="oral"
-                            {...register("oral", { required: true })}
+                            required
+                            {...register("oral", { required: true, max:20 })}
                             className={`form-control text-center marks ${errors.oral ? "error-input" : ""
                               }`}
                           />
@@ -492,6 +496,7 @@ Below		0-49 */
                               type="file"
                               accept="video/*"
                               name="oral_video"
+                              required
                               {...register('oral_video', { required: true })}
                             />
                           )}
@@ -502,7 +507,7 @@ Below		0-49 */
                       </td>
                       <td className="text-center">
                         <div className="r1">
-                          <p>100</p>
+                          <p>20</p>
                         </div>
                       </td>
                     </tr>
@@ -515,7 +520,8 @@ Below		0-49 */
                           <input
                             type="text"
                             name="practical"
-                            {...register("practical", { required: true })}
+                            required
+                            {...register("practical", { required: true, max:40 })}
                             className={`form-control text-center marks ${errors.practical ? "error-input" : ""
                               }`}
                           />
@@ -536,6 +542,7 @@ Below		0-49 */
                                 type="file"
                                 accept="image/*"
                                 name="practical_photo"
+                                required
                                 {...register('practical_photo', { required: true })}
                               />
                             </div>
@@ -546,7 +553,32 @@ Below		0-49 */
                       </td>
                       <td className="text-center">
                         <div className="r1">
-                          <p>100</p>
+                          <p>40</p>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="">
+                      <td scope="row" className="text-center">
+                      Behaviour 
+                      </td>
+                      <td className="text-center">
+                        <div className="r1">
+                          <input
+                            type="text"
+                            name="behaviour"
+                            required
+                            {...register("behaviour", { required: true, max:5 })}
+                            className={`form-control text-center marks ${errors.behaviour ? "error-input" : ""
+                              }`}
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        
+                      </td>
+                      <td className="text-center">
+                        <div className="r1">
+                          <p>5</p>
                         </div>
                       </td>
                     </tr>
@@ -569,7 +601,7 @@ Below		0-49 */
                       <td></td>
                       <td className="text-center">
                         <div className="r1">
-                          <p>300</p>
+                          <p>100</p>
                         </div>
                       </td>
                     </tr>

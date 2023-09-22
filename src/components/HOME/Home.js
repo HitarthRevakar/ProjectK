@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-
+import firebase from "../../firebase";
 import './home.css'
 import questionsSet1 from '../QuestionPaper/Electrical.json';
 import questionsSet2 from '../QuestionPaper/Instrumentation.json';
@@ -159,13 +159,13 @@ function Home() {
     }
   }
 
-  const [selectedOption, setSelectedOption] = useState(null);
+  // const [selectedOption, setSelectedOption] = useState(null);
 
-  const handleRadioChange = (e) => {
-    debugger
-    setTesttypeError("")
-    setSelectedOption(e.target.value);
-  };
+  // const handleRadioChange = (e) => {
+  //   debugger
+  //   setTesttypeError("")
+  //   setSelectedOption(e.target.value);
+  // };
 
   const shuffleArray = (array) => {
     const shuffledArray = [...array];
@@ -182,9 +182,22 @@ function Home() {
     setIsButtonVisible(false);
     const storageRef = storage.ref();
     debugger
-    const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
-    await userPhotoRef.put(formData.user_photo[0]);
+    // const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
+    
 
+    const userPhoto = formData.user_photo && formData.user_photo[0];
+    let userPhotoRef
+    if (userPhoto) {
+       userPhotoRef = storageRef.child(`user_photos/${userPhoto.name}`);
+      
+       
+      await userPhotoRef.put(userPhoto);
+    } else {
+      // Handle the case where formData.user_photo is null or undefined
+      console.error('formData.user_photo is null or undefined');
+    }
+    
+    debugger
     // Get the download URL of the uploaded photo
     const downloadURL = await userPhotoRef.getDownloadURL();
     console.log('Download URL:', downloadURL);
@@ -192,7 +205,10 @@ function Home() {
     // Update the formData with the download URL
     formData.user_photo = downloadURL;
 
-    formData.createdDate = new Date()
+    const date = new Date(); // Your date object
+    const timestamp = firebase.firestore.Timestamp.fromDate(date);
+    formData.createdDate = timestamp
+    debugger
 
 
     firestore.collection('candidate-info').add(formData)
@@ -208,94 +224,6 @@ function Home() {
         console.error('Error adding document: ', error);
       });
 
-    debugger
-    // if(selectedOption){
-    //   try {
-
-    //     await userPhotoRef.put(formData.user_photo[0]);
-
-    //     // Get the download URL of the uploaded photo
-    //     const downloadURL = await userPhotoRef.getDownloadURL();
-    //     console.log('Download URL:', downloadURL);
-
-    //     // Update the formData with the download URL
-    //     formData.user_photo = downloadURL;
-
-
-    //     firestore.collection('candidate-info').add(formData)
-    //       .then((docRef) => {
-    //         debugger
-    //         toggle();
-    //         console.log('Document written with ID: ', docRef.id);
-    //       })
-    //       .catch((error) => {
-    //         debugger
-    //         console.error('Error adding document: ', error);
-    //       });
-
-
-    //     // Create a new jsPDF instance
-    //     const pdf = new jsPDF({
-    //       unit: 'mm',
-    //       format: 'a4',
-    //     });
-    //     pdf.setFontSize(10);
-
-    //     // Assuming imageRef.current is correctly defined
-
-
-    //     const canvas = await html2canvas(imageRef.current);
-
-    //       // const imageSrc = canvas.toDataURL('image/png');
-    //       // pdf.addImage(imageSrc, 'PNG', 10, 10, 190, 270);
-
-    //       // // Add a new page for the questions
-    //       // pdf.addPage();
-
-    //     // Assuming question is correctly defined and selectedOption is set
-    //     debugger
-    //     const questions = selectedOption === 'electrical' ? shuffleArray(questionsSet1) : shuffleArray(questionsSet2);
-    //     let currentYPosition = 10;  // Initialize Y-coordinate for the new page
-
-    //     questions.forEach((q, index) => {
-    //       // Check if we need to add a new page
-    //       if (currentYPosition > 270) { // Check if Y-coordinate is beyond page's limit
-    //         pdf.addPage();
-    //         currentYPosition = 10; // Reset Y-coordinate for the new page
-    //       }
-    //       // testing
-    //       pdf.text(`Question ${index + 1}: ${q.question}`, 10, currentYPosition);
-    //       currentYPosition += 10;
-    //       if(q.a || q.b || q.c || q.d){
-    //         pdf.text(`A) ${q.a}`, 10, currentYPosition);
-    //         currentYPosition += 10;
-
-    //         pdf.text(`B) ${q.b}`, 10, currentYPosition);
-    //         currentYPosition += 10;
-
-    //         pdf.text(`C) ${q.c}`, 10, currentYPosition);
-    //         currentYPosition += 10;
-    //         pdf.text(`D) ${q.d}`, 10, currentYPosition);
-    //         currentYPosition += 20;  // Add more space before the next question
-    //       } else {
-    //         pdf.text(`Ans:`, 10, currentYPosition)
-    //         currentYPosition += 60
-    //       }
-
-
-
-    //     });
-
-    //     pdf.save('generated.pdf');
-    //     debugger
-    //     setSubmitted(false)
-    //   } catch (error) { 
-    //     console.error('An error occurred:', error);
-    //     alert('An error occurred while generating the PDF. Please try again.');
-    //   }
-    // } else {
-    //   setTesttypeError("Please select a examination type to continue!")
-    // }
 
   };
 
@@ -306,6 +234,7 @@ function Home() {
     // Handle form submission
     console.log(data);
     setFormData(data)
+    debugger
     handleGeneratePDF();
     // setModal(!modal)
   };
@@ -369,6 +298,7 @@ function Home() {
                   <input
                     type="text"
                     name="contractor_name"
+                    required
                     {...register('contractor_name', { required: true })}
                     className={`form-control ${errors.contractor_name ? 'error-input' : ''
                       }`}
@@ -412,6 +342,7 @@ function Home() {
                 <td rowSpan="1">CANDIDATE NAME:</td>
                 <td rowSpan="1" className="align-items-center">
                   <input
+                    required
                     type="text"
                     name="candidate_name"
                     {...register('candidate_name', { required: true })}
@@ -423,6 +354,7 @@ function Home() {
                   <td colSpan="1">UPLOAD PHOTO:</td>
                   <td colSpan="1">
                     <input
+                      required
                       accept="image/*"
                       type="file"
                       name="user_photo"
@@ -442,20 +374,42 @@ function Home() {
                   <input
                     type="text"
                     name="id_number"
-                    {...register('id_number', { required: true })}
+                    required
+                    {...register('id_number', { required: true, maxLength: 12, pattern: /^\d{12}$/ })}
                     className={`form-control ${errors.id_number ? 'error-input' : ''
                       }`}
                   />
+                  {errors.id_number && errors.id_number.type === 'required' && (
+                    <p className="error-message">I.D NUMBER is required.</p>
+                  )}
+                  {errors.id_number && errors.id_number.type === 'maxLength' && (
+                    <p className="error-message">I.D NUMBER should not exceed 12 characters.</p>
+                  )}
+                  {errors.id_number && errors.id_number.type === 'pattern' && (
+                    <p className="error-message">I.D NUMBER should contain 12 digits only.</p>
+                  )}
                 </td>
                 <td>CONTACT NO:</td>
                 <td>
                   <input
                     type="text"
                     name="contact"
+                    required
                     {...register('contact', { required: true, maxLength: 10, pattern: /^[0-9]{10}$/ })}
-                    className={`form-control ${errors.contact ? 'error-input' : ''
-                      }`}
+                    className={`form-control ${errors.contact ? 'error-input' : ''}`}
                   />
+
+
+                  {errors.contact && errors.contact.type === 'required' && (
+                    <p className="error-message">Contact is required.</p>
+                  )}
+                  {errors.contact && errors.contact.type === 'maxLength' && (
+                    <p className="error-message">Contact should not exceed 10 characters.</p>
+                  )}
+                  {errors.contact && errors.contact.type === 'pattern' && (
+                    <p className="error-message">Contact should contain 10 digits only.</p>
+                  )}
+
                 </td>
               </tr>
               {/* Add more CONTACT INFORMATION fields here */}
@@ -467,6 +421,7 @@ function Home() {
                   <input
                     type="email"
                     name="email"
+                    required
                     {...register('email', { required: true })}
                     className={`form-control ${errors.email ? 'error-input' : ''
                       }`}
@@ -476,6 +431,7 @@ function Home() {
                 <td>
                   <input
                     type="text"
+                    required
                     name="nationality"
                     {...register('nationality', { required: true })}
                     className={`form-control ${errors.nationality ? 'error-input' : ''
@@ -488,6 +444,7 @@ function Home() {
                 <td>
                   <select
                     name="state"
+                    required
                     {...register('state', { required: true })}
                     className={`form-control ${errors.state ? 'error-input' : ''}`}
                   >
@@ -503,6 +460,7 @@ function Home() {
                 <td>
                   <select
                     name="marital_status"
+                    required
                     {...register('marital_status', { required: true })}
                     className={`form-select ${errors.marital_status ? 'error-input' : ''
                       }`}
@@ -519,6 +477,7 @@ function Home() {
                   <input
                     type="date"
                     name="dob"
+                    required
                     {...register('dob', {
                       required: true,
                       validate: {
@@ -716,6 +675,7 @@ function Home() {
               <td className="sub-header">ACADEMIC:</td>
               <td>
                 <input
+                  required
                   type="text"
                   name="academic_qualification"
                   {...register('academic_qualification', { required: true })}
@@ -753,6 +713,7 @@ function Home() {
               <td>TOTAL YEARS OF EXPERIENCE:</td>
               <td colSpan="2">
                 <input
+                  required
                   type="text"
                   name="total_experience"
                   {...register('total_experience', { required: true })}
