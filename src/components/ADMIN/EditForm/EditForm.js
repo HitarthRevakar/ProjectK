@@ -102,6 +102,9 @@ Below		0-49 */
   let navigate = useNavigate()
 
   const onSubmit = async (data) => {
+    const date = new Date(); // Your date object
+    const timestamp = firebase.firestore.Timestamp.fromDate(date);
+    
     setLoading(true)
     debugger;
     // Update Firestore
@@ -147,7 +150,8 @@ Below		0-49 */
     // Now, you have the download URLs for all uploaded files
     // Add the data along with file URLs to Firestore
     if (querySnapshot.empty) {
-
+      data.evaluatedDate = timestamp
+      data.lastEvaluatedDate =timestamp
       const firestore = firebase.firestore();
       try {
         debugger
@@ -156,10 +160,12 @@ Below		0-49 */
         delete data.practical_photo
         await firestore.collection('candidate-marks').add({
           ...data,
-          ...files
+          ...files,
+
 
           // Add other file URLs here
         }).then(async (docRef) => {
+
           toast.success('Data added Successfully!');
           console.log('Document written with ID: ', docRef.id);
           const querySnapshot = firestore
@@ -170,7 +176,9 @@ Below		0-49 */
             // Define the fields and new values you want to update
             // For example:
             marksId: docRef.id,
-            evaluation
+            evaluation,
+            evaluatedDate:timestamp,
+            lastEvaluatedDate: timestamp
             // Add more fields as needed
           };
           querySnapshot
@@ -198,14 +206,43 @@ Below		0-49 */
     // Check if a document with the same user ID exists
 
     if (!querySnapshot.empty) {
+      data.lastEvaluatedDate =timestamp
+
       // If a document exists, update it
       const docRef = querySnapshot.docs[0];
       // Assuming there's only one matching document
       delete data.written_photo;
       delete data.oral_video;
       delete data.practical_photo
-      await docRef.ref.update({ ...data, ...files });
+
+      await docRef.ref.update({ ...data, ...files, });
+      const querySnapshot1 = firestore
+        .collection('candidate-info').doc(id)
+      // let formData1 = formData;
+      // formData1.marksId = docRef.id
+      const newData = {
+        // Define the fields and new values you want to update
+        // For example:
+        marksId: docRef.id,
+        evaluation,
+        lastEvaluatedDate: timestamp
+        // Add more fields as needed
+      };
+      querySnapshot1
+        .update(newData)
+        .then(() => {
+          setTimeout(() => {
+            navigate('/admin')
+          }, 2000);
+          console.log('Document successfully updated!');
+        })
+        .catch((error) => {
+          console.error('Error updating document: ', error);
+        });
+
+      debugger
       toast.success('Data updated Successfully!');
+      debugger
       setTimeout(() => {
         navigate('/admin')
       }, 2000);
@@ -289,8 +326,11 @@ Below		0-49 */
       parseFloat(document.querySelector("input[name='practical']").value) ||
       0;
 
+    let behaviour1 =
+      parseFloat(document.querySelector("input[name='behaviour']").value) ||
+      0;
     // Calculate the totals
-    let total1 = written1 + oral1 + practical1;
+    let total1 = written1 + oral1 + practical1 + behaviour1;
     let percentage = (total1 / 100) * 100;
     // setPercentage(percentage1.toFixed(2));
     if (percentage >= 90) {
@@ -432,7 +472,7 @@ Below		0-49 */
                             type="text"
                             name="written"
                             required
-                            {...register("written", { required: true , max:35})}
+                            {...register("written", { required: true, max: 35 })}
                             className={`form-control text-center marks ${errors.written ? "error-input" : ""
                               }`}
                           />
@@ -477,7 +517,7 @@ Below		0-49 */
                             type="text"
                             name="oral"
                             required
-                            {...register("oral", { required: true, max:20 })}
+                            {...register("oral", { required: true, max: 20 })}
                             className={`form-control text-center marks ${errors.oral ? "error-input" : ""
                               }`}
                           />
@@ -521,7 +561,7 @@ Below		0-49 */
                             type="text"
                             name="practical"
                             required
-                            {...register("practical", { required: true, max:40 })}
+                            {...register("practical", { required: true, max: 40 })}
                             className={`form-control text-center marks ${errors.practical ? "error-input" : ""
                               }`}
                           />
@@ -559,7 +599,7 @@ Below		0-49 */
                     </tr>
                     <tr class="">
                       <td scope="row" className="text-center">
-                      Behaviour 
+                        Behaviour
                       </td>
                       <td className="text-center">
                         <div className="r1">
@@ -567,14 +607,14 @@ Below		0-49 */
                             type="text"
                             name="behaviour"
                             required
-                            {...register("behaviour", { required: true, max:5 })}
+                            {...register("behaviour", { required: true, max: 5 })}
                             className={`form-control text-center marks ${errors.behaviour ? "error-input" : ""
                               }`}
                           />
                         </div>
                       </td>
                       <td>
-                        
+
                       </td>
                       <td className="text-center">
                         <div className="r1">
@@ -624,27 +664,27 @@ Below		0-49 */
                     <tr className="">
                       <td scope="row">Outstanding</td>
                       <td><input type="checkbox" name="Outstanding" checked={evaluation == "Outstanding"} /></td>
-                   
+
                     </tr>
                     <tr className="">
                       <td scope="row">Excellent</td>
                       <td><input type="checkbox" name="Excellent" checked={evaluation == "Excellent"} /></td>
-              
+
                     </tr>
                     <tr className="">
                       <td scope="row">Good</td>
                       <td><input type="checkbox" name="Good" checked={evaluation == "Good"} /></td>
-                      
+
                     </tr>
                     <tr className="">
                       <td scope="row">Average</td>
                       <td><input type="checkbox" name="Average" checked={evaluation == "Average"} /></td>
-         
+
                     </tr>
                     <tr className="">
                       <td scope="row">Below</td>
                       <td><input type="checkbox" name="Below" checked={evaluation == "Below"} /></td>
-                  
+
                     </tr>
                   </tbody>
 

@@ -34,18 +34,35 @@ const AdminApp = () => {
   let gradeRef = useRef()
 
   function exportToExcel(data) {
-    const ws = XLSX.utils.json_to_sheet(data);
+    // Extract only the desired fields from each object in the data array
+    const filteredData = data.map((item) => ({
+      Srno: item.id_number,
+      Name: item.candidate_name,
+      Number: item.contact,
+      Email: item.email,
+      Contractor: item.contractor_name,
+      Grade: item.evaluation,
+      EvaluatedDate: item.evaluatedDate?.toDate(),
+      LastEvaluatedDate:item.lastEvaluatedDate?.toDate()
+    }));
+  
+    // Convert the filtered data to an Excel sheet
+    const ws = XLSX.utils.json_to_sheet(filteredData);
+  
+    // Create a new Excel workbook and add the sheet to it
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  
+    // Save the workbook as an Excel file
     XLSX.writeFile(wb, "user_data.xlsx");
   }
-
   const handleExportClick = () => {
     exportToExcel(forms);
   };
 
 
   const searchUser = async () => {
+
     try {
       const searchTxt = searchTxtRef.current.value;
       const formsRef = firestore.collection('candidate-info');
@@ -59,11 +76,11 @@ const AdminApp = () => {
 
       // Issue 1: Search filter by contractor_name
       if (searchTxt) {
-        // Correction: Use strict equality for matching contractor_name
+        // Use a case-insensitive search by converting both the search text and contractor_name to lowercase
+        const searchTxtLower = searchTxt.toLowerCase();
         newForms = newForms.filter((form) =>
-          form?.contractor_name.includes(searchTxt)
+          form?.contractor_name.toLowerCase().includes(searchTxtLower)
         );
-
       }
 
       // Issue 2: Filtering by fromDate
@@ -344,13 +361,16 @@ const AdminApp = () => {
               </button>
             </Col>
             <Col xl="2" >
-              <input ref={fromRef} type='date' id='datepicker' className='form-control' />
+            <p>From</p>
+              <input ref={fromRef} type='date' id='datepicker'  className='form-control' />
             </Col>
             <Col xl="2" >
+              <p>To</p>
               <input ref={toRef} type='date' id='datepicker' className='form-control' />
 
             </Col>
             <Col xl="3 " className='d-flex p-5'>
+              
               <select className='' ref={gradeRef}>
                 <option value="">Select a Grade</option>
                 <option value="Below">Below</option>
@@ -382,11 +402,12 @@ const AdminApp = () => {
           <table className="table m-3">
             <thead>
               <tr className='col-lg-4 col-md-4 col-sm-4 col-5 text-start '>
-                <th className='text-danger fw-bold fs-4'>ID Number</th>
-                <th className='text-danger fw-bold fs-4'>Candidate Name</th>
+                <th className='text-danger fw-bold fs-4'>Sr No.</th>
+                <th className='text-danger fw-bold fs-4'>Name</th>
+                <th className='text-danger fw-bold fs-4'>Number</th>
                 <th className='text-danger fw-bold fs-4'>Email</th>
-                <th className='text-danger fw-bold fs-4'>Contractor</th>
-                <th className='text-danger fw-bold fs-4'>Evaluation</th>
+                <th className='text-danger fw-bold fs-4'>Name of Contractor</th>
+                <th className='text-danger fw-bold fs-4'>Grade Evaluation</th>
 
                 <th className='text-danger fw-bold fs-4'></th>
               </tr>
@@ -396,6 +417,7 @@ const AdminApp = () => {
                 <tr key={form.id}>
                   <td>{form.id_number}</td>
                   <td>{form.candidate_name}</td>
+                  <td>{form.contact}</td>
                   <td>{form.email}</td>
                   <td>{form.contractor_name}</td>
                   <td>{form.evaluation ? form.evaluation : ""}</td>

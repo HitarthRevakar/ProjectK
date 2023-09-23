@@ -18,8 +18,9 @@ import { firestore, storage } from '../../firebase';
 
 function Home() {
   const { logOut, user } = useUserAuth();
-  let [userData, setUserData] = useState()
+  let [userData, setUserData] = useState("")
   let userData1 = localStorage.getItem("user");
+  debugger
   useEffect(() => {
     debugger
     setUserData(JSON.parse(userData1))
@@ -255,7 +256,7 @@ function Home() {
       <div><Toaster /></div>
       <div className='navbar bg-body-tertiary  d-flex justify-content-between  py-2 px-3 '>
 
-        <span className='fs-5'>Welcome,&nbsp;<i className="bi bi-person-circle text-secondary "></i>&nbsp;<span className='text-success fw-bold text-decoration-underline'>{user && user.firstName}</span></span>
+        <span className='fs-5'>Welcome,&nbsp;<span className='text-primary fw-bold'>{userData.firstName}</span></span>
 
         <button type="button" className="btn btn-info m-2">
           <Link to={`/admin`} style={{ color: 'white', textDecoration: 'none' }}>
