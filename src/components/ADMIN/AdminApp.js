@@ -425,8 +425,8 @@ pdf.addImage(imageSrc, 'PNG', 7, -100, 200, 150);
   return (
     <>
 
-      <div className='my-4'>
-        <div className="container">
+      <div className='my-4 '>
+        <div className="container mb-5">
           <Row>
             <div className='text-center my-5'>
               <h1>List of users</h1>
@@ -592,6 +592,247 @@ pdf.addImage(imageSrc, 'PNG', 7, -100, 200, 150);
 
 
         </div>
+        <div className="custom-table custom-table table-responsive" style={{width:"90%", margin:"0 auto"}} >
+          <table style={{border:"2px solid black"}} className="table table-striped custom-table table-responsive">
+            <tbody>
+              <tr className='text-center align-items-center' style={{ height: "140px", backgroundColor: "white" }}>
+                <td style={{border:"2px solid black"}} className="" colSpan="1">
+                  <img src={process.env.PUBLIC_URL + '/logo.jpg'} style={{ border: "none" }} className='mt-2' alt="Logo" />
+                </td>
+                <td  style={{ fontFamily: "Times New Roman", fontWeight: "bolder", color: "#0060B0" }} colSpan="2" className='mt-1 pt-2 align-items-center'>
+                  <div className='align-items-center mt-5 '><h4 className='fw-bold'>TECHNO CONCEPTS INSTRUMENTS PRIVATE LIMITED VALIDATION CENTER, JAMNAGAR</h4>  </div>
+                </td>
+                </tr>
+                </tbody>
+                </table>
+                <table className='custom-table table-responsive'>
+              <tr style={{width:"100%"}} className='text-center align-items-center'>
+              <td   style={{border:"2px solid black"}} colSpan="4" className='mt-1 align-items-center '>
+                  <div className='align-items-center '><h4 className='fw-bold'>CANDIDATE VALIDATION AND ASSESSMENT REPORT</h4>  </div>
+                </td>
+</tr>
+ <tr className='text-center align-items-center'>
+    <td style={{border:"2px solid black", width:"220px"}} rowSpan={6} class="box"> QR Code</td>
+ <td >
+ <div className='h-100 w-100' style={{ margin: '0', padding: '0', width:"50%" }}>
+ <table  className='fw-bold custom-table table-responsive' style={{borderCollapse:"collapse",margin: '0', padding: '0'}}>
+    <tr>
+      <td style={{ border: '1px solid black' }}>CANDIDATE NAME:</td>
+    </tr>
+    <tr>
+      <td style={{ border: '1px solid black' }}>TRADE:</td>
+    </tr>
+    <tr>
+      <td style={{ border: '1px solid black' }}>DISCIPLINE:</td>
+    </tr>
+    <tr>
+      <td style={{ border: '1px solid black' }}>ID NUMBER:</td>
+    </tr>
+    <tr>
+      <td style={{ border: '1px solid black' }}>CONTRACTOR NAME:</td>
+    </tr>
+    <tr>
+      <td style={{ border: '1px solid black' }}>DATE:</td>
+    </tr>
+</table>
+</div>
+</td>
+<td>
+<div className='h-100 w-100' style={{ margin: '0', padding: '0', width:"50%" }}>
+
+ <table className='custom-table table-responsive' style={{borderCollapse:"collapse",margin: '0', padding: '0'}}>
+    <tr>
+      <td style={{ border: '1px solid black', padding:"20px "}}>{" "}</td>
+    </tr>
+    <tr>
+      <td style={{ border: '1px solid black' }}></td>
+    </tr>
+    <tr>
+      <td style={{ border: '1px solid black' }}></td>
+    </tr>
+    <tr>
+      <td style={{ border: '1px solid black' }}></td>
+    </tr>
+    <tr>
+      <td style={{ border: '1px solid black' }}></td>
+    </tr>
+    <tr>
+      <td style={{ border: '1px solid black' }}></td>
+    </tr>
+</table>
+</div>
+ </td>
+    <td  style={{border:"2px solid black", width:"220px"}} rowspan="5" class="box">PHOTO</td>
+  </tr>
+                </table>
+                <table className="table custom-table table-responsive mt-5">
+
+<thead>
+
+ 
+  <tr>
+  
+    <th>TEST CATEGORY</th>
+    <th>MARKS ALLOTED</th>
+    <th>MARKS OBTAINED</th>
+  
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td>WRITTEN</td>
+    <td>
+    
+    </td>
+    <td>
+    
+    </td>
+
+  </tr>
+  {/* Add more LANGUAGES KNOWN fields here */}
+</tbody>
+<tbody>
+  <tr>
+    <td>VIVA</td>
+    <td>
+    
+    </td>
+    <td>
+    
+    </td>
+
+  </tr>
+  {/* Add more LANGUAGES KNOWN fields here */}
+</tbody>
+<tbody>
+  <tr>
+    <td>PRACTICAL</td>
+    <td>
+   
+    </td>
+    
+    <td>
+      
+    </td>
+  </tr>
+  {/* Add more LANGUAGES KNOWN fields here */}
+</tbody>
+<tbody>
+  <tr>
+    <td>TOTAL</td>
+    <td>
+   
+    </td>
+    <td>
+     
+    </td>
+  
+  </tr>
+  {/* Add more LANGUAGES KNOWN fields here */}
+</tbody>
+</table>
+<table className="table custom-table table-responsive mt-5">
+                  <tr>
+                    <th>COMPETENCY ASSESSMENT:</th>
+                  </tr>
+                  <tr>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>PM OF LT MOTORS </td>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>PM OF SWITCH GEAR</td>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>PM OF PP </td>
+                  </tr>
+                  <tr>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>PM OF HT MOTORS </td>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>CM OF SWITCH GEAR</td>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>PM OF LDB </td>
+                  </tr>
+                  <tr>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>CM OF LT MOTORS </td>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>PM OF POWER TRANSFORMER</td>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>MEGGERING </td>
+                  </tr>
+                  <tr>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>CM OF HT MOTORS </td>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>CM OF POWER TRANSFORMER</td>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>BASIC SAFETY</td>
+                  </tr>
+                  <tr>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>PM OF EARTH PIT </td>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>GLANDING AND TERMINATION </td>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>TBRA AND HITRA </td>
+                  </tr>
+                  <tr>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>CABLE LAYING </td>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>EMERGENCY RESPONSE</td>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>TOOL BOX TALK </td>
+                  </tr>
+                  <tr>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>ROLES AND RESPONSIBILITIES </td>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>LPRZT</td>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>WORK PERMIT SYSTEM </td>
+                  </tr>
+
+
+                </table>
+                <table className='table custom-table table-responsive mt-5'>
+                  <tr>
+                    <th> PERFORMANCE EVALUATION:</th>
+                  </tr>
+                  <tr>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>OUTSTANDING </td>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>GOOD</td>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>NOT COMPITENT</td>
+                  </tr>
+                  <tr>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>EXCELLENT </td>
+                    <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }}/>AVERAGE</td>
+                    <td></td>
+                  </tr>
+                </table>
+
+                <table className='table custom-table table-responsive mt-5'>
+                  <thead>
+                    <tr>
+                      <th>DESCRIPTION</th>
+                      <th>REMARKS</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        KNOWLEDGE IN ASSESMENT MENTIONED
+                      </td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        CANDIDATE CAN WORK INDIVIDUALLY AND IMPROVEMENT IN THEORATICAL KNOWLEDGE IS
+                        REUIRED
+                      </td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        CANDIDATE CAN WORK IN GROUP AS HE LACKS BOTH THEORATICAL AND PRACTICAL KNOWLEDGE
+                      </td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        CANDIDATE NOT FIT FOR WORK
+                      </td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <table>
+                  <tr>
+                  <th colSpan={1}>CANDIDATE<br></br>
+                    SPECIALIZED IN:</th>
+                  <td></td></tr>
+                </table>
+                </div>
       </div>
 
     </>
