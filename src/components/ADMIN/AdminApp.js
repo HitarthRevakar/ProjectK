@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { firestore, storage } from '../../firebase';
 import firebase from '@firebase/app-compat';
+import { AiOutlineDownload } from "react-icons/ai";
 import { Link, useNavigate } from 'react-router-dom';
 import '../ADMIN/Admin.css';
 import { Row, Col } from 'reactstrap'
@@ -32,6 +33,85 @@ const AdminApp = () => {
   let fromRef = useRef()
   let toRef = useRef()
   let gradeRef = useRef()
+  let reportTypeRef = useRef()
+  function jsonToTable(jsonData) {
+    let table = '<table border="1">';
+    let headers = Object.keys(jsonData[0]);
+    
+    // Create the table header row
+    table += '<thead><tr>';
+    headers.forEach(function (header) {
+      table += '<th>' + header + '</th>';
+    });
+    table += '</tr></thead>';
+  
+    // Create the table body rows
+    table += '<tbody>';
+    jsonData.forEach(function (row) {
+      table += '<tr>';
+      headers.forEach(function (header) {
+        table += '<td>' + row[header] + '</td>';
+      });
+      table += '</tr>';
+    });
+    table += '</tbody>';
+  
+    table += '</table>';
+    return table;
+  }
+  
+ 
+
+async function downloadReport(){
+  if(reportTypeRef.current.value=="Excel"){
+    
+    handleExportClick()
+  } else if(reportTypeRef.current.value=="Pdf") {
+    const filteredData = forms.map((item) => ({
+      Srno: item.id_number,
+      Name: item.candidate_name,
+      Number: item.contact,
+      Email: item.email,
+      Contractor: item.contractor_name,
+      Grade: item.evaluation,
+      // EvaluatedDate: item.evaluatedDate?.toDate(),
+      LastEvaluatedDate:item.lastEvaluatedDate?.toDate() ? item.lastEvaluatedDate?.toDate() : ""
+    }));
+    const htmlTable = await jsonToTable(filteredData);
+    const parser = new DOMParser();
+
+// Parse the HTML string into a DOM document
+const doc = parser.parseFromString(htmlTable, 'text/html');
+
+// Extract the root element of the parsed document (in this case, a <div> element)
+const rootElement = doc.documentElement;
+    debugger
+    const pdf = new jsPDF();
+  pdf.text('Report',10,60);
+  // Create a canvas element
+
+
+// Append the canvas to the document or wherever you want to place it
+document.body.appendChild(rootElement);
+let imageSrc
+// Use html2canvas to convert the root element to a canvas
+await html2canvas(rootElement).then(function (canvas) {
+ imageSrc = canvas.toDataURL('image/png');
+
+  // Append the generated canvas to the document or do further actions with it
+});
+debugger
+
+
+// Add the image to the PDF with the new dimensions
+pdf.addImage(imageSrc, 'PNG', 7, -100, 200, 150);
+  pdf.save('report.pdf');
+  document.body.removeChild(rootElement);
+
+  }
+
+}
+
 
   function exportToExcel(data) {
     // Extract only the desired fields from each object in the data array
@@ -42,8 +122,8 @@ const AdminApp = () => {
       Email: item.email,
       Contractor: item.contractor_name,
       Grade: item.evaluation,
-      EvaluatedDate: item.evaluatedDate?.toDate(),
-      LastEvaluatedDate:item.lastEvaluatedDate?.toDate()
+      // EvaluatedDate: item.evaluatedDate?.toDate(),
+      LastEvaluatedDate:item.lastEvaluatedDate?.toDate() ? item.lastEvaluatedDate?.toDate() : ""
     }));
   
     // Convert the filtered data to an Excel sheet
@@ -394,7 +474,16 @@ const AdminApp = () => {
               <button type="button" onClick={fetchData1} className="btn btn-secondary m-2 text-white">
                 Clear
               </button>
-              <button className="btn btn-secondary m-2 text-white" onClick={handleExportClick}>Report  <BsDownload /></button>
+              {/* <button className="btn btn-secondary m-2 text-white" onClick={handleExportClick}>Report  <BsDownload /></button> */}
+              <select color='secondary' onChange={downloadReport} style={{width:"170px", height:"40px"}} className='mt-2 secondary  rounded-1' ref={reportTypeRef}>
+                <option value="">Download report{" "}</option>
+                <option value="Pdf">Pdf  {" "}</option>
+                <option value="Excel">Excel  {" "}</option>
+
+               
+
+
+              </select>
             </Col>
           </Row>
 
