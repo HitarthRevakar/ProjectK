@@ -312,11 +312,11 @@ function Home() {
                   <input
                     type="text"
                     name="trade"
-                    className='form-control'
-                  // {...register('trade', { required: true })}
-                  // className={`form-control ${
-                  //   errors.trade ? 'error-input' : ''
-                  // }`}
+                 
+                  {...register('trade', { required: true })}
+                  className={`form-control ${
+                    errors.trade ? 'error-input' : ''
+                  }`}
                   />
                 </td>
               </tr>
@@ -326,11 +326,11 @@ function Home() {
                   <input
                     type="text"
                     name="discipline"
-                    className='form-control'
-                  // {...register('discipline', { required: true })}
-                  // className={`form-control ${
-                  //   errors.discipline ? 'error-input' : ''
-                  // }`}
+                    // className='form-control'
+                  {...register('discipline', { required: true })}
+                  className={`form-control ${
+                    errors.discipline ? 'error-input' : ''
+                  }`}
                   />
                 </td>
               </tr>

@@ -17,6 +17,7 @@ const AdminApp = () => {
   const [forms, setForms] = useState([]);
   const [modal, setModal] = useState(false);
   const [currentFormId, setCurrentFormId] = useState(null);
+  let [selectedUser, setSelectedUser] = useState()
   // State to store the current form ID
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -26,6 +27,33 @@ const AdminApp = () => {
     setCurrentFormId(formId); // Set the current form ID in the state
     setModal(true); // Open the modal
   };
+  let userReportRef = useRef()
+ async function generatePDF() {
+    const doc = new jsPDF();
+  
+    // Traverse the DOM elements within userReportRef and add them to the PDF
+    const elementToCapture = document.getElementById('reportTable');
+   await html2canvas(elementToCapture).then(canvas => {
+      // Convert the canvas to an image data URL (base64)
+      const imageDataURL = canvas.toDataURL('image/png');
+  
+      // You can display the captured image or perform further actions with it
+      console.log(imageDataURL); // Print the image data URL
+      doc.addImage(imageDataURL, 'PNG', 7, 10, 180, 240)
+      // To display the image in an HTML element (e.g., an <img> tag):
+      // const imgElement = document.createElement('img');
+      // imgElement.src = imageDataURL;
+      // document.body.appendChild(imgElement);
+    });
+    // You can adjust the position as needed
+  
+    // Save or display the PDF
+   await doc.save("user_report.pdf");
+   setTimeout(() => {
+    setSelectedUser()
+    
+   }, 10000);
+  }
   let [testtypeError, setTesttypeError] = useState("")
   let imageRef = useRef();
   const [submitted, setSubmitted] = useState(false)
@@ -60,7 +88,11 @@ const AdminApp = () => {
     return table;
   }
   
- 
+ useEffect(()=>{
+if(selectedUser?.candidate_name){
+  generatePDF()
+}
+ },[selectedUser])
 
 async function downloadReport(){
   if(reportTypeRef.current.value=="Excel"){
@@ -497,6 +529,8 @@ pdf.addImage(imageSrc, 'PNG', 7, -100, 200, 150);
                 <th className='text-danger fw-bold fs-4'>Email</th>
                 <th className='text-danger fw-bold fs-4'>Name of Contractor</th>
                 <th className='text-danger fw-bold fs-4'>Grade Evaluation</th>
+                <th className='text-danger fw-bold fs-4'>Report</th>
+
 
                 <th className='text-danger fw-bold fs-4'></th>
               </tr>
@@ -510,6 +544,7 @@ pdf.addImage(imageSrc, 'PNG', 7, -100, 200, 150);
                   <td>{form.email}</td>
                   <td>{form.contractor_name}</td>
                   <td>{form.evaluation ? form.evaluation : ""}</td>
+                  <td onClick={()=>{setSelectedUser(form);}}>Select a user</td>
 
 
 
@@ -592,7 +627,8 @@ pdf.addImage(imageSrc, 'PNG', 7, -100, 200, 150);
 
 
         </div>
-        <div className="custom-table custom-table table-responsive" style={{width:"90%", margin:"0 auto"}} >
+       {selectedUser ? <div className='mt-5' style={{marginTop:"120px"}}>
+        <div ref={userReportRef} id='reportTable' className="custom-table custom-table table-responsive" style={{width:"90%", margin:"0 auto"}} >
           <table style={{border:"2px solid black"}} className="table table-striped custom-table table-responsive">
             <tbody>
               <tr className='text-center align-items-center' style={{ height: "140px", backgroundColor: "white" }}>
@@ -642,22 +678,22 @@ pdf.addImage(imageSrc, 'PNG', 7, -100, 200, 150);
 
  <table className='custom-table table-responsive' style={{borderCollapse:"collapse",margin: '0', padding: '0'}}>
     <tr>
-      <td style={{ border: '1px solid black', padding:"20px "}}>{" "}</td>
+      <td style={{ border: '1px solid black', padding:"20px "}}>{selectedUser?.candidate_name}</td>
     </tr>
     <tr>
-      <td style={{ border: '1px solid black' }}></td>
+      <td style={{ border: '1px solid black' }}>{selectedUser?.trade}</td>
     </tr>
     <tr>
-      <td style={{ border: '1px solid black' }}></td>
+      <td style={{ border: '1px solid black' }}>{selectedUser?.discipline}</td>
     </tr>
     <tr>
-      <td style={{ border: '1px solid black' }}></td>
+      <td style={{ border: '1px solid black' }}>{selectedUser?.id_number}</td>
     </tr>
     <tr>
-      <td style={{ border: '1px solid black' }}></td>
+      <td style={{ border: '1px solid black' }}>{selectedUser?.contractor_name}</td>
     </tr>
     <tr>
-      <td style={{ border: '1px solid black' }}></td>
+      <td style={{ border: '1px solid black' }}>{JSON.stringify(selectedUser?.createdDate?.toDate())}</td>
     </tr>
 </table>
 </div>
@@ -682,10 +718,11 @@ pdf.addImage(imageSrc, 'PNG', 7, -100, 200, 150);
   <tr>
     <td>WRITTEN</td>
     <td>
-    
+    35
     </td>
     <td>
-    
+    {selectedUser?.writtenMarks ? selectedUser?.writtenMarks : ""} 
+                    
     </td>
 
   </tr>
@@ -695,9 +732,10 @@ pdf.addImage(imageSrc, 'PNG', 7, -100, 200, 150);
   <tr>
     <td>VIVA</td>
     <td>
-    
+    20
     </td>
     <td>
+    {selectedUser?.oralMarks ? selectedUser?.oralMarks : ""} 
     
     </td>
 
@@ -708,10 +746,11 @@ pdf.addImage(imageSrc, 'PNG', 7, -100, 200, 150);
   <tr>
     <td>PRACTICAL</td>
     <td>
-   
+   40
     </td>
     
     <td>
+    {selectedUser?.practicalMarks ? selectedUser?.practicalMarks : ""} 
       
     </td>
   </tr>
@@ -721,9 +760,10 @@ pdf.addImage(imageSrc, 'PNG', 7, -100, 200, 150);
   <tr>
     <td>TOTAL</td>
     <td>
-   
+   100
     </td>
     <td>
+    {selectedUser?.totalMarks ? selectedUser?.totalMarks : ""} 
      
     </td>
   
@@ -789,7 +829,7 @@ pdf.addImage(imageSrc, 'PNG', 7, -100, 200, 150);
                   </tr>
                 </table>
 
-                <table className='table custom-table table-responsive mt-5'>
+                <table className='table custom-table table-responsive text-center mt-5'style={{border:"2px black solid", }}>
                   <thead>
                     <tr>
                       <th>DESCRIPTION</th>
@@ -833,6 +873,7 @@ pdf.addImage(imageSrc, 'PNG', 7, -100, 200, 150);
                   <td></td></tr>
                 </table>
                 </div>
+                </div>:<></>}
       </div>
 
     </>

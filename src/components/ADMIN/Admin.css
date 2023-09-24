@@ -26,11 +26,11 @@ table {
     width: 100%;
   }
   
-  .custom-table >tr, td, th {
+  .custom-table > tr, td, th {
     border: 2px solid black;
     padding: 0;
     margin: 0;
-    text-align: LEFT;
+    text-align: center;
   }
   h3{
     padding: 0;

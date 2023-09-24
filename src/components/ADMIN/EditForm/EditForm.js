@@ -173,13 +173,15 @@ Below		0-49 */
           // let formData1 = formData;
           // formData1.marksId = docRef.id
           const newData = {
-            // Define the fields and new values you want to update
-            // For example:
             marksId: docRef.id,
             evaluation,
             evaluatedDate:timestamp,
-            lastEvaluatedDate: timestamp
-            // Add more fields as needed
+            lastEvaluatedDate: timestamp,
+            writtenMarks: data.written,
+            oralMarks: data.oral,
+            practicalMarks: data.practical,
+            behaviourMarks:data.behaviour,
+            totalMarks : data.total
           };
           querySnapshot
             .update(newData)
@@ -207,7 +209,7 @@ Below		0-49 */
 
     if (!querySnapshot.empty) {
       data.lastEvaluatedDate =timestamp
-
+debugger
       // If a document exists, update it
       const docRef = querySnapshot.docs[0];
       // Assuming there's only one matching document
@@ -225,7 +227,12 @@ Below		0-49 */
         // For example:
         marksId: docRef.id,
         evaluation,
-        lastEvaluatedDate: timestamp
+        lastEvaluatedDate: timestamp,
+        writtenMarks: data.written,
+        oralMarks: data.oral,
+        practicalMarks: data.practical,
+        behaviourMarks:data.behaviour,
+        totalMarks : data.total
         // Add more fields as needed
       };
       querySnapshot1
