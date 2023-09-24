@@ -39,6 +39,7 @@ const AdminApp = () => {
   
       // You can display the captured image or perform further actions with it
       console.log(imageDataURL); // Print the image data URL
+      
       doc.addImage(imageDataURL, 'PNG', 7, 10, 180, 240)
       // To display the image in an HTML element (e.g., an <img> tag):
       // const imgElement = document.createElement('img');
@@ -52,7 +53,7 @@ const AdminApp = () => {
    setTimeout(() => {
     setSelectedUser()
     
-   }, 10000);
+   }, 2000);
   }
   let [testtypeError, setTesttypeError] = useState("")
   let imageRef = useRef();
@@ -90,6 +91,7 @@ const AdminApp = () => {
   
  useEffect(()=>{
 if(selectedUser?.candidate_name){
+  debugger
   generatePDF()
 }
  },[selectedUser])
@@ -136,7 +138,7 @@ debugger
 
 
 // Add the image to the PDF with the new dimensions
-pdf.addImage(imageSrc, 'PNG', 7, -100, 200, 150);
+pdf.addImage(imageSrc, 'PNG', 7, -80, 200, 150);
   pdf.save('report.pdf');
   document.body.removeChild(rootElement);
 
@@ -544,7 +546,9 @@ pdf.addImage(imageSrc, 'PNG', 7, -100, 200, 150);
                   <td>{form.email}</td>
                   <td>{form.contractor_name}</td>
                   <td>{form.evaluation ? form.evaluation : ""}</td>
-                  <td onClick={()=>{setSelectedUser(form);}}>Select a user</td>
+                  <td onClick={()=>{setSelectedUser(form);}}> <Button color="primary" onClick={toggle}>
+                              Report <BsDownload />
+                            </Button></td>
 
 
 
@@ -627,7 +631,7 @@ pdf.addImage(imageSrc, 'PNG', 7, -100, 200, 150);
 
 
         </div>
-       {selectedUser ? <div className='mt-5' style={{marginTop:"120px"}}>
+       {selectedUser ? <div style={{marginTop:"420px"}}>
         <div ref={userReportRef} id='reportTable' className="custom-table custom-table table-responsive" style={{width:"90%", margin:"0 auto"}} >
           <table style={{border:"2px solid black"}} className="table table-striped custom-table table-responsive">
             <tbody>
@@ -698,7 +702,12 @@ pdf.addImage(imageSrc, 'PNG', 7, -100, 200, 150);
 </table>
 </div>
  </td>
-    <td  style={{border:"2px solid black", width:"220px"}} rowspan="5" class="box">PHOTO</td>
+    <td  style={{border:"2px solid black", width:"220px"}} rowspan="5" class="box"> <img
+                    src={selectedUser.user_photo}
+                    alt="user-photo"
+                    className="w-50 img-fluid img-thumbnail user-photo  my-3"
+                  />
+</td>
   </tr>
                 </table>
                 <table className="table custom-table table-responsive mt-5">
