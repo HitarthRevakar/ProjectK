@@ -146,33 +146,49 @@ pdf.addImage(imageSrc, 'PNG', 7, -80, 200, 150);
 
 }
 
+function exportToExcel(data) {
+  // Extract only the desired fields from each object in the data array
+  const filteredData = data.map((item) => ({
+    Srno: item.id_number,
+    Name: item.candidate_name,
+    Number: item.contact,
+    Email: item.email,
+    Contractor: item.contractor_name,
+    Grade: item.evaluation,
+    LastEvaluatedDate: item.lastEvaluatedDate?.toDate() ? item.lastEvaluatedDate?.toDate() : ""
+  }));
+  const gradeCounts = filteredData.reduce((acc, curr) => {
+    const grade = curr.Grade;
+    if (grade) {
+      if (!acc[grade]) {
+        acc[grade] = 1;
+      } else {
+        acc[grade]++;
+      }
+    }
+    return acc;
+  }, {});
 
-  function exportToExcel(data) {
-    // Extract only the desired fields from each object in the data array
-    const filteredData = data.map((item) => ({
-      Srno: item.id_number,
-      Name: item.candidate_name,
-      Number: item.contact,
-      Email: item.email,
-      Contractor: item.contractor_name,
-      Grade: item.evaluation,
-      // EvaluatedDate: item.evaluatedDate?.toDate(),
-      LastEvaluatedDate:item.lastEvaluatedDate?.toDate() ? item.lastEvaluatedDate?.toDate() : ""
-    }));
-  
-    // Convert the filtered data to an Excel sheet
-    const ws = XLSX.utils.json_to_sheet(filteredData);
-  
-    // Create a new Excel workbook and add the sheet to it
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-  
-    // Save the workbook as an Excel file
-    XLSX.writeFile(wb, "user_data.xlsx");
-  }
-  const handleExportClick = () => {
-    exportToExcel(forms);
-  };
+  console.log(gradeCounts);
+
+  // Convert the filtered data to an Excel sheet
+  const ws = XLSX.utils.json_to_sheet(filteredData);
+
+  // Convert gradeCounts into an array of objects
+  const gradeCountsArray = Object.entries(gradeCounts).map(([Grade, Count]) => ({ Grade, Count }));
+
+  // Create a new Excel workbook and add the sheets to it
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Report');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(gradeCountsArray), 'Grade Count');
+
+  // Save the workbook as an Excel file
+  XLSX.writeFile(wb, "user_data.xlsx");
+}
+
+const handleExportClick = () => {
+  exportToExcel(forms);
+};
 
 
   const searchUser = async () => {
@@ -697,7 +713,10 @@ pdf.addImage(imageSrc, 'PNG', 7, -80, 200, 150);
       <td style={{ border: '1px solid black' }}>{selectedUser?.contractor_name}</td>
     </tr>
     <tr>
-      <td style={{ border: '1px solid black' }}>{JSON.stringify(selectedUser?.createdDate?.toDate())}</td>
+    <td style={{ border: '1px solid black' }}>
+  {selectedUser?.createdDate?.toDate() ? selectedUser.createdDate.toDate().toISOString().split('T')[0] : ''}
+</td>
+
     </tr>
 </table>
 </div>
