@@ -595,6 +595,7 @@ Below		0-49 */
                               name="oral_video"
                               required
                               {...register('oral_video', { required: true })}
+                              style={{marginLeft:"170px"}}
                             />
                           )}
 
@@ -632,7 +633,7 @@ Below		0-49 */
                               </a>
                             </div>
                           ) : (
-                            <div>
+                            <div  >
                               {/* <p>Upload:</p> */}
                               <input
                                 type="file"
@@ -640,6 +641,7 @@ Below		0-49 */
                                 name="practical_photo"
                                 required
                                 {...register('practical_photo', { required: true })}
+                                style={{marginLeft:"170px"}}
                               />
                             </div>
                           )}
