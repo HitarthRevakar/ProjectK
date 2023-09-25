@@ -101,7 +101,7 @@ const AdminApp = () => {
 
       handleExportClick()
     } else if (reportTypeRef.current.value == "Pdf") {
-       const filteredData = forms.map((item) => ({
+      const filteredData = forms.map((item) => ({
         EP_No: item.id_number,
         Name: item.candidate_name,
         Number: item.contact,
@@ -173,7 +173,7 @@ const AdminApp = () => {
         } else {
           acc[grade]++;
         }
-      } 
+      }
       return acc;
     }, {});
 
@@ -487,43 +487,37 @@ const AdminApp = () => {
       <div className='my-4 '>
         <div className="container mb-5">
           <Row>
-            <div className='text-center my-5'>
-              <h1>List of users</h1>
+            <div className='text-center my-4'>
+              <h1>List of Users</h1>
             </div>
           </Row>
           <Row className='d-flex justify-content-between align-items-center'>
             <Col xl="1">
-              <button type="button" className="btn btn-info m-2">
+              <button type="button" className="btn btn-info mt-5 " style={{marginLeft:"21px"}}>
                 <Link to={`/home`} style={{ color: 'white', textDecoration: 'none' }}>
                   Home
                 </Link>
               </button>
             </Col>
-            <Col xl="2" >
+            <Col xl="2" className='mt-3'>
               <p>From</p>
               <input ref={fromRef} type='date' id='datepicker' className='form-control' />
             </Col>
-            <Col xl="2" >
+            <Col xl="2" className='mt-3'>
               <p>To</p>
               <input ref={toRef} type='date' id='datepicker' className='form-control' />
-
             </Col>
-            <Col xl="3 " className='d-flex p-5'>
-
+            <Col xl="3" className='d-flex p-5 mt-5'>
               <select className='' ref={gradeRef}>
                 <option value="">Select a Grade</option>
                 <option value="Below">Below</option>
                 <option value="Average">Average</option>
-
                 <option value="Good">Good</option>
                 <option value="Excellent">Excellent</option>
                 <option value="Outstanding">Outstanding</option>
-
-
               </select>
-              {/* <input ref={searchTxtRef} placeholder='Enter your ' className='form-control' /> */}
             </Col>
-            <Col xl="2">
+            <Col xl="2" className='mt-5'>
               <input ref={searchTxtRef} placeholder='Enter contractor name' className='form-control' />
             </Col>
             <Col xl="12" className='d-flex justify-content-end'>
@@ -533,38 +527,35 @@ const AdminApp = () => {
               <button type="button" onClick={fetchData1} className="btn btn-secondary m-2 text-white">
                 Clear
               </button>
-              {/* <button className="btn btn-secondary m-2 text-white" onClick={handleExportClick}>Report  <BsDownload /></button> */}
-              <select color='secondary' onChange={downloadReport} style={{ width: "170px", height: "40px" }} className='mt-2 secondary  rounded-1' ref={reportTypeRef}>
-                <option value="">Download report{" "}</option>
-                <option value="Pdf">Pdf  {" "}</option>
-                <option value="Excel">Excel  {" "}</option>
-
-
-
-
+              <select color='secondary' onChange={downloadReport} style={{ width: "170px", height: "40px" }} className='mt-2 secondary rounded-1' ref={reportTypeRef}>
+                <option value="">Download report</option>
+                <option value="Pdf">Pdf</option>
+                <option value="Excel">Excel</option>
               </select>
             </Col>
           </Row>
 
 
+
           <table className="table m-3">
             <thead>
-              <tr className='col-lg-4 col-md-4 col-sm-4 col-5 text-start '>
-                <th className='text-danger fw-bold fs-4'>Sr No.</th>
-                <th className='text-danger fw-bold fs-4'>Name</th>
-                <th className='text-danger fw-bold fs-4'>Number</th>
-                <th className='text-danger fw-bold fs-4'>Email</th>
-                <th className='text-danger fw-bold fs-4'>Name of Contractor</th>
-                <th className='text-danger fw-bold fs-4'>Grade Evaluation</th>
-                <th className='text-danger fw-bold fs-4'>Report</th>
+            <tr className='col-lg-12 col-md-12 col-sm-12 col-12 text-center'>
+            <th className='text-danger fw-bold fs-4'>Sr No.</th>
+  <th className='text-danger fw-bold fs-4'>Id No.</th>
+  <th className='text-danger fw-bold fs-4'>Name</th>
+  <th className='text-danger fw-bold fs-4'>Number</th>
+  <th className='text-danger fw-bold fs-4'>Email</th>
+  <th className='text-danger fw-bold fs-4'>Name of Contractor</th>
+  <th className='text-danger fw-bold fs-4'>Grade Evaluation</th>
+  <th className='text-danger fw-bold fs-4'>Report</th>
+  <th className='text-danger fw-bold fs-4'></th>
+</tr>
 
-
-                <th className='text-danger fw-bold fs-4'></th>
-              </tr>
             </thead>
             <tbody>
-              {forms.map((form) => (
+              {forms.map((form,index) => (
                 <tr key={form.id}>
+                  <td>{index +1}</td>
                   <td>{form.id_number}</td>
                   <td>{form.candidate_name}</td>
                   <td>{form.contact}</td>
@@ -809,234 +800,234 @@ const AdminApp = () => {
               </tbody>
             </table>
             <table className="table custom-table table-responsive mt-5">
-        <tr>
-          <th>COMPETENCY ASSESSMENT:</th>
-        </tr>
-        <tr>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="pmOfLtMotors"
-              style={{ marginRight: '25px' }}
-              // {...register('pmOfLtMotors')}
-              checked={selectedUser.pmOfLtMotors}
-            />
-            PM OF LT MOTORS
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="pmOfSwitchGear"
-              style={{ marginRight: '25px' }}
-              // {...register('pmOfSwitchGear')}
-              checked={selectedUser.pmOfSwitchGear}
-            />
-            PM OF SWITCH GEAR
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="pmOfPP"
-              style={{ marginRight: '25px' }}
-              // {...register('pmOfPP')}
-              checked={selectedUser.pmOfPP}
-            />
-            PM OF PP
-          </td>
-        </tr>
-        <tr>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="pmOfHtMotors"
-              style={{ marginRight: '25px' }}
-              // {...register('pmOfHtMotors')}
-              checked={selectedUser.pmOfHtMotors}
-            />
-            PM OF HT MOTORS
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="cmOfSwitchGear"
-              style={{ marginRight: '25px' }}
-              // {...register('cmOfSwitchGear')}
-              checked={selectedUser.cmOfSwitchGear}
-            />
-            CM OF SWITCH GEAR
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="pmOfLdb"
-              style={{ marginRight: '25px' }}
-              // {...register('pmOfLdb')}
-              checked={selectedUser.pmOfLdb}
-            />
-            PM OF LDB
-          </td>
-        </tr>
-        <tr>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="cmOfLtMotors"
-              style={{ marginRight: '25px' }}
-              // {...register('cmOfLtMotors')}
-              checked={selectedUser.cmOfLtMotors}
-            />
-            CM OF LT MOTORS
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="pmOfPowerTransformer"
-              style={{ marginRight: '25px' }}
-              // {...register('pmOfPowerTransformer')}
-              checked={selectedUser.pmOfPowerTransformer}
-            />
-            PM OF POWER TRANSFORMER
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="meggering"
-              style={{ marginRight: '25px' }}
-              // {...register('meggering')}
-              checked={selectedUser.meggering}
-            />
-            MEGGERING
-          </td>
-        </tr>
-        <tr>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="cmOfHtMotors"
-              style={{ marginRight: '25px' }}
-              // {...register('cmOfHtMotors')}
-              checked={selectedUser.cmOfHtMotors}
-            />
-            CM OF HT MOTORS
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="cmOfPowerTransformer"
-              style={{ marginRight: '25px' }}
-              // {...register('cmOfPowerTransformer')}
-              checked={selectedUser.cmOfPowerTransformer}
-            />
-            CM OF POWER TRANSFORMER
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="basicSafety"
-              style={{ marginRight: '25px' }}
-              // {...register('basicSafety')}
-              checked={selectedUser.basicSafety}
-            />
-            BASIC SAFETY
-          </td>
-        </tr>
-        <tr>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="pmOfEarthPit"
-              style={{ marginRight: '25px' }}
-              // {...register('pmOfEarthPit')}
-              checked={selectedUser.pmOfEarthPit}
-            />
-            PM OF EARTH PIT
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="glandingAndTermination"
-              style={{ marginRight: '25px' }}
-              // {...register('glandingAndTermination')}
-              checked={selectedUser.glandingAndTermination}
-            />
-            GLANDING AND TERMINATION
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="tbraAndHitra"
-              style={{ marginRight: '25px' }}
-              // {...register('tbraAndHitra')}
-              checked={selectedUser.tbraAndHitra}
-            />
-            TBRA AND HITRA
-          </td>
-        </tr>
-        <tr>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="cableLaying"
-              style={{ marginRight: '25px' }}
-              // {...register('cableLaying')}
-              checked={selectedUser.cableLaying}
-            />
-            CABLE LAYING
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="emergencyResponse"
-              style={{ marginRight: '25px' }}
-              // {...register('emergencyResponse')}
-              checked={selectedUser.emergencyResponse}
-            />
-            EMERGENCY RESPONSE
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="toolBoxTalk"
-              style={{ marginRight: '25px' }}
-              // {...register('toolBoxTalk')}
-              checked={selectedUser.toolBoxTalk}
-            />
-            TOOL BOX TALK
-          </td>
-        </tr>
-        <tr>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="rolesAndResponsibilities"
-              style={{ marginRight: '25px' }}
-              // {...register('rolesAndResponsibilities')}
-              checked={selectedUser.rolesAndResponsibilities}
-            />
-            ROLES AND RESPONSIBILITIES
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="lprzt"
-              style={{ marginRight: '25px' }}
-            
-              checked={selectedUser.lprzt}
-            />
-            LPRZT
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="workPermitSystem"
-              style={{ marginRight: '25px' }}
-         
-              checked={selectedUser.workPermitSystem}
-            />
-            WORK PERMIT SYSTEM
-          </td>
-        </tr>
-      </table>
+              <tr>
+                <th>COMPETENCY ASSESSMENT:</th>
+              </tr>
+              <tr>
+                <td scope="row">
+                  <input
+                    type="checkbox"
+                    name="pmOfLtMotors"
+                    style={{ marginRight: '25px' }}
+                    // {...register('pmOfLtMotors')}
+                    checked={selectedUser.pmOfLtMotors}
+                  />
+                  PM OF LT MOTORS
+                </td>
+                <td scope="row">
+                  <input
+                    type="checkbox"
+                    name="pmOfSwitchGear"
+                    style={{ marginRight: '25px' }}
+                    // {...register('pmOfSwitchGear')}
+                    checked={selectedUser.pmOfSwitchGear}
+                  />
+                  PM OF SWITCH GEAR
+                </td>
+                <td scope="row">
+                  <input
+                    type="checkbox"
+                    name="pmOfPP"
+                    style={{ marginRight: '25px' }}
+                    // {...register('pmOfPP')}
+                    checked={selectedUser.pmOfPP}
+                  />
+                  PM OF PP
+                </td>
+              </tr>
+              <tr>
+                <td scope="row">
+                  <input
+                    type="checkbox"
+                    name="pmOfHtMotors"
+                    style={{ marginRight: '25px' }}
+                    // {...register('pmOfHtMotors')}
+                    checked={selectedUser.pmOfHtMotors}
+                  />
+                  PM OF HT MOTORS
+                </td>
+                <td scope="row">
+                  <input
+                    type="checkbox"
+                    name="cmOfSwitchGear"
+                    style={{ marginRight: '25px' }}
+                    // {...register('cmOfSwitchGear')}
+                    checked={selectedUser.cmOfSwitchGear}
+                  />
+                  CM OF SWITCH GEAR
+                </td>
+                <td scope="row">
+                  <input
+                    type="checkbox"
+                    name="pmOfLdb"
+                    style={{ marginRight: '25px' }}
+                    // {...register('pmOfLdb')}
+                    checked={selectedUser.pmOfLdb}
+                  />
+                  PM OF LDB
+                </td>
+              </tr>
+              <tr>
+                <td scope="row">
+                  <input
+                    type="checkbox"
+                    name="cmOfLtMotors"
+                    style={{ marginRight: '25px' }}
+                    // {...register('cmOfLtMotors')}
+                    checked={selectedUser.cmOfLtMotors}
+                  />
+                  CM OF LT MOTORS
+                </td>
+                <td scope="row">
+                  <input
+                    type="checkbox"
+                    name="pmOfPowerTransformer"
+                    style={{ marginRight: '25px' }}
+                    // {...register('pmOfPowerTransformer')}
+                    checked={selectedUser.pmOfPowerTransformer}
+                  />
+                  PM OF POWER TRANSFORMER
+                </td>
+                <td scope="row">
+                  <input
+                    type="checkbox"
+                    name="meggering"
+                    style={{ marginRight: '25px' }}
+                    // {...register('meggering')}
+                    checked={selectedUser.meggering}
+                  />
+                  MEGGERING
+                </td>
+              </tr>
+              <tr>
+                <td scope="row">
+                  <input
+                    type="checkbox"
+                    name="cmOfHtMotors"
+                    style={{ marginRight: '25px' }}
+                    // {...register('cmOfHtMotors')}
+                    checked={selectedUser.cmOfHtMotors}
+                  />
+                  CM OF HT MOTORS
+                </td>
+                <td scope="row">
+                  <input
+                    type="checkbox"
+                    name="cmOfPowerTransformer"
+                    style={{ marginRight: '25px' }}
+                    // {...register('cmOfPowerTransformer')}
+                    checked={selectedUser.cmOfPowerTransformer}
+                  />
+                  CM OF POWER TRANSFORMER
+                </td>
+                <td scope="row">
+                  <input
+                    type="checkbox"
+                    name="basicSafety"
+                    style={{ marginRight: '25px' }}
+                    // {...register('basicSafety')}
+                    checked={selectedUser.basicSafety}
+                  />
+                  BASIC SAFETY
+                </td>
+              </tr>
+              <tr>
+                <td scope="row">
+                  <input
+                    type="checkbox"
+                    name="pmOfEarthPit"
+                    style={{ marginRight: '25px' }}
+                    // {...register('pmOfEarthPit')}
+                    checked={selectedUser.pmOfEarthPit}
+                  />
+                  PM OF EARTH PIT
+                </td>
+                <td scope="row">
+                  <input
+                    type="checkbox"
+                    name="glandingAndTermination"
+                    style={{ marginRight: '25px' }}
+                    // {...register('glandingAndTermination')}
+                    checked={selectedUser.glandingAndTermination}
+                  />
+                  GLANDING AND TERMINATION
+                </td>
+                <td scope="row">
+                  <input
+                    type="checkbox"
+                    name="tbraAndHitra"
+                    style={{ marginRight: '25px' }}
+                    // {...register('tbraAndHitra')}
+                    checked={selectedUser.tbraAndHitra}
+                  />
+                  TBRA AND HITRA
+                </td>
+              </tr>
+              <tr>
+                <td scope="row">
+                  <input
+                    type="checkbox"
+                    name="cableLaying"
+                    style={{ marginRight: '25px' }}
+                    // {...register('cableLaying')}
+                    checked={selectedUser.cableLaying}
+                  />
+                  CABLE LAYING
+                </td>
+                <td scope="row">
+                  <input
+                    type="checkbox"
+                    name="emergencyResponse"
+                    style={{ marginRight: '25px' }}
+                    // {...register('emergencyResponse')}
+                    checked={selectedUser.emergencyResponse}
+                  />
+                  EMERGENCY RESPONSE
+                </td>
+                <td scope="row">
+                  <input
+                    type="checkbox"
+                    name="toolBoxTalk"
+                    style={{ marginRight: '25px' }}
+                    // {...register('toolBoxTalk')}
+                    checked={selectedUser.toolBoxTalk}
+                  />
+                  TOOL BOX TALK
+                </td>
+              </tr>
+              <tr>
+                <td scope="row">
+                  <input
+                    type="checkbox"
+                    name="rolesAndResponsibilities"
+                    style={{ marginRight: '25px' }}
+                    // {...register('rolesAndResponsibilities')}
+                    checked={selectedUser.rolesAndResponsibilities}
+                  />
+                  ROLES AND RESPONSIBILITIES
+                </td>
+                <td scope="row">
+                  <input
+                    type="checkbox"
+                    name="lprzt"
+                    style={{ marginRight: '25px' }}
+
+                    checked={selectedUser.lprzt}
+                  />
+                  LPRZT
+                </td>
+                <td scope="row">
+                  <input
+                    type="checkbox"
+                    name="workPermitSystem"
+                    style={{ marginRight: '25px' }}
+
+                    checked={selectedUser.workPermitSystem}
+                  />
+                  WORK PERMIT SYSTEM
+                </td>
+              </tr>
+            </table>
             <table className='table custom-table table-responsive mt-5'>
               <tr>
                 <th> PERFORMANCE EVALUATION:</th>

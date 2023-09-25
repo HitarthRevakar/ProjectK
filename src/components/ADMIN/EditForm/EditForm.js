@@ -17,6 +17,8 @@ const EditForm = () => {
   const [evaluation, setEvaluation] = useState("")
   const [fileUrls, setFileUrls] = useState({});
   const [loading, setLoading] = useState(false)
+  const [Competency, setCOMPETENCY] = useState("")
+
   /*
   90+
 Excellent		76-89
@@ -104,7 +106,7 @@ Below		0-49 */
   const onSubmit = async (data) => {
     const date = new Date(); // Your date object
     const timestamp = firebase.firestore.Timestamp.fromDate(date);
-    
+
     setLoading(true)
     debugger;
     // Update Firestore
@@ -151,7 +153,7 @@ Below		0-49 */
     // Add the data along with file URLs to Firestore
     if (querySnapshot.empty) {
       data.evaluatedDate = timestamp
-      data.lastEvaluatedDate =timestamp
+      data.lastEvaluatedDate = timestamp
       const firestore = firebase.firestore();
       try {
         debugger
@@ -175,13 +177,13 @@ Below		0-49 */
           const newData = {
             marksId: docRef.id,
             evaluation,
-            evaluatedDate:timestamp,
+            evaluatedDate: timestamp,
             lastEvaluatedDate: timestamp,
             writtenMarks: data.written,
             oralMarks: data.oral,
             practicalMarks: data.practical,
-            behaviourMarks:data.behaviour,
-            totalMarks : data.total,
+            behaviourMarks: data.behaviour,
+            totalMarks: data.total,
             pmOfLtMotors: data.pmOfLtMotors,
             pmOfSwitchGear: data.pmOfSwitchGear,
             pmOfPP: data.pmOfPP,
@@ -229,8 +231,8 @@ Below		0-49 */
     // Check if a document with the same user ID exists
 
     if (!querySnapshot.empty) {
-      data.lastEvaluatedDate =timestamp
-debugger
+      data.lastEvaluatedDate = timestamp
+      debugger
       // If a document exists, update it
       const docRef = querySnapshot.docs[0];
       // Assuming there's only one matching document
@@ -252,34 +254,34 @@ debugger
         writtenMarks: data.written,
         oralMarks: data.oral,
         practicalMarks: data.practical,
-        behaviourMarks:data.behaviour,
-        totalMarks : data.total,
+        behaviourMarks: data.behaviour,
+        totalMarks: data.total,
         writtenMarks: data.written,
-            oralMarks: data.oral,
-            practicalMarks: data.practical,
-            behaviourMarks:data.behaviour,
-            totalMarks : data.total,
-            pmOfLtMotors: data.pmOfLtMotors,
-            pmOfSwitchGear: data.pmOfSwitchGear,
-            pmOfPP: data.pmOfPP,
-            pmOfHtMotors: data.pmOfHtMotors,
-            cmOfSwitchGear: data.cmOfSwitchGear,
-            pmOfLdb: data.pmOfLdb,
-            cmOfLtMotors: data.cmOfLtMotors,
-            pmOfPowerTransformer: data.pmOfPowerTransformer,
-            meggering: data.meggering,
-            cmOfHtMotors: data.cmOfHtMotors,
-            cmOfPowerTransformer: data.cmOfPowerTransformer,
-            basicSafety: data.basicSafety,
-            pmOfEarthPit: data.pmOfEarthPit,
-            glandingAndTermination: data.glandingAndTermination,
-            tbraAndHitra: data.tbraAndHitra,
-            cableLaying: data.cableLaying,
-            emergencyResponse: data.emergencyResponse,
-            toolBoxTalk: data.toolBoxTalk,
-            rolesAndResponsibilities: data.rolesAndResponsibilities,
-            lprzt: data.lprzt,
-            workPermitSystem: data.workPermitSystem,
+        oralMarks: data.oral,
+        practicalMarks: data.practical,
+        behaviourMarks: data.behaviour,
+        totalMarks: data.total,
+        pmOfLtMotors: data.pmOfLtMotors,
+        pmOfSwitchGear: data.pmOfSwitchGear,
+        pmOfPP: data.pmOfPP,
+        pmOfHtMotors: data.pmOfHtMotors,
+        cmOfSwitchGear: data.cmOfSwitchGear,
+        pmOfLdb: data.pmOfLdb,
+        cmOfLtMotors: data.cmOfLtMotors,
+        pmOfPowerTransformer: data.pmOfPowerTransformer,
+        meggering: data.meggering,
+        cmOfHtMotors: data.cmOfHtMotors,
+        cmOfPowerTransformer: data.cmOfPowerTransformer,
+        basicSafety: data.basicSafety,
+        pmOfEarthPit: data.pmOfEarthPit,
+        glandingAndTermination: data.glandingAndTermination,
+        tbraAndHitra: data.tbraAndHitra,
+        cableLaying: data.cableLaying,
+        emergencyResponse: data.emergencyResponse,
+        toolBoxTalk: data.toolBoxTalk,
+        rolesAndResponsibilities: data.rolesAndResponsibilities,
+        lprzt: data.lprzt,
+        workPermitSystem: data.workPermitSystem,
         // Add more fields as needed
       };
       querySnapshot1
@@ -330,7 +332,8 @@ debugger
     setValue('oral', result?.oral);
     setValue('practical', result?.practical);
     setValue('total', result?.total);
-    setValue('behaviour', result?.behaviour)
+    setValue('behaviour', result?.behaviour);
+    setCOMPETENCY('meggering',result?.meggering)
 
     if (result?.percentage) {
 
@@ -497,7 +500,7 @@ debugger
             {/* --------  Marks Details ------ */}
             <div className="my-5" id="marksTable">
               <div class=" table-responsive-sm text-center">
-                <table class="table " className="text-center">
+                <table className="table custom-table table-responsive">
                   <thead>
                     <tr>
                       <th scope="col" className="text-center">
@@ -532,19 +535,19 @@ debugger
                           />
                         </div>
                       </td>
-                      <td style={{ width: "fit-content" }}>
+                      <td>
                         <div className="r1">
                           <td>
                             {result && result?.written_photo ? (
                               // Display the download URL if result.written_photo exists
                               <a href={result.written_photo} target="_blank" rel="noopener noreferrer">
-                                Download Photo
+                                Download Document
                               </a>
                             ) : (
                               // Display the upload input if result.written_photo doesn't exist
                               <input
                                 type="file"
-                                accept="image/*"
+                                accept="*/*"
                                 name="written_photo"
                                 required
                                 {...register('written_photo', { required: true })}
@@ -565,7 +568,7 @@ debugger
                       <td scope="row" className="text-center">
                         Oral
                       </td>
-                      <td style={{ width: "fit-content" }}>
+                      <td >
                         <div className="r1">
                           <input
                             type="text"
@@ -578,7 +581,7 @@ debugger
                         </div>
                       </td>
                       <td>
-                        <div className="r1 text-center">
+                        <div className="r1">
                           {result && result.oral_video ? (
                             // If result is defined and result.oral_video has a value, show a download link
                             <a href={result.oral_video} target="_blank" rel="noopener noreferrer">
@@ -596,7 +599,6 @@ debugger
                           )}
 
 
-
                         </div>
                       </td>
                       <td className="text-center">
@@ -609,7 +611,7 @@ debugger
                       <td scope="row" className="text-center">
                         Practical
                       </td>
-                      <td style={{ width: "fit-content" }}>
+                      <td >
                         <div className="r1">
                           <input
                             type="text"
@@ -626,7 +628,7 @@ debugger
                           {result && result.practical_photo ? (
                             <div>
                               <a href={result.practical_photo} target="_blank" rel="noopener noreferrer">
-                                Download Practical Photo
+                                Download Video
                               </a>
                             </div>
                           ) : (
@@ -634,7 +636,7 @@ debugger
                               {/* <p>Upload:</p> */}
                               <input
                                 type="file"
-                                accept="image/*"
+                                accept="video/*"
                                 name="practical_photo"
                                 required
                                 {...register('practical_photo', { required: true })}
@@ -703,219 +705,263 @@ debugger
                 </table>
               </div>
             </div>
-                                <div>
-                          
-      <table className="table custom-table table-responsive mt-5">
-        <tr>
-          <th>COMPETENCY ASSESSMENT:</th>
-        </tr>
-        <tr>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="pmOfLtMotors"
-              style={{ marginRight: '25px' }}
-              {...register('pmOfLtMotors')}
-            />
-            PM OF LT MOTORS
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="pmOfSwitchGear"
-              style={{ marginRight: '25px' }}
-              {...register('pmOfSwitchGear')}
-            />
-            PM OF SWITCH GEAR
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="pmOfPP"
-              style={{ marginRight: '25px' }}
-              {...register('pmOfPP')}
-            />
-            PM OF PP
-          </td>
-        </tr>
-        <tr>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="pmOfHtMotors"
-              style={{ marginRight: '25px' }}
-              {...register('pmOfHtMotors')}
-            />
-            PM OF HT MOTORS
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="cmOfSwitchGear"
-              style={{ marginRight: '25px' }}
-              {...register('cmOfSwitchGear')}
-            />
-            CM OF SWITCH GEAR
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="pmOfLdb"
-              style={{ marginRight: '25px' }}
-              {...register('pmOfLdb')}
-            />
-            PM OF LDB
-          </td>
-        </tr>
-        <tr>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="cmOfLtMotors"
-              style={{ marginRight: '25px' }}
-              {...register('cmOfLtMotors')}
-            />
-            CM OF LT MOTORS
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="pmOfPowerTransformer"
-              style={{ marginRight: '25px' }}
-              {...register('pmOfPowerTransformer')}
-            />
-            PM OF POWER TRANSFORMER
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="meggering"
-              style={{ marginRight: '25px' }}
-              {...register('meggering')}
-            />
-            MEGGERING
-          </td>
-        </tr>
-        <tr>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="cmOfHtMotors"
-              style={{ marginRight: '25px' }}
-              {...register('cmOfHtMotors')}
-            />
-            CM OF HT MOTORS
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="cmOfPowerTransformer"
-              style={{ marginRight: '25px' }}
-              {...register('cmOfPowerTransformer')}
-            />
-            CM OF POWER TRANSFORMER
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="basicSafety"
-              style={{ marginRight: '25px' }}
-              {...register('basicSafety')}
-            />
-            BASIC SAFETY
-          </td>
-        </tr>
-        <tr>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="pmOfEarthPit"
-              style={{ marginRight: '25px' }}
-              {...register('pmOfEarthPit')}
-            />
-            PM OF EARTH PIT
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="glandingAndTermination"
-              style={{ marginRight: '25px' }}
-              {...register('glandingAndTermination')}
-            />
-            GLANDING AND TERMINATION
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="tbraAndHitra"
-              style={{ marginRight: '25px' }}
-              {...register('tbraAndHitra')}
-            />
-            TBRA AND HITRA
-          </td>
-        </tr>
-        <tr>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="cableLaying"
-              style={{ marginRight: '25px' }}
-              {...register('cableLaying')}
-            />
-            CABLE LAYING
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="emergencyResponse"
-              style={{ marginRight: '25px' }}
-              {...register('emergencyResponse')}
-            />
-            EMERGENCY RESPONSE
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="toolBoxTalk"
-              style={{ marginRight: '25px' }}
-              {...register('toolBoxTalk')}
-            />
-            TOOL BOX TALK
-          </td>
-        </tr>
-        <tr>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="rolesAndResponsibilities"
-              style={{ marginRight: '25px' }}
-              {...register('rolesAndResponsibilities')}
-            />
-            ROLES AND RESPONSIBILITIES
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="lprzt"
-              style={{ marginRight: '25px' }}
-              {...register('lprzt')}
-            />
-            LPRZT
-          </td>
-          <td scope="row">
-            <input
-              type="checkbox"
-              name="workPermitSystem"
-              style={{ marginRight: '25px' }}
-              {...register('workPermitSystem')}
-            />
-            WORK PERMIT SYSTEM
-          </td>
-        </tr>
-      </table>
-     
+            <div>
 
-                                </div>
+            <table className="table custom-table table-responsive mt-5">
+                <tr>
+                  <th>COMPETENCY ASSESSMENT:</th>
+                </tr>
+                <tr>
+                  <td scope="row">
+                    <input
+                      type="checkbox"
+                      name="pmOfLtMotors"
+                      style={{ marginRight: '25px' }}
+                      {...register('pmOfLtMotors')}
+                      checked={result && result.pmOfLtMotors === true}
+                      onChange={(e) => setResult({ ...result, pmOfLtMotors: e.target.checked })}
+                    />
+                    PM OF LT MOTORS
+                  </td>
+                  <td scope="row">
+                    <input
+                      type="checkbox"
+                      name="pmOfSwitchGear"
+                      style={{ marginRight: '25px' }}
+                      {...register('pmOfSwitchGear')}
+                      checked={result && result.pmOfSwitchGear === true}
+                      onChange={(e) => setResult({ ...result, pmOfSwitchGear: e.target.checked })}
+
+                    />
+                    PM OF SWITCH GEAR
+                  </td>
+                  <td scope="row">
+                    <input
+                      type="checkbox"
+                      name="pmOfPP"
+                      style={{ marginRight: '25px' }}
+                      {...register('pmOfPP')}
+                      checked={result && result.pmOfPP === true}
+                      onChange={(e) => setResult({ ...result, pmOfPP: e.target.checked })}
+
+                    />
+                    PM OF PP
+                  </td>
+                </tr>
+                <tr>
+                  <td scope="row">
+                    <input
+                      type="checkbox"
+                      name="pmOfHtMotors"
+                      style={{ marginRight: '25px' }}
+                      {...register('pmOfHtMotors')}
+                      checked={result && result.pmOfHtMotors === true}
+                      onChange={(e) => setResult({ ...result, pmOfHtMotors: e.target.checked })}
+                    />
+                    PM OF HT MOTORS
+                  </td>
+                  <td scope="row">
+                    <input
+                      type="checkbox"
+                      name="cmOfSwitchGear"
+                      style={{ marginRight: '25px' }}
+                      {...register('cmOfSwitchGear')}
+                      checked={result && result.cmOfSwitchGear === true}
+                      onChange={(e) => setResult({ ...result, cmOfSwitchGear: e.target.checked })}
+                    />
+                    CM OF SWITCH GEAR
+                  </td>
+                  <td scope="row">
+                    <input
+                      type="checkbox"
+                      name="pmOfLdb"
+                      style={{ marginRight: '25px' }}
+                      {...register('pmOfLdb')}
+                      checked={result && result.pmOfLdb === true}
+                      onChange={(e) => setResult({ ...result, pmOfLdb: e.target.checked })}
+                    />
+                    PM OF LDB
+                  </td>
+                </tr>
+                <tr>
+                  <td scope="row">
+                    <input
+                      type="checkbox"
+                      name="cmOfLtMotors"
+                      style={{ marginRight: '25px' }}
+                      {...register('cmOfLtMotors')}
+                      checked={result && result.cmOfLtMotors === true}
+                      onChange={(e) => setResult({ ...result, cmOfLtMotors: e.target.checked })}
+                    />
+                    CM OF LT MOTORS
+                  </td>
+                  <td scope="row">
+                    <input
+                      type="checkbox"
+                      name="pmOfPowerTransformer"
+                      style={{ marginRight: '25px' }}
+                      {...register('pmOfPowerTransformer')}
+                      checked={result && result.pmOfPowerTransformer === true}
+                      onChange={(e) => setResult({ ...result, pmOfPowerTransformer: e.target.checked })}
+                    />
+                    PM OF POWER TRANSFORMER
+                  </td>
+                  <td scope="row">
+                    <input
+                      type="checkbox"
+                      name="meggering"
+                      style={{ marginRight: '25px' }}
+                      {...register('meggering')}
+                      checked={result && result.meggering === true}
+                      onChange={(e) => setResult({ ...result, meggering: e.target.checked })}
+                    />
+                    MEGGERING
+                  </td>
+                </tr>
+                <tr>
+                  <td scope="row">
+                    <input
+                      type="checkbox"
+                      name="cmOfHtMotors"
+                      style={{ marginRight: '25px' }}
+                      {...register('cmOfHtMotors')}
+                      checked={result && result.cmOfHtMotors === true}
+                      onChange={(e) => setResult({ ...result, cmOfHtMotors: e.target.checked })}
+                    />
+                    CM OF HT MOTORS
+                  </td>
+                  <td scope="row">
+                    <input
+                      type="checkbox"
+                      name="cmOfPowerTransformer"
+                      style={{ marginRight: '25px' }}
+                      {...register('cmOfPowerTransformer')}
+                      checked={result && result.cmOfPowerTransformer === true}
+                      onChange={(e) => setResult({ ...result, cmOfPowerTransformer: e.target.checked })}
+                    />
+                    CM OF POWER TRANSFORMER
+                  </td>
+                  <td scope="row">
+                    <input
+                      type="checkbox"
+                      name="basicSafety"
+                      style={{ marginRight: '25px' }}
+                      {...register('basicSafety')}
+                      checked={result && result.basicSafety === true}
+                      onChange={(e) => setResult({ ...result, basicSafety: e.target.checked })}
+                    />
+                    BASIC SAFETY
+                  </td>
+                </tr>
+                <tr>
+                  <td scope="row">
+                    <input
+                      type="checkbox"
+                      name="pmOfEarthPit"
+                      style={{ marginRight: '25px' }}
+                      {...register('pmOfEarthPit')}
+                      checked={result && result.pmOfEarthPit === true}
+                      onChange={(e) => setResult({ ...result, pmOfEarthPit: e.target.checked })}
+                    />
+                    PM OF EARTH PIT
+                  </td>
+                  <td scope="row">
+                    <input
+                      type="checkbox"
+                      name="glandingAndTermination"
+                      style={{ marginRight: '25px' }}
+                      {...register('glandingAndTermination')}
+                      checked={result && result.glandingAndTermination === true}
+                      onChange={(e) => setResult({ ...result, glandingAndTermination: e.target.checked })}
+                    />
+                    GLANDING AND TERMINATION
+                  </td>
+                  <td scope="row">
+                    <input
+                      type="checkbox"
+                      name="tbraAndHitra"
+                      style={{ marginRight: '25px' }}
+                      {...register('tbraAndHitra')}
+                      checked={result && result.tbraAndHitra === true}
+                      onChange={(e) => setResult({ ...result, tbraAndHitra: e.target.checked })}
+                    />
+                    TBRA AND HITRA
+                  </td>
+                </tr>
+                <tr>
+                  <td scope="row">
+                    <input
+                      type="checkbox"
+                      name="cableLaying"
+                      style={{ marginRight: '25px' }}
+                      {...register('cableLaying')}
+                      checked={result && result.cableLaying === true}
+                      onChange={(e) => setResult({ ...result, cableLaying: e.target.checked })}
+                    />
+                    CABLE LAYING
+                  </td>
+                  <td scope="row">
+                    <input
+                      type="checkbox"
+                      name="emergencyResponse"
+                      style={{ marginRight: '25px' }}
+                      {...register('emergencyResponse')}
+                      checked={result && result.emergencyResponse === true}
+                      onChange={(e) => setResult({ ...result, emergencyResponse: e.target.checked })}
+                    />
+                    EMERGENCY RESPONSE
+                  </td>
+                  <td scope="row">
+                    <input
+                      type="checkbox"
+                      name="toolBoxTalk"
+                      style={{ marginRight: '25px' }}
+                      {...register('toolBoxTalk')}
+                      checked={result && result.toolBoxTalk === true}
+                      onChange={(e) => setResult({ ...result, toolBoxTalk: e.target.checked })}
+                    />
+                    TOOL BOX TALK
+                  </td>
+                </tr>
+                <tr>
+                  <td scope="row">
+                    <input
+                      type="checkbox"
+                      name="rolesAndResponsibilities"
+                      style={{ marginRight: '25px' }}
+                      {...register('rolesAndResponsibilities')}
+                      checked={result && result.rolesAndResponsibilities === true}
+                      onChange={(e) => setResult({ ...result, rolesAndResponsibilities: e.target.checked })}
+                    />
+                    ROLES AND RESPONSIBILITIES
+                  </td>
+                  <td scope="row">
+                    <input
+                      type="checkbox"
+                      name="lprzt"
+                      style={{ marginRight: '25px' }}
+                      {...register('lprzt')}
+                      checked={result && result.lprzt === true}
+                      onChange={(e) => setResult({ ...result, lprzt: e.target.checked })}
+                    />
+                    LPRZT
+                  </td>
+                  <td scope="row">
+                    <input
+                      type="checkbox"
+                      name="workPermitSystem"
+                      style={{ marginRight: '25px' }}
+                      {...register('workPermitSystem')}
+                      checked={result && result.workPermitSystem === true}
+                      onChange={(e) => setResult({ ...result, workPermitSystem: e.target.checked })}
+                    />
+                    WORK PERMIT SYSTEM
+                  </td>
+                </tr>
+              </table>
+
+
+            </div>
             <div>
               <div class="table-responsive">
                 <table class="table ">
