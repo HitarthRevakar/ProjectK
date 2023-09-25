@@ -181,7 +181,28 @@ Below		0-49 */
             oralMarks: data.oral,
             practicalMarks: data.practical,
             behaviourMarks:data.behaviour,
-            totalMarks : data.total
+            totalMarks : data.total,
+            pmOfLtMotors: data.pmOfLtMotors,
+            pmOfSwitchGear: data.pmOfSwitchGear,
+            pmOfPP: data.pmOfPP,
+            pmOfHtMotors: data.pmOfHtMotors,
+            cmOfSwitchGear: data.cmOfSwitchGear,
+            pmOfLdb: data.pmOfLdb,
+            cmOfLtMotors: data.cmOfLtMotors,
+            pmOfPowerTransformer: data.pmOfPowerTransformer,
+            meggering: data.meggering,
+            cmOfHtMotors: data.cmOfHtMotors,
+            cmOfPowerTransformer: data.cmOfPowerTransformer,
+            basicSafety: data.basicSafety,
+            pmOfEarthPit: data.pmOfEarthPit,
+            glandingAndTermination: data.glandingAndTermination,
+            tbraAndHitra: data.tbraAndHitra,
+            cableLaying: data.cableLaying,
+            emergencyResponse: data.emergencyResponse,
+            toolBoxTalk: data.toolBoxTalk,
+            rolesAndResponsibilities: data.rolesAndResponsibilities,
+            lprzt: data.lprzt,
+            workPermitSystem: data.workPermitSystem,
           };
           querySnapshot
             .update(newData)
@@ -232,7 +253,33 @@ debugger
         oralMarks: data.oral,
         practicalMarks: data.practical,
         behaviourMarks:data.behaviour,
-        totalMarks : data.total
+        totalMarks : data.total,
+        writtenMarks: data.written,
+            oralMarks: data.oral,
+            practicalMarks: data.practical,
+            behaviourMarks:data.behaviour,
+            totalMarks : data.total,
+            pmOfLtMotors: data.pmOfLtMotors,
+            pmOfSwitchGear: data.pmOfSwitchGear,
+            pmOfPP: data.pmOfPP,
+            pmOfHtMotors: data.pmOfHtMotors,
+            cmOfSwitchGear: data.cmOfSwitchGear,
+            pmOfLdb: data.pmOfLdb,
+            cmOfLtMotors: data.cmOfLtMotors,
+            pmOfPowerTransformer: data.pmOfPowerTransformer,
+            meggering: data.meggering,
+            cmOfHtMotors: data.cmOfHtMotors,
+            cmOfPowerTransformer: data.cmOfPowerTransformer,
+            basicSafety: data.basicSafety,
+            pmOfEarthPit: data.pmOfEarthPit,
+            glandingAndTermination: data.glandingAndTermination,
+            tbraAndHitra: data.tbraAndHitra,
+            cableLaying: data.cableLaying,
+            emergencyResponse: data.emergencyResponse,
+            toolBoxTalk: data.toolBoxTalk,
+            rolesAndResponsibilities: data.rolesAndResponsibilities,
+            lprzt: data.lprzt,
+            workPermitSystem: data.workPermitSystem,
         // Add more fields as needed
       };
       querySnapshot1
@@ -656,7 +703,219 @@ debugger
                 </table>
               </div>
             </div>
+                                <div>
+                          
+      <table className="table custom-table table-responsive mt-5">
+        <tr>
+          <th>COMPETENCY ASSESSMENT:</th>
+        </tr>
+        <tr>
+          <td scope="row">
+            <input
+              type="checkbox"
+              name="pmOfLtMotors"
+              style={{ marginRight: '25px' }}
+              {...register('pmOfLtMotors')}
+            />
+            PM OF LT MOTORS
+          </td>
+          <td scope="row">
+            <input
+              type="checkbox"
+              name="pmOfSwitchGear"
+              style={{ marginRight: '25px' }}
+              {...register('pmOfSwitchGear')}
+            />
+            PM OF SWITCH GEAR
+          </td>
+          <td scope="row">
+            <input
+              type="checkbox"
+              name="pmOfPP"
+              style={{ marginRight: '25px' }}
+              {...register('pmOfPP')}
+            />
+            PM OF PP
+          </td>
+        </tr>
+        <tr>
+          <td scope="row">
+            <input
+              type="checkbox"
+              name="pmOfHtMotors"
+              style={{ marginRight: '25px' }}
+              {...register('pmOfHtMotors')}
+            />
+            PM OF HT MOTORS
+          </td>
+          <td scope="row">
+            <input
+              type="checkbox"
+              name="cmOfSwitchGear"
+              style={{ marginRight: '25px' }}
+              {...register('cmOfSwitchGear')}
+            />
+            CM OF SWITCH GEAR
+          </td>
+          <td scope="row">
+            <input
+              type="checkbox"
+              name="pmOfLdb"
+              style={{ marginRight: '25px' }}
+              {...register('pmOfLdb')}
+            />
+            PM OF LDB
+          </td>
+        </tr>
+        <tr>
+          <td scope="row">
+            <input
+              type="checkbox"
+              name="cmOfLtMotors"
+              style={{ marginRight: '25px' }}
+              {...register('cmOfLtMotors')}
+            />
+            CM OF LT MOTORS
+          </td>
+          <td scope="row">
+            <input
+              type="checkbox"
+              name="pmOfPowerTransformer"
+              style={{ marginRight: '25px' }}
+              {...register('pmOfPowerTransformer')}
+            />
+            PM OF POWER TRANSFORMER
+          </td>
+          <td scope="row">
+            <input
+              type="checkbox"
+              name="meggering"
+              style={{ marginRight: '25px' }}
+              {...register('meggering')}
+            />
+            MEGGERING
+          </td>
+        </tr>
+        <tr>
+          <td scope="row">
+            <input
+              type="checkbox"
+              name="cmOfHtMotors"
+              style={{ marginRight: '25px' }}
+              {...register('cmOfHtMotors')}
+            />
+            CM OF HT MOTORS
+          </td>
+          <td scope="row">
+            <input
+              type="checkbox"
+              name="cmOfPowerTransformer"
+              style={{ marginRight: '25px' }}
+              {...register('cmOfPowerTransformer')}
+            />
+            CM OF POWER TRANSFORMER
+          </td>
+          <td scope="row">
+            <input
+              type="checkbox"
+              name="basicSafety"
+              style={{ marginRight: '25px' }}
+              {...register('basicSafety')}
+            />
+            BASIC SAFETY
+          </td>
+        </tr>
+        <tr>
+          <td scope="row">
+            <input
+              type="checkbox"
+              name="pmOfEarthPit"
+              style={{ marginRight: '25px' }}
+              {...register('pmOfEarthPit')}
+            />
+            PM OF EARTH PIT
+          </td>
+          <td scope="row">
+            <input
+              type="checkbox"
+              name="glandingAndTermination"
+              style={{ marginRight: '25px' }}
+              {...register('glandingAndTermination')}
+            />
+            GLANDING AND TERMINATION
+          </td>
+          <td scope="row">
+            <input
+              type="checkbox"
+              name="tbraAndHitra"
+              style={{ marginRight: '25px' }}
+              {...register('tbraAndHitra')}
+            />
+            TBRA AND HITRA
+          </td>
+        </tr>
+        <tr>
+          <td scope="row">
+            <input
+              type="checkbox"
+              name="cableLaying"
+              style={{ marginRight: '25px' }}
+              {...register('cableLaying')}
+            />
+            CABLE LAYING
+          </td>
+          <td scope="row">
+            <input
+              type="checkbox"
+              name="emergencyResponse"
+              style={{ marginRight: '25px' }}
+              {...register('emergencyResponse')}
+            />
+            EMERGENCY RESPONSE
+          </td>
+          <td scope="row">
+            <input
+              type="checkbox"
+              name="toolBoxTalk"
+              style={{ marginRight: '25px' }}
+              {...register('toolBoxTalk')}
+            />
+            TOOL BOX TALK
+          </td>
+        </tr>
+        <tr>
+          <td scope="row">
+            <input
+              type="checkbox"
+              name="rolesAndResponsibilities"
+              style={{ marginRight: '25px' }}
+              {...register('rolesAndResponsibilities')}
+            />
+            ROLES AND RESPONSIBILITIES
+          </td>
+          <td scope="row">
+            <input
+              type="checkbox"
+              name="lprzt"
+              style={{ marginRight: '25px' }}
+              {...register('lprzt')}
+            />
+            LPRZT
+          </td>
+          <td scope="row">
+            <input
+              type="checkbox"
+              name="workPermitSystem"
+              style={{ marginRight: '25px' }}
+              {...register('workPermitSystem')}
+            />
+            WORK PERMIT SYSTEM
+          </td>
+        </tr>
+      </table>
+     
 
+                                </div>
             <div>
               <div class="table-responsive">
                 <table class="table ">
