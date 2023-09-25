@@ -449,8 +449,8 @@ debugger
 
             {/* --------  Marks Details ------ */}
             <div className="my-5" id="marksTable">
-              <div class=" table-responsive-sm">
-                <table class="table ">
+              <div class=" table-responsive-sm text-center">
+                <table class="table " className="text-center">
                   <thead>
                     <tr>
                       <th scope="col" className="text-center">
@@ -518,7 +518,7 @@ debugger
                       <td scope="row" className="text-center">
                         Oral
                       </td>
-                      <td className="text-center">
+                      <td style={{ width: "fit-content" }}>
                         <div className="r1">
                           <input
                             type="text"
@@ -531,7 +531,7 @@ debugger
                         </div>
                       </td>
                       <td>
-                        <div className="r1">
+                        <div className="r1 text-center">
                           {result && result.oral_video ? (
                             // If result is defined and result.oral_video has a value, show a download link
                             <a href={result.oral_video} target="_blank" rel="noopener noreferrer">
@@ -562,7 +562,7 @@ debugger
                       <td scope="row" className="text-center">
                         Practical
                       </td>
-                      <td className="text-center">
+                      <td style={{ width: "fit-content" }}>
                         <div className="r1">
                           <input
                             type="text"
