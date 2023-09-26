@@ -23,6 +23,7 @@ const AdminApp = () => {
 
   const toggle1 = () => setDropdownOpen((prevState) => !prevState);
   const handleStartEvaluationClick = (formId) => {
+    debugger
     onSubmit();
     setCurrentFormId(formId); // Set the current form ID in the state
     setModal(true); // Open the modal
@@ -635,7 +636,7 @@ const AdminApp = () => {
                         </Modal></>
                       : <>
                         <button type="button" className="btn btn-success">
-                          <Link to={`/edit/${form.id}`} style={{ color: 'white', textDecoration: 'none' }}>
+                          <Link to={`/edit/${form.marksId}`} style={{ color: 'white', textDecoration: 'none' }}>
                             Edit Evaluation
                           </Link>
                         </button>

@@ -20,9 +20,9 @@ function Home() {
   const { logOut, user } = useUserAuth();
   let [userData, setUserData] = useState("")
   let userData1 = localStorage.getItem("user");
-  debugger
+  
   useEffect(() => {
-    debugger
+    
     setUserData(JSON.parse(userData1))
   }, [userData1])
 
@@ -163,7 +163,7 @@ function Home() {
   // const [selectedOption, setSelectedOption] = useState(null);
 
   // const handleRadioChange = (e) => {
-  //   debugger
+  //   
   //   setTesttypeError("")
   //   setSelectedOption(e.target.value);
   // };
@@ -182,37 +182,37 @@ function Home() {
     // Upload the user's photo to Firebase Storage
     setIsButtonVisible(false);
     const storageRef = storage.ref();
-    debugger
+    
     // const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
     let userPhoto = document.getElementById("user_photo")
-debugger
+    
     // const userPhoto = formData.user_photo && formData.user_photo[0];
     let userPhotoRef
-    let downloadURL
+   
     if (userPhoto) {
        userPhotoRef = storageRef.child(`user_photos/${userPhoto.name}`);
       
-       debugger
+       
       await userPhotoRef.put(userPhoto.files[0]);
-      debugger
+      
     } else {
       // Handle the case where formData.user_photo is null or undefined
       console.error('formData.user_photo is null or undefined');
     }
     
-    debugger
+    
     // Get the download URL of the uploaded photo
     
-
+    const downloadURL = await userPhotoRef.getDownloadURL();
     // Update the formData with the download URL
     formData.user_photo = downloadURL;
 
     const date = new Date(); // Your date object
     const timestamp = firebase.firestore.Timestamp.fromDate(date);
     formData.createdDate = timestamp
+    
+
     debugger
-
-
     firestore.collection('candidate-info').add(formData)
       .then((docRef) => {
         debugger
@@ -222,7 +222,7 @@ debugger
         console.log('Document written with ID: ', docRef.id);
       })
       .catch((error) => {
-        debugger
+        
         console.error('Error adding document: ', error);
       });
 
@@ -236,7 +236,7 @@ debugger
     // Handle form submission
     console.log(data);
     setFormData(data)
-    debugger
+    
     handleGeneratePDF();
     // setModal(!modal)
   };
@@ -787,9 +787,9 @@ debugger
                         const designation = getValues(`designation_${index}`);
                         const from_date = getValues(`from_date_${index}`);
                         const till_date = getValues(`till_date_${index}`);
-                        debugger
+                        
                         if (companyName && designation && from_date) {
-                          debugger
+                          
                           handleAddIndex();
                         }
                       }}

@@ -36,18 +36,31 @@ Below		0-49 */
   useEffect(() => {
     let userId = id;
     debugger
-    const resultRef = firestore.collection('candidate-marks')
+    // const resultRef1 = firestore.collection('candidate-info')
+    // let result1 ;
+    // async function fetchResult1() {
+    //   const snapshot = await resultRef1.get();
+    //   const formsData = snapshot.docs.map((doc) => ({
+    //     id: doc.id, // Document ID
+    //     ...doc.data(), // Data inside the document
+    //   })); 
+    //    result1 = formsData.find(user => user.userId == id)
+
+    // }
+    // fetchResult1();
+    const resultRef = firestore.collection('candidate-info')
     async function fetchResult() {
       const snapshot = await resultRef.get();
       const formsData = snapshot.docs.map((doc) => ({
         id: doc.id, // Document ID
         ...doc.data(), // Data inside the document
       }));
+      const result1 = formsData.find(user => user.id == id)
 
-      const result1 = formsData.find(user => user.userId == id)
       debugger
       // Set the forms state with the fetched data
       setResult(result1);
+      debugger
       for (const key in result1) {
         if (Object.hasOwnProperty.call(result1, key)) {
           const value = result1[key];
@@ -58,6 +71,7 @@ Below		0-49 */
       debugger
     }
     fetchResult();
+
   }, [])
 
   // useEffect(()=>{
@@ -211,6 +225,10 @@ Below		0-49 */
             rolesAndResponsibilities: data.rolesAndResponsibilities,
             lprzt: data.lprzt,
             workPermitSystem: data.workPermitSystem,
+            written_photo: data.written_photo,
+            oral_video: data.oral_video,
+            practical_photo: data.practical_photo
+
           };
           querySnapshot
             .update(newData)
@@ -288,6 +306,9 @@ Below		0-49 */
         rolesAndResponsibilities: data.rolesAndResponsibilities,
         lprzt: data.lprzt,
         workPermitSystem: data.workPermitSystem,
+        written_photo: result.written_photo,
+        oral_video: result.oral_video,
+        practical_photo: result.practical_photo
         // Add more fields as needed
       };
       querySnapshot1
@@ -339,7 +360,7 @@ Below		0-49 */
     setValue('practical', result?.practical);
     setValue('total', result?.total);
     setValue('behaviour', result?.behaviour);
-    setCOMPETENCY('meggering',result?.meggering)
+    setCOMPETENCY('meggering', result?.meggering)
 
     if (result?.percentage) {
 
@@ -601,7 +622,7 @@ Below		0-49 */
                               name="oral_video"
                               required
                               {...register('oral_video', { required: true })}
-                              style={{marginLeft:"170px"}}
+                              style={{ marginLeft: "170px" }}
                             />
                           )}
 
@@ -647,7 +668,7 @@ Below		0-49 */
                                 name="practical_photo"
                                 required
                                 {...register('practical_photo', { required: true })}
-                                style={{marginLeft:"170px"}}
+                                style={{ marginLeft: "170px" }}
                               />
                             </div>
                           )}
@@ -715,7 +736,7 @@ Below		0-49 */
             </div>
             <div>
 
-            <table className="table custom-table table-responsive mt-5">
+              <table className="table custom-table table-responsive mt-5">
                 <tr>
                   <th>COMPETENCY ASSESSMENT:</th>
                 </tr>
@@ -726,9 +747,9 @@ Below		0-49 */
                       name="pmOfLtMotors"
                       style={{ marginRight: '25px' }}
                       {...register('pmOfLtMotors')}
-                      
-                      // checked={result && result.pmOfLtMotors === true}
-                      // onChange={(e) => setResult({ ...result, pmOfLtMotors: e.target.checked })}
+
+                    // checked={result && result.pmOfLtMotors === true}
+                    // onChange={(e) => setResult({ ...result, pmOfLtMotors: e.target.checked })}
                     />
                     PM OF LT MOTORS
                   </td>
@@ -738,9 +759,9 @@ Below		0-49 */
                       name="pmOfSwitchGear"
                       style={{ marginRight: '25px' }}
                       {...register('pmOfSwitchGear')}
-                      
-                      // checked={result && result.pmOfSwitchGear === true}
-                      // onChange={(e) => setResult({ ...result, pmOfSwitchGear: e.target.checked })}
+
+                    // checked={result && result.pmOfSwitchGear === true}
+                    // onChange={(e) => setResult({ ...result, pmOfSwitchGear: e.target.checked })}
 
                     />
                     PM OF SWITCH GEAR
@@ -751,9 +772,9 @@ Below		0-49 */
                       name="pmOfPP"
                       style={{ marginRight: '25px' }}
                       {...register('pmOfPP')}
-                      
-                      // checked={result && result.pmOfPP === true}
-                      // onChange={(e) => setResult({ ...result, pmOfPP: e.target.checked })}
+
+                    // checked={result && result.pmOfPP === true}
+                    // onChange={(e) => setResult({ ...result, pmOfPP: e.target.checked })}
 
                     />
                     PM OF PP
@@ -766,9 +787,9 @@ Below		0-49 */
                       name="pmOfHtMotors"
                       style={{ marginRight: '25px' }}
                       {...register('pmOfHtMotors')}
-                      
-                      // checked={result && result.pmOfHtMotors === true}
-                      // onChange={(e) => setResult({ ...result, pmOfHtMotors: e.target.checked })}
+
+                    // checked={result && result.pmOfHtMotors === true}
+                    // onChange={(e) => setResult({ ...result, pmOfHtMotors: e.target.checked })}
                     />
                     PM OF HT MOTORS
                   </td>
@@ -778,9 +799,9 @@ Below		0-49 */
                       name="cmOfSwitchGear"
                       style={{ marginRight: '25px' }}
                       {...register('cmOfSwitchGear')}
-                      
-                      // checked={result && result.cmOfSwitchGear === true}
-                      // onChange={(e) => setResult({ ...result, cmOfSwitchGear: e.target.checked })}
+
+                    // checked={result && result.cmOfSwitchGear === true}
+                    // onChange={(e) => setResult({ ...result, cmOfSwitchGear: e.target.checked })}
                     />
                     CM OF SWITCH GEAR
                   </td>
@@ -790,9 +811,9 @@ Below		0-49 */
                       name="pmOfLdb"
                       style={{ marginRight: '25px' }}
                       {...register('pmOfLdb')}
-                      
-                      // checked={result && result.pmOfLdb === true}
-                      // onChange={(e) => setResult({ ...result, pmOfLdb: e.target.checked })}
+
+                    // checked={result && result.pmOfLdb === true}
+                    // onChange={(e) => setResult({ ...result, pmOfLdb: e.target.checked })}
                     />
                     PM OF LDB
                   </td>
@@ -804,9 +825,9 @@ Below		0-49 */
                       name="cmOfLtMotors"
                       style={{ marginRight: '25px' }}
                       {...register('cmOfLtMotors')}
-                      
-                      // checked={result && result.cmOfLtMotors === true}
-                      // onChange={(e) => setResult({ ...result, cmOfLtMotors: e.target.checked })}
+
+                    // checked={result && result.cmOfLtMotors === true}
+                    // onChange={(e) => setResult({ ...result, cmOfLtMotors: e.target.checked })}
                     />
                     CM OF LT MOTORS
                   </td>
@@ -816,9 +837,9 @@ Below		0-49 */
                       name="pmOfPowerTransformer"
                       style={{ marginRight: '25px' }}
                       {...register('pmOfPowerTransformer')}
-                      
-                      // checked={result && result.pmOfPowerTransformer === true}
-                      // onChange={(e) => setResult({ ...result, pmOfPowerTransformer: e.target.checked })}
+
+                    // checked={result && result.pmOfPowerTransformer === true}
+                    // onChange={(e) => setResult({ ...result, pmOfPowerTransformer: e.target.checked })}
                     />
                     PM OF POWER TRANSFORMER
                   </td>
@@ -828,9 +849,9 @@ Below		0-49 */
                       name="meggering"
                       style={{ marginRight: '25px' }}
                       {...register('meggering')}
-                      
-                      // checked={result && result.meggering === true}
-                      // onChange={(e) => setResult({ ...result, meggering: e.target.checked })}
+
+                    // checked={result && result.meggering === true}
+                    // onChange={(e) => setResult({ ...result, meggering: e.target.checked })}
                     />
                     MEGGERING
                   </td>
@@ -842,9 +863,9 @@ Below		0-49 */
                       name="cmOfHtMotors"
                       style={{ marginRight: '25px' }}
                       {...register('cmOfHtMotors')}
-                      
-                      // checked={result && result.cmOfHtMotors === true}
-                      // onChange={(e) => setResult({ ...result, cmOfHtMotors: e.target.checked })}
+
+                    // checked={result && result.cmOfHtMotors === true}
+                    // onChange={(e) => setResult({ ...result, cmOfHtMotors: e.target.checked })}
                     />
                     CM OF HT MOTORS
                   </td>
@@ -854,9 +875,9 @@ Below		0-49 */
                       name="cmOfPowerTransformer"
                       style={{ marginRight: '25px' }}
                       {...register('cmOfPowerTransformer')}
-                      
-                      // checked={result && result.cmOfPowerTransformer === true}
-                      // onChange={(e) => setResult({ ...result, cmOfPowerTransformer: e.target.checked })}
+
+                    // checked={result && result.cmOfPowerTransformer === true}
+                    // onChange={(e) => setResult({ ...result, cmOfPowerTransformer: e.target.checked })}
                     />
                     CM OF POWER TRANSFORMER
                   </td>
@@ -866,9 +887,9 @@ Below		0-49 */
                       name="basicSafety"
                       style={{ marginRight: '25px' }}
                       {...register('basicSafety')}
-                      
-                      // checked={result && result.basicSafety === true}
-                      // onChange={(e) => setResult({ ...result, basicSafety: e.target.checked })}
+
+                    // checked={result && result.basicSafety === true}
+                    // onChange={(e) => setResult({ ...result, basicSafety: e.target.checked })}
                     />
                     BASIC SAFETY
                   </td>
@@ -880,9 +901,9 @@ Below		0-49 */
                       name="pmOfEarthPit"
                       style={{ marginRight: '25px' }}
                       {...register('pmOfEarthPit')}
-                      
-                      // checked={result && result.pmOfEarthPit === true}
-                      // onChange={(e) => setResult({ ...result, pmOfEarthPit: e.target.checked })}
+
+                    // checked={result && result.pmOfEarthPit === true}
+                    // onChange={(e) => setResult({ ...result, pmOfEarthPit: e.target.checked })}
                     />
                     PM OF EARTH PIT
                   </td>
@@ -892,9 +913,9 @@ Below		0-49 */
                       name="glandingAndTermination"
                       style={{ marginRight: '25px' }}
                       {...register('glandingAndTermination')}
-                      
-                      // checked={result && result.glandingAndTermination === true}
-                      // onChange={(e) => setResult({ ...result, glandingAndTermination: e.target.checked })}
+
+                    // checked={result && result.glandingAndTermination === true}
+                    // onChange={(e) => setResult({ ...result, glandingAndTermination: e.target.checked })}
                     />
                     GLANDING AND TERMINATION
                   </td>
@@ -904,9 +925,9 @@ Below		0-49 */
                       name="tbraAndHitra"
                       style={{ marginRight: '25px' }}
                       {...register('tbraAndHitra')}
-                      
-                      // checked={result && result.tbraAndHitra === true}
-                      // onChange={(e) => setResult({ ...result, tbraAndHitra: e.target.checked })}
+
+                    // checked={result && result.tbraAndHitra === true}
+                    // onChange={(e) => setResult({ ...result, tbraAndHitra: e.target.checked })}
                     />
                     TBRA AND HITRA
                   </td>
@@ -918,9 +939,9 @@ Below		0-49 */
                       name="cableLaying"
                       style={{ marginRight: '25px' }}
                       {...register('cableLaying')}
-                      
-                      // checked={result && result.cableLaying === true}
-                      // onChange={(e) => setResult({ ...result, cableLaying: e.target.checked })}
+
+                    // checked={result && result.cableLaying === true}
+                    // onChange={(e) => setResult({ ...result, cableLaying: e.target.checked })}
                     />
                     CABLE LAYING
                   </td>
@@ -930,9 +951,9 @@ Below		0-49 */
                       name="emergencyResponse"
                       style={{ marginRight: '25px' }}
                       {...register('emergencyResponse')}
-                      
-                      // checked={result && result.emergencyResponse === true}
-                      // onChange={(e) => setResult({ ...result, emergencyResponse: e.target.checked })}
+
+                    // checked={result && result.emergencyResponse === true}
+                    // onChange={(e) => setResult({ ...result, emergencyResponse: e.target.checked })}
                     />
                     EMERGENCY RESPONSE
                   </td>
@@ -942,9 +963,9 @@ Below		0-49 */
                       name="toolBoxTalk"
                       style={{ marginRight: '25px' }}
                       {...register('toolBoxTalk')}
-                      
-                      // checked={result && result.toolBoxTalk === true}
-                      // onChange={(e) => setResult({ ...result, toolBoxTalk: e.target.checked })}
+
+                    // checked={result && result.toolBoxTalk === true}
+                    // onChange={(e) => setResult({ ...result, toolBoxTalk: e.target.checked })}
                     />
                     TOOL BOX TALK
                   </td>
@@ -956,9 +977,9 @@ Below		0-49 */
                       name="rolesAndResponsibilities"
                       style={{ marginRight: '25px' }}
                       {...register('rolesAndResponsibilities')}
-                      
-                      // checked={result && result.rolesAndResponsibilities === true}
-                      // onChange={(e) => setResult({ ...result, rolesAndResponsibilities: e.target.checked })}
+
+                    // checked={result && result.rolesAndResponsibilities === true}
+                    // onChange={(e) => setResult({ ...result, rolesAndResponsibilities: e.target.checked })}
                     />
                     ROLES AND RESPONSIBILITIES
                   </td>
@@ -968,9 +989,9 @@ Below		0-49 */
                       name="lprzt"
                       style={{ marginRight: '25px' }}
                       {...register('lprzt')}
-                      
-                      // checked={result && result.lprzt === true}
-                      // onChange={(e) => setResult({ ...result, lprzt: e.target.checked })}
+
+                    // checked={result && result.lprzt === true}
+                    // onChange={(e) => setResult({ ...result, lprzt: e.target.checked })}
                     />
                     LPRZT
                   </td>
@@ -980,9 +1001,9 @@ Below		0-49 */
                       name="workPermitSystem"
                       style={{ marginRight: '25px' }}
                       {...register('workPermitSystem')}
-                      
-                      // checked={result && result.workPermitSystem === true}
-                      // onChange={(e) => setResult({ ...result, workPermitSystem: e.target.checked })}
+
+                    // checked={result && result.workPermitSystem === true}
+                    // onChange={(e) => setResult({ ...result, workPermitSystem: e.target.checked })}
                     />
                     WORK PERMIT SYSTEM
                   </td>
