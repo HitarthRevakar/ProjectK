@@ -671,7 +671,7 @@ const AdminApp = () => {
                 </td>
               </tr>
               <tr className='text-center align-items-center'>
-                <td style={{ border: "2px solid black", width: "220px" }} rowSpan={6} class="box"> QR Code</td>
+                {/* <td style={{ border: "2px solid black", width: "220px" }} rowSpan={6} class="box"> QR Code</td> */}
                 <td >
                   <div className='h-100 w-100' style={{ margin: '0', padding: '0', width: "50%" }}>
                     <table className='fw-bold custom-table table-responsive' style={{ borderCollapse: "collapse", margin: '0', padding: '0' }}>
@@ -726,12 +726,12 @@ const AdminApp = () => {
                 </td>
                 <td style={{ border: "2px solid black", width: "220px" }} rowspan="5" class="box">
                   <img
-                    src={selectedUser.user_photo}
+                    // src='{selectedUser.user_photo}'
+                    src={process.env.PUBLIC_URL + '/logo.jpg'}
                     alt="User Profile Photo"
                     className="w-50 img-fluid img-thumbnail user-photo my-3"
-                    onLoad={() => setTimeout(generatePDF, 1000)}
+                    onLoad={generatePDF}
                   />
-
                 </td>
               </tr>
             </table>
