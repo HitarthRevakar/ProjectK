@@ -218,6 +218,7 @@ function Home() {
         debugger
         toast.success('Data added Successfully!');
         // toggle();
+        setSelectedPhoto("")
         reset();
         console.log('Document written with ID: ', docRef.id);
       })
