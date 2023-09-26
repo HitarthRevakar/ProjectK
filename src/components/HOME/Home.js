@@ -188,11 +188,14 @@ function Home() {
 
     const userPhoto = formData.user_photo && formData.user_photo[0];
     let userPhotoRef
+    let downloadURL
     if (userPhoto) {
        userPhotoRef = storageRef.child(`user_photos/${userPhoto.name}`);
       
-       
+        
       await userPhotoRef.put(userPhoto);
+      downloadURL = await userPhotoRef.getDownloadURL();
+    
     } else {
       // Handle the case where formData.user_photo is null or undefined
       console.error('formData.user_photo is null or undefined');
@@ -200,8 +203,7 @@ function Home() {
     
     debugger
     // Get the download URL of the uploaded photo
-    const downloadURL = await userPhotoRef.getDownloadURL();
-    console.log('Download URL:', downloadURL);
+    
 
     // Update the formData with the download URL
     formData.user_photo = downloadURL;

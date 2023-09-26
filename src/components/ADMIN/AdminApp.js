@@ -53,6 +53,8 @@ const AdminApp = () => {
     setTimeout(() => {
       setSelectedUser()
 
+
+
     }, 2000);
   }
   let [testtypeError, setTesttypeError] = useState("")
@@ -92,7 +94,7 @@ const AdminApp = () => {
   useEffect(() => {
     if (selectedUser?.candidate_name) {
       debugger
-      generatePDF()
+      // generatePDF()
     }
   }, [selectedUser])
 
@@ -493,7 +495,7 @@ const AdminApp = () => {
           </Row>
           <Row className='d-flex justify-content-between align-items-center'>
             <Col xl="1">
-              <button type="button" className="btn btn-info mt-5 " style={{marginLeft:"21px"}}>
+              <button type="button" className="btn btn-info mt-5 " style={{ marginLeft: "21px" }}>
                 <Link to={`/home`} style={{ color: 'white', textDecoration: 'none' }}>
                   Home
                 </Link>
@@ -539,30 +541,30 @@ const AdminApp = () => {
 
           <table className="table m-3">
             <thead>
-            <tr className='col-lg-12 col-md-12 col-sm-12 col-12 text-center'>
-            <th className='text-danger fw-bold fs-4'>Sr No.</th>
-  <th className='text-danger fw-bold fs-4'>Id No.</th>
-  <th className='text-danger fw-bold fs-4'>Name</th>
-  <th className='text-danger fw-bold fs-4'>Number</th>
-  <th className='text-danger fw-bold fs-4'>Email</th>
-  <th className='text-danger fw-bold fs-4'>Name of Contractor</th>
-  <th className='text-danger fw-bold fs-4'>Grade Evaluation</th>
-  <th className='text-danger fw-bold fs-4'>Report</th>
-  <th className='text-danger fw-bold fs-4'></th>
-</tr>
+              <tr className='col-lg-12 col-md-12 col-sm-12 col-12 text-center'>
+                <th className='text-danger fw-bold fs-4'>Sr No.</th>
+                <th className='text-danger fw-bold fs-4'>Id No.</th>
+                <th className='text-danger fw-bold fs-4'>Name</th>
+                <th className='text-danger fw-bold fs-4'>Number</th>
+                <th className='text-danger fw-bold fs-4'>Email</th>
+                <th className='text-danger fw-bold fs-4'>Name of Contractor</th>
+                <th className='text-danger fw-bold fs-4'>Grade Evaluation</th>
+                <th className='text-danger fw-bold fs-4'>Report</th>
+                <th className='text-danger fw-bold fs-4'></th>
+              </tr>
 
             </thead>
             <tbody>
-              {forms.map((form,index) => (
+              {forms.map((form, index) => (
                 <tr key={form.id}>
-                  <td>{index +1}</td>
+                  <td>{index + 1}</td>
                   <td>{form.id_number}</td>
                   <td>{form.candidate_name}</td>
                   <td>{form.contact}</td>
                   <td>{form.email}</td>
                   <td>{form.contractor_name}</td>
                   <td>{form.evaluation ? form.evaluation : ""}</td>
-                  <td onClick={() => { setSelectedUser(form); }}> <Button color="primary">
+                  <td onClick={() => { setSelectedUser(form); debugger }}> <Button color="primary">
                     Report <BsDownload />
                   </Button></td>
 
@@ -721,11 +723,14 @@ const AdminApp = () => {
                     </table>
                   </div>
                 </td>
-                <td style={{ border: "2px solid black", width: "220px" }} rowspan="5" class="box"> <img
-                  src={selectedUser.user_photo}
-                  alt="user-photo"
-                  className="w-50 img-fluid img-thumbnail user-photo  my-3"
-                />
+                <td style={{ border: "2px solid black", width: "220px" }} rowspan="5" class="box">
+                  <img
+                    src={selectedUser.user_photo}
+                    alt="User Profile Photo"
+                    className="w-50 img-fluid img-thumbnail user-photo my-3"
+                    onLoad={() => setTimeout(generatePDF, 1000)}
+                  />
+
                 </td>
               </tr>
             </table>
@@ -1033,13 +1038,13 @@ const AdminApp = () => {
                 <th> PERFORMANCE EVALUATION:</th>
               </tr>
               <tr>
-                <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }} />OUTSTANDING </td>
-                <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }} />GOOD</td>
-                <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }} />NOT COMPITENT</td>
+                <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }} checked={selectedUser.evaluation === "Outstanding"} />OUTSTANDING </td>
+                <td scope="row">  <input type="checkbox" name="Good" style={{ marginRight: '25px' }} checked={selectedUser.evaluation === "Good"} />GOOD</td>
+                <td scope="row">  <input type="checkbox" name="Below" style={{ marginRight: '25px' }} checked={selectedUser.evaluation === "Below"} />NOT COMPITENT</td>
               </tr>
               <tr>
-                <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }} />EXCELLENT </td>
-                <td scope="row">  <input type="checkbox" name="Outstanding" style={{ marginRight: '25px' }} />AVERAGE</td>
+                <td scope="row">  <input type="checkbox" name="Excellent" style={{ marginRight: '25px' }} checked={selectedUser.evaluation === "Excellent"} />EXCELLENT </td>
+                <td scope="row">  <input type="checkbox" name="Average" style={{ marginRight: '25px' }} checked={selectedUser.evaluation === "Average"} />AVERAGE</td>
                 <td></td>
               </tr>
             </table>
