@@ -225,11 +225,10 @@ Below		0-49 */
             rolesAndResponsibilities: data.rolesAndResponsibilities,
             lprzt: data.lprzt,
             workPermitSystem: data.workPermitSystem,
-            written_photo: data.written_photo,
-            oral_video: data.oral_video,
-            practical_photo: data.practical_photo
+           ...files
 
           };
+          debugger
           querySnapshot
             .update(newData)
             .then(() => {
@@ -355,24 +354,24 @@ Below		0-49 */
   };
 
   useEffect(() => {
-    setValue('written', result?.written);
-    setValue('oral', result?.oral);
-    setValue('practical', result?.practical);
-    setValue('total', result?.total);
-    setValue('behaviour', result?.behaviour);
+    setValue('written', result?.writtenMarks);
+    setValue('oral', result?.oralMarks);
+    setValue('practical', result?.practicalMarks);
+    setValue('total', result?.totalMarks);
+    setValue('behaviour', result?.behaviourMarks);
     setCOMPETENCY('meggering', result?.meggering)
 
-    if (result?.percentage) {
+    if (result?.totalMarks) {
 
-      if (result.percentage >= 90) {
+      if (result.totalMarks >= 90) {
         setEvaluation("Outstanding")
-      } else if (result.percentage < 90 && result.percentage >= 76) {
+      } else if (result.totalMarks < 90 && result.totalMarks >= 76) {
         setEvaluation("Excellent")
-      } else if (result.percentage < 76 && result.percentage >= 60) {
+      } else if (result.totalMarks < 76 && result.totalMarks >= 60) {
         setEvaluation("Good")
-      } else if (result.percentage < 60 && result.percentage >= 50) {
+      } else if (result.totalMarks < 60 && result.totalMarks >= 50) {
         setEvaluation("Average")
-      } else if (result.percentage < 50) {
+      } else if (result.totalMarks < 50) {
         setEvaluation("Below")
       }
     }

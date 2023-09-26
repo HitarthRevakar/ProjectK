@@ -178,7 +178,7 @@ function Home() {
   };
 
 
-  const handleGeneratePDF = async () => {
+  const handleGeneratePDF = async (data) => {
     // Upload the user's photo to Firebase Storage
     setIsButtonVisible(false);
     const storageRef = storage.ref();
@@ -205,15 +205,15 @@ function Home() {
     
     const downloadURL = await userPhotoRef.getDownloadURL();
     // Update the formData with the download URL
-    formData.user_photo = downloadURL;
+    data.user_photo = downloadURL;
 
     const date = new Date(); // Your date object
     const timestamp = firebase.firestore.Timestamp.fromDate(date);
-    formData.createdDate = timestamp
+    data.createdDate = timestamp
     
 
     debugger
-    firestore.collection('candidate-info').add(formData)
+    firestore.collection('candidate-info').add(data)
       .then((docRef) => {
         debugger
         toast.success('Data added Successfully!');
@@ -235,9 +235,9 @@ function Home() {
   const onSubmit = async (data) => {
     // Handle form submission
     console.log(data);
-    setFormData(data)
     
-    handleGeneratePDF();
+    debugger
+    handleGeneratePDF(data);
     // setModal(!modal)
   };
 

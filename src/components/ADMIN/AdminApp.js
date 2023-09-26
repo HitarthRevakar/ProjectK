@@ -636,7 +636,7 @@ const AdminApp = () => {
                         </Modal></>
                       : <>
                         <button type="button" className="btn btn-success">
-                          <Link to={`/edit/${form.marksId}`} style={{ color: 'white', textDecoration: 'none' }}>
+                          <Link to={`/edit/${form.id}`} style={{ color: 'white', textDecoration: 'none' }}>
                             Edit Evaluation
                           </Link>
                         </button>
