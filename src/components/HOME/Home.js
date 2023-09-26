@@ -184,15 +184,16 @@ function Home() {
     const storageRef = storage.ref();
     debugger
     // const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
-    
-
-    const userPhoto = formData.user_photo && formData.user_photo[0];
+    let userPhoto = document.getElementById("user_photo")
+debugger
+    // const userPhoto = formData.user_photo && formData.user_photo[0];
     let userPhotoRef
     if (userPhoto) {
        userPhotoRef = storageRef.child(`user_photos/${userPhoto.name}`);
       
-       
-      await userPhotoRef.put(userPhoto);
+       debugger
+      await userPhotoRef.put(userPhoto.files[0]);
+      debugger
     } else {
       // Handle the case where formData.user_photo is null or undefined
       console.error('formData.user_photo is null or undefined');
@@ -355,6 +356,7 @@ function Home() {
                   <td colSpan="1">UPLOAD PHOTO:</td>
                   <td colSpan="1">
                     <input
+                    id="user_photo"
                       required
                       accept="image/*"
                       type="file"
