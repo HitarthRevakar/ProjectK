@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import GoogleButton from 'react-google-button'
+import GoogleButton from 'react-google-button';
+
 import { useUserAuth } from '../context/UserAuthContext';
 import { firestore } from '../firebase';
 import axios from 'axios';
+import jwt_decode from 'jwt-decode'
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -13,12 +15,19 @@ const Login = () => {
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
+        e.preventDefault();
         debugger
         axios.post('http://localhost:3000/v1/users/login', {
             email,
             password
           }).then((res) => {
-           const data = res;
+            const decodedToken = jwt_decode(res.data.token);
+            debugger
+            // const userId = decodedToken.userId;
+            // const userEmail = decodedToken.email;
+// Access any other user data you included in the JWT
+
+
            console.log(res)
             debugger
           })
