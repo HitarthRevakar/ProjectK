@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import GoogleButton from 'react-google-button'
+import GoogleButton from 'react-google-button';
+
 import { useUserAuth } from '../context/UserAuthContext';
 import { firestore } from '../firebase';
 
@@ -13,6 +14,7 @@ const Login = () => {
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
+        e.preventDefault();
         debugger
         // axios.post('http://localhost:3000/v1/users/login', {
         //     email,
