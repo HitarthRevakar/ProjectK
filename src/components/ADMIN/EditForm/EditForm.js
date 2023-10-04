@@ -35,7 +35,7 @@ Below		0-49 */
 
   useEffect(() => {
     let userId = id;
-    debugger
+    
     // const resultRef1 = firestore.collection('candidate-info')
     // let result1 ;
     // async function fetchResult1() {
@@ -57,10 +57,16 @@ Below		0-49 */
       }));
       const result1 = formsData.find(user => user.id == id)
 
-      debugger
+      
       // Set the forms state with the fetched data
       setResult(result1);
-      debugger
+      let compentencyAssessment = JSON.parse(result1.compentencyAssessment)
+      for (const key in compentencyAssessment) {
+        if (Object.hasOwnProperty.call(compentencyAssessment, key)) {
+          const value = compentencyAssessment[key];
+          setValue(key, value);
+        }
+      }
       for (const key in result1) {
         if (Object.hasOwnProperty.call(result1, key)) {
           const value = result1[key];
@@ -68,7 +74,7 @@ Below		0-49 */
         }
       }
       // setValue(result)
-      debugger
+      
     }
     fetchResult();
 
@@ -77,7 +83,7 @@ Below		0-49 */
   // useEffect(()=>{
   //   if(result){
 
-  //     debugger
+  //     
   //   }
   // },[result])
 
@@ -95,7 +101,7 @@ Below		0-49 */
         if (doc.exists) {
           console.log(doc.data());
 
-          debugger;
+          ;
           // Set the formData state with the fetched data
           setFormData({
             id: doc.id
@@ -124,11 +130,12 @@ Below		0-49 */
   let navigate = useNavigate()
 
   const onSubmit = async (data) => {
+   
     const date = new Date(); // Your date object
     const timestamp = firebase.firestore.Timestamp.fromDate(date);
 
     setLoading(true)
-    debugger;
+    ;
     // Update Firestore
     data.userId = id;
     const querySnapshot = await firestore
@@ -148,13 +155,12 @@ Below		0-49 */
       const writtenPhotoUrl = await writtenPhotoRef.getDownloadURL();
 
       files.written_photo = writtenPhotoUrl;
-      debugger
+      
     }
     if (data.oral_video[0]) {
       const oral_videoref = storageRef.child(`oral_video/${data.oral_video[0].name}`);
       await oral_videoref.put(data.oral_video[0]);
       const oral_videorefUrl = await oral_videoref.getDownloadURL();
-
       files.oral_video = oral_videorefUrl;
 
     }
@@ -162,7 +168,6 @@ Below		0-49 */
       const practical_photoref = storageRef.child(`practical_photos/${data.practical_photo[0].name}`);
       await practical_photoref.put(data.practical_photo[0]);
       const practical_photoUrl = await practical_photoref.getDownloadURL();
-
       files.practical_photo = practical_photoUrl;
 
     }
@@ -176,7 +181,7 @@ Below		0-49 */
       data.lastEvaluatedDate = timestamp
       const firestore = firebase.firestore();
       try {
-        debugger
+        
         delete data.written_photo;
         delete data.oral_video;
         delete data.practical_photo
@@ -187,23 +192,9 @@ Below		0-49 */
 
           // Add other file URLs here
         }).then(async (docRef) => {
-
-          toast.success('Data added Successfully!');
-          console.log('Document written with ID: ', docRef.id);
-          const querySnapshot = firestore
-            .collection('candidate-info').doc(id)
-          // let formData1 = formData;
-          // formData1.marksId = docRef.id
-          const newData = {
-            marksId: docRef.id,
-            evaluation,
-            evaluatedDate: timestamp,
-            lastEvaluatedDate: timestamp,
-            writtenMarks: data.written,
-            oralMarks: data.oral,
-            practicalMarks: data.practical,
-            behaviourMarks: data.behaviour,
-            totalMarks: data.total,
+          let compentencyAssessment = ""
+          if(result?.discipline == "Electrical"){
+               compentencyAssessment = JSON.stringify({
             pmOfLtMotors: data.pmOfLtMotors,
             pmOfSwitchGear: data.pmOfSwitchGear,
             pmOfPP: data.pmOfPP,
@@ -224,9 +215,78 @@ Below		0-49 */
             toolBoxTalk: data.toolBoxTalk,
             rolesAndResponsibilities: data.rolesAndResponsibilities,
             lprzt: data.lprzt,
-            workPermitSystem: data.workPermitSystem,
+            workPermitSystem: data.workPermitSystem})
+          } else {
+            compentencyAssessment = JSON.stringify({
+              temperatureMeasurement: data.temperatureMeasurement,
+              pressureMeasurement: data.pressureMeasurement,
+              levelMeasurement: data.levelMeasurement,
+              flowMeasurement: data.flowMeasurement,
+              vibrationMeasurement: data.vibrationMeasurement,
+              controlValve: data.controlValve,
+              onOffValve: data.onOffValve,
+              switches: data.switches,
+              openCloseLoopInterlock: data.openCloseLoopInterlock,
+              tciCsiInstruments: data.tciCsiInstruments,
+              pid: data.pid,
+              termination: data.termination,
+              dcs: data.dcs,
+              plc: data.plc,
+              esd: data.esd,
+              mcms: data.mcms,
+              irpMarshallingControlCabiner: data.irpMarshallingControlCabiner,
+              weighingSystem: data.weighingSystem,
+              ppes: data.ppes,
+              analyser: data.analyser,
+              instrumentationCables: data.instrumentationCables,
+              atexCertification: data.atexCertification,
+              dataSheet: data.dataSheet,
+              cableScheduleJbSchedule: data.cableScheduleJbSchedule,
+              dryLoopWetLoopCheck: data.dryLoopWetLoopCheck,
+              llf: data.llf,
+              earthingGrounding: data.earthingGrounding,
+              tbraHitra: data.tbraHitra,
+              fittings: data.fittings,
+              maintenanceTypes: data.maintenanceTypes,
+              smp: data.smp,
+              workPermitSystem: data.workPermitSystem,
+              pstFst: data.pstFst,
+              fireGasSystem: data.fireGasSystem,
+              basicSafety: data.basicSafetyEmergencyResponse,
+              msds: data.lfi,
+              fiveS: data.fiveS,
+              codesStandards: data.codesStandards,
+              nearMissUnsafeCondition: data.nearMissUnsafeCondition,
+              lprzt: data.lprzt,
+              hartAndFFSystem: data.hartAndFFSystem,
+              sisAndSilBasic: data.sisAndSilBasic,
+              isoBasic: data.isoBasic,
+              emergencyResponse: data.emergencyResponse,
+              toolboxTalk: data.toolboxTalk,
+              htm: data.htm,
+            });
+            
+          }
+        
+          toast.success('Data added Successfully!');
+          console.log('Document written with ID: ', docRef.id);
+          const querySnapshot = firestore
+            .collection('candidate-info').doc(id)
+          // let formData1 = formData;
+          // formData1.marksId = docRef.id
+          debugger
+          const newData = {
+            marksId: docRef.id,
+            evaluation,
+            evaluatedDate: timestamp,
+            lastEvaluatedDate: timestamp,
+            writtenMarks: data.written,
+            oralMarks: data.oral,
+            practicalMarks: data.practical,
+            behaviourMarks: data.behaviour,
+            totalMarks: data.total,
+            compentencyAssessment,
            ...files
-
           };
           debugger
           querySnapshot
@@ -240,22 +300,22 @@ Below		0-49 */
             .catch((error) => {
               console.error('Error updating document: ', error);
             });
-        })
+        });
         setLoading(false)
-        debugger
+        
         console.log('Data added to Firestore successfully');
       } catch (error) {
         console.error('Error adding data to Firestore', error);
       }
     }
 
-    debugger;
+    ;
 
     // Check if a document with the same user ID exists
 
     if (!querySnapshot.empty) {
       data.lastEvaluatedDate = timestamp
-      debugger
+      
       // If a document exists, update it
       const docRef = querySnapshot.docs[0];
       // Assuming there's only one matching document
@@ -264,8 +324,85 @@ Below		0-49 */
       delete data.practical_photo
 
       await docRef.ref.update({ ...data, ...files, });
+      let compentencyAssessment
       const querySnapshot1 = firestore
-        .collection('candidate-info').doc(id)
+        .collection('candidate-info').doc(id);
+        if(result?.discipline == "Electrical"){
+          compentencyAssessment = JSON.stringify({
+       pmOfLtMotors: data.pmOfLtMotors,
+       pmOfSwitchGear: data.pmOfSwitchGear,
+       pmOfPP: data.pmOfPP,
+       pmOfHtMotors: data.pmOfHtMotors,
+       cmOfSwitchGear: data.cmOfSwitchGear,
+       pmOfLdb: data.pmOfLdb,
+       cmOfLtMotors: data.cmOfLtMotors,
+       pmOfPowerTransformer: data.pmOfPowerTransformer,
+       meggering: data.meggering,
+       cmOfHtMotors: data.cmOfHtMotors,
+       cmOfPowerTransformer: data.cmOfPowerTransformer,
+       basicSafety: data.basicSafety,
+       pmOfEarthPit: data.pmOfEarthPit,
+       glandingAndTermination: data.glandingAndTermination,
+       tbraAndHitra: data.tbraAndHitra,
+       cableLaying: data.cableLaying,
+       emergencyResponse: data.emergencyResponse,
+       toolBoxTalk: data.toolBoxTalk,
+       rolesAndResponsibilities: data.rolesAndResponsibilities,
+       lprzt: data.lprzt,
+       workPermitSystem: data.workPermitSystem})
+     } else {
+      debugger
+       compentencyAssessment = JSON.stringify({
+         temperatureMeasurement: data.temperatureMeasurement,
+         pressureMeasurement: data.pressureMeasurement,
+         levelMeasurement: data.levelMeasurement,
+         flowMeasurement: data.flowMeasurement,
+         vibrationMeasurement: data.vibrationMeasurement,
+         controlValve: data.controlValve,
+         onOffValve: data.onOffValve,
+         switches: data.switches,
+         openCloseLoopInterlock: data.openCloseLoopInterlock,
+         tciCsiInstruments: data.tciCsiInstruments,
+         pid: data.pid,
+         termination: data.termination,
+         dcs: data.dcs,
+         plc: data.plc,
+         esd: data.esd,
+         mcms: data.mcms,
+         irpMarshallingControlCabiner: data.irpMarshallingControlCabiner,
+         weighingSystem: data.weighingSystem,
+         ppes: data.ppes,
+         analyser: data.analyser,
+         instrumentationCables: data.instrumentationCables,
+         atexCertification: data.atexCertification,
+         dataSheet: data.dataSheet,
+         cableScheduleJbSchedule: data.cableScheduleJbSchedule,
+         dryLoopWetLoopCheck: data.dryLoopWetLoopCheck,
+         llf: data.llf,
+         earthingGrounding: data.earthingGrounding,
+         tbraHitra: data.tbraHitra,
+         fittings: data.fittings,
+         maintenanceTypes: data.maintenanceTypes,
+         smp: data.smp,
+         workPermitSystem: data.workPermitSystem,
+         pstFst: data.pstFst,
+         fireGasSystem: data.fireGasSystem,
+         basicSafety: data.basicSafetyEmergencyResponse,
+         msds: data.lfi,
+         fiveS: data.fiveS,
+         codesStandards: data.codesStandards,
+         nearMissUnsafeCondition: data.nearMissUnsafeCondition,
+         lprzt: data.lprzt,
+         hartAndFFSystem: data.hartAndFFSystem,
+         sisAndSilBasic: data.sisAndSilBasic,
+         isoBasic: data.isoBasic,
+         emergencyResponse: data.emergencyResponse,
+         toolboxTalk: data.toolboxTalk,
+         htm: data.htm,
+       });
+       
+     }
+   
       // let formData1 = formData;
       // formData1.marksId = docRef.id
       const newData = {
@@ -281,30 +418,10 @@ Below		0-49 */
         totalMarks: data.total,
         writtenMarks: data.written,
         oralMarks: data.oral,
+        compentencyAssessment,
         practicalMarks: data.practical,
         behaviourMarks: data.behaviour,
         totalMarks: data.total,
-        pmOfLtMotors: data.pmOfLtMotors,
-        pmOfSwitchGear: data.pmOfSwitchGear,
-        pmOfPP: data.pmOfPP,
-        pmOfHtMotors: data.pmOfHtMotors,
-        cmOfSwitchGear: data.cmOfSwitchGear,
-        pmOfLdb: data.pmOfLdb,
-        cmOfLtMotors: data.cmOfLtMotors,
-        pmOfPowerTransformer: data.pmOfPowerTransformer,
-        meggering: data.meggering,
-        cmOfHtMotors: data.cmOfHtMotors,
-        cmOfPowerTransformer: data.cmOfPowerTransformer,
-        basicSafety: data.basicSafety,
-        pmOfEarthPit: data.pmOfEarthPit,
-        glandingAndTermination: data.glandingAndTermination,
-        tbraAndHitra: data.tbraAndHitra,
-        cableLaying: data.cableLaying,
-        emergencyResponse: data.emergencyResponse,
-        toolBoxTalk: data.toolBoxTalk,
-        rolesAndResponsibilities: data.rolesAndResponsibilities,
-        lprzt: data.lprzt,
-        workPermitSystem: data.workPermitSystem,
         written_photo: result.written_photo,
         oral_video: result.oral_video,
         practical_photo: result.practical_photo
@@ -314,7 +431,7 @@ Below		0-49 */
         .update(newData)
         .then(() => {
           setTimeout(() => {
-            navigate('/admin')
+            navigate('/admin');
           }, 2000);
           console.log('Document successfully updated!');
         })
@@ -322,9 +439,9 @@ Below		0-49 */
           console.error('Error updating document: ', error);
         });
 
-      debugger
+      
       toast.success('Data updated Successfully!');
-      debugger
+      
       setTimeout(() => {
         navigate('/admin')
       }, 2000);
@@ -339,13 +456,11 @@ Below		0-49 */
         .collection('candidate-marks')
         .add(data)
         .then(async (docRef) => {
-
-          // debugger
+          // 
           // const docRef1 = querySnapshot.docs[0]; 
-          // debugger
+          // 
           // await docRef1.ref.update(formData1);
-          // debugger
-
+          // 
         })
         .catch((error) => {
           console.error('Error adding document: ', error);
@@ -359,7 +474,7 @@ Below		0-49 */
     setValue('practical', result?.practicalMarks);
     setValue('total', result?.totalMarks);
     setValue('behaviour', result?.behaviourMarks);
-    setCOMPETENCY('meggering', result?.meggering)
+    
 
     if (result?.totalMarks) {
 
@@ -397,7 +512,7 @@ Below		0-49 */
   // };
 
   function calculateTotal() {
-    debugger
+    
     // Define your fields by their 'name' attributes
     let written1 =
       parseFloat(document.querySelector("input[name='written']").value) || 0;
@@ -427,7 +542,7 @@ Below		0-49 */
     } else if (percentage < 50) {
       setEvaluation("Below")
     }
-    debugger
+    
     setValue('total', total1)
     // Update the total fields
     document.querySelector("input[name='total']").value = total1;
@@ -506,7 +621,7 @@ Below		0-49 */
                   </div>
                   <div className="mb-3">
                     <p>
-                      Contractor Name:{" "}
+                      Jobber Name:{" "}
                       <span className="fw-b">{formData.contractor_name}</span>
                     </p>
                   </div>
@@ -624,8 +739,6 @@ Below		0-49 */
                               style={{ marginLeft: "170px" }}
                             />
                           )}
-
-
                         </div>
                       </td>
                       <td className="text-center">
@@ -734,13 +847,13 @@ Below		0-49 */
               </div>
             </div>
             <div>
-
+              {result?.discipline == "Electrical" ?
               <table className="table custom-table table-responsive mt-5">
                 <tr>
                   <th>COMPETENCY ASSESSMENT:</th>
                 </tr>
-                <tr>
-                  <td scope="row">
+                <tr colSpan="3">
+                  <td colSpan="1" scope="col">
                     <input
                       type="checkbox"
                       name="pmOfLtMotors"
@@ -752,7 +865,7 @@ Below		0-49 */
                     />
                     PM OF LT MOTORS
                   </td>
-                  <td scope="row">
+                  <td scope="col">
                     <input
                       type="checkbox"
                       name="pmOfSwitchGear"
@@ -765,7 +878,7 @@ Below		0-49 */
                     />
                     PM OF SWITCH GEAR
                   </td>
-                  <td scope="row">
+                  <td scope="col">
                     <input
                       type="checkbox"
                       name="pmOfPP"
@@ -1008,7 +1121,481 @@ Below		0-49 */
                   </td>
                 </tr>
               </table>
+              : <table className="table custom-table table-responsive mt-5">
+        <thead>
+          <tr>
+            <th>COMPETENCY ASSESSMENT:</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="temperatureMeasurement"
+                style={{ marginRight: '25px' }}
+                {...register('temperatureMeasurement')}
+              />
+              TEMPERATURE MEASUREMENT
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="pressureMeasurement"
+                style={{ marginRight: '25px' }}
+                {...register('pressureMeasurement')}
+              />
+              PRESSURE MEASUREMENT
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="levelMeasurement"
+                style={{ marginRight: '25px' }}
+                {...register('levelMeasurement')}
+              />
+              LEVEL MEASUREMENT
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="flowMeasurement"
+                style={{ marginRight: '25px' }}
+                {...register('flowMeasurement')}
+              />
+              FLOW MEASUREMENT
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="vibrationMeasurement"
+                style={{ marginRight: '25px' }}
+                {...register('vibrationMeasurement')}
+              />
+              VIBRATION MEASUREMENT
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="controlValve"
+                style={{ marginRight: '25px' }}
+                {...register('controlValve')}
+              />
+              CONTROL VALVE
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="onOffValve"
+                style={{ marginRight: '25px' }}
+                {...register('onOffValve')}
+              />
+              ON-OFF VALVE
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="switches"
+                style={{ marginRight: '25px' }}
+                {...register('switches')}
+              />
+              SWITCHES (TEMPERATURE, PRESSURE, LEVEL, AND FLOW)
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="openCloseLoopInterlock"
+                style={{ marginRight: '25px' }}
+                {...register('openCloseLoopInterlock')}
+              />
+              OPEN LOOP, CLOSE LOOP, AND INTERLOCK
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="tciCsiInstruments"
+                style={{ marginRight: '25px' }}
+                {...register('tciCsiInstruments')}
+              />
+              TCI AND CSI INSTRUMENTS
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="pid"
+                style={{ marginRight: '25px' }}
+                {...register('pid')}
+              />
+              P & ID
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="termination"
+                style={{ marginRight: '25px' }}
+                {...register('termination')}
+              />
+              TERMINATION
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="dcs"
+                style={{ marginRight: '25px' }}
+                {...register('dcs')}
+              />
+              DCS
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="plc"
+                style={{ marginRight: '25px' }}
+                {...register('plc')}
+              />
+              PLC
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="esd"
+                style={{ marginRight: '25px' }}
+                {...register('esd')}
+              />
+              ESD
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="mcms"
+                style={{ marginRight: '25px' }}
+                {...register('mcms')}
+              />
+              MCMS
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="irpMarshallingControlCabiner"
+                style={{ marginRight: '25px' }}
+                {...register('irpMarshallingControlCabiner')}
+              />
+              IRP, MARSHALLING, AND CONTROL CABINER
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="weighingSystem"
+                style={{ marginRight: '25px' }}
+                {...register('weighingSystem')}
+              />
+              WEIGHING SYSTEM
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="ppes"
+                style={{ marginRight: '25px' }}
+                {...register('ppes')}
+              />
+              PPE'S
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="analyser"
+                style={{ marginRight: '25px' }}
+                {...register('analyser')}
+              />
+              ANALYSER
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="instrumentationCables"
+                style={{ marginRight: '25px' }}
+                {...register('instrumentationCables')}
+              />
+              INSTRUMENTATION CABLES
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="atexCertification"
+                style={{ marginRight: '25px' }}
+                {...register('atexCertification')}
+              />
+              ATEX CERTIFICATION DEFINITION
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="dataSheet"
+                style={{ marginRight: '25px' }}
+                {...register('dataSheet')}
+              />
+              DATA SHEET
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="cableScheduleJbSchedule"
+                style={{ marginRight: '25px' }}
+                {...register('cableScheduleJbSchedule')}
+              />
+              CABLE SCHEDULE AND JB SCHEDULE
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="dryLoopWetLoopCheck"
+                style={{ marginRight: '25px' }}
+                {...register('dryLoopWetLoopCheck')}
+              />
+              DRY LOOP AND WET LOOP CHECK
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="llf"
+                style={{ marginRight: '25px' }}
+                {...register('llf')}
+              />
+              LLF
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="earthingGrounding"
+                style={{ marginRight: '25px' }}
+                {...register('earthingGrounding')}
+              />
+              EARTHING AND GROUNDING
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="tbraHitra"
+                style={{ marginRight: '25px' }}
+                {...register('tbraHitra')}
+              />
+              TBRA AND HITRA
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="fittings"
+                style={{ marginRight: '25px' }}
+                {...register('fittings')}
+              />
+              FITTINGS
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="maintenanceTypes"
+                style={{ marginRight: '25px' }}
+                {...register('maintenanceTypes')}
+              />
+              TYPES OF MAINTENANCE
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="smp"
+                style={{ marginRight: '25px' }}
+                {...register('smp')}
+              />
+              SMP
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="workPermitSystem"
+                style={{ marginRight: '25px' }}
+                {...register('workPermitSystem')}
+              />
+              WORK PERMIT SYSTEM
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="pstFst"
+                style={{ marginRight: '25px' }}
+                {...register('pstFst')}
+              />
+              PST AND FST
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="fireGasSystem"
+                style={{ marginRight: '25px' }}
+                {...register('fireGasSystem')}
+              />
+              FIRE AND GAS SYSTEM
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="basicSafety"
+                style={{ marginRight: '25px' }}
+                {...register('basicSafety')}
+              />
+              BASIC SAFETY
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="msds"
+                style={{ marginRight: '25px' }}
+                {...register('msds')}
+              />
+              MSDS
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="fiveS"
+                style={{ marginRight: '25px' }}
+                {...register('fiveS')}
+              />
+              5S
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="codesStandards"
+                style={{ marginRight: '25px' }}
+                {...register('codesStandards')}
+              />
+              CODES AND STANDARDS
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="nearMissUnsafeCondition"
+                style={{ marginRight: '25px' }}
+                {...register('nearMissUnsafeCondition')}
+              />
+              NEAR MISS AND UNSAFE CONDITION
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="lprzt"
+                style={{ marginRight: '25px' }}
+                {...register('lprzt')}
+              />
+              LPRZT
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="nfpa"
+                style={{ marginRight: '25px' }}
+                {...register('nfpa')}
+              />
+              NFPA
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="lfi"
+                style={{ marginRight: '25px' }}
+                {...register('lfi')}
+              />
+              LFI
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="hartAndFFSystem"
+                style={{ marginRight: '25px' }}
+                {...register('hartAndFFSystem')}
+              />
+              HART AND FF SYSTEM
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="sisAndSilBasic"
+                style={{ marginRight: '25px' }}
+                {...register('sisAndSilBasic')}
+              />
+              SIS AND SIL BASIC
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="isoBasic"
+                style={{ marginRight: '25px' }}
+                {...register('isoBasic')}
+              />
+              ISO Basic
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="emergencyResponse"
+                style={{ marginRight: '25px' }}
+                {...register('emergencyResponse')}
+              />
+              EMERGENCY RESPONSE
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="toolboxTalk"
+                style={{ marginRight: '25px' }}
+                {...register('toolboxTalk')}
+              />
+              ToolBox Talk
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="htm"
+                style={{ marginRight: '25px' }}
+                {...register('htm')}
+              />
+              HTM
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
+}
 
             </div>
             <div>

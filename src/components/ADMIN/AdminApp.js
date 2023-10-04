@@ -4,6 +4,8 @@ import firebase from '@firebase/app-compat';
 import { AiOutlineDownload } from "react-icons/ai";
 import { Link, useNavigate } from 'react-router-dom';
 import '../ADMIN/Admin.css';
+import { useForm } from "react-hook-form";
+
 import { Row, Col } from 'reactstrap'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import * as XLSX from 'xlsx';
@@ -13,6 +15,12 @@ import { BsDownload } from "react-icons/bs";
 import questionsSet1 from '../QuestionPaper/Electrical.json';
 import questionsSet2 from '../QuestionPaper/Instrumentation.json';
 const AdminApp = () => {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm()
   const navigate = useNavigate();
   const [forms, setForms] = useState([]);
   const [modal, setModal] = useState(false);
@@ -42,7 +50,10 @@ const AdminApp = () => {
       console.log(imageDataURL); // Print the image data URL
 
       doc.addImage(imageDataURL, 'PNG', 7, 10, 180, 240)
-    
+      // To display the image in an HTML element (e.g., an <img> tag):
+      // const imgElement = document.createElement('img');
+      // imgElement.src = imageDataURL;
+      // document.body.appendChild(imgElement);
     });
     // You can adjust the position as needed
 
@@ -63,9 +74,6 @@ const AdminApp = () => {
   let toRef = useRef()
   let gradeRef = useRef()
   let reportTypeRef = useRef()
-  let trade = useRef()
-  let disciplinedata = useRef()
-
   function jsonToTable(jsonData) {
     let table = '<table border="1">';
     let headers = Object.keys(jsonData[0]);
@@ -93,10 +101,16 @@ const AdminApp = () => {
   }
 
   useEffect(() => {
-    if (selectedUser?.candidate_name) {
-      debugger
-      // generatePDF()
+    if(selectedUser?.compentencyAssessment){
+      let compentencyAssessment = JSON.parse(selectedUser.compentencyAssessment)
+      for (const key in compentencyAssessment) {
+        if (Object.hasOwnProperty.call(compentencyAssessment, key)) {
+          const value = compentencyAssessment[key];
+          setValue(key, value);
+        }
+      }
     }
+   
   }, [selectedUser])
 
   async function downloadReport() {
@@ -268,23 +282,6 @@ const AdminApp = () => {
         debugger
       }
 
-      const tradedata = trade.current.value
-      debugger
-      if (tradedata){
-        newForms = newForms.filter(
-          (form) => form.trade === tradedata
-        );
-      }
-
-      const selecteddisciplinedata = disciplinedata.current.value
-      debugger
-      if (selecteddisciplinedata)
-      {
-        newForms = newForms.filter(
-          (form) => form.discipline === selecteddisciplinedata
-        );
-      }
-
       // Update the state with filtered data
       setForms(newForms);
     } catch (error) {
@@ -356,8 +353,6 @@ const AdminApp = () => {
       fromRef.current.value = null
       toRef.current.value = null
       gradeRef.current.value = ""
-      trade.current.value =""
-      disciplinedata.current.value = ""
 
       // // add images of candidates in admin below code is code to get the images from firebase 
       // const storageRef = storage.ref();
@@ -502,36 +497,7 @@ const AdminApp = () => {
     setModal(!modal)
 
   };
-  const [selectedDiscipline, setSelectedDiscipline] = useState('');
-  const handleTradeChange = (event) => {
-    // event.preventDefault()
-    setSelectedDiscipline(event.target.value); // Update the selected trade
-  };
-  const discipline = [
-    "Electrical",
-    "Instrumental"
-  ]
-  const Instrumentaltrade = [
-    { trade: "INST-SUPERVISOR", mrcNo: "JG-I-PM-SU" },
-    { trade: "INST-TECHNICIAN", mrcNo: "JG-I-PM-TE" },
-    { trade: "INST-ELECTRICIAN", mrcNo: "JG-I-PM-EL" },
-    { trade: "INST-FITTER", mrcNo: "JG-I-PM-FT" },
 
-  ]
-  const ElectricalInstrumentaltrade = [
-    { trade: "ELEC-SUPERVISOR (ELECTRICAL MAINT, PM, CM, RM)", mrcNo: "JG-E-EM-SU" },
-    { trade: "ELEC-SUPERVISOR (STREET LIGHTING, TESTING)", mrcNo: "JG-E-LT-SU" },
-    { trade: "ELEC-SUPERVISOR (LV SWGR MAINTENANCE)", mrcNo: "JG-E-SS-SU" },
-    { trade: "ELEC-SUPERVISOR (HV SWGR MAINT)", mrcNo: "JG-E-HS-SU" },
-    { trade: "ELEC-SUPERVISOR (SUBSTATION ELECTRICAL MAINTENANCE)", mrcNo: "JG-E-SE-SU" },
-    { trade: "ELEC-SUPERVISOR (LIGHTING MAINTENANCE)", mrcNo: "JG-E-LM-SU" },
-    { trade: "ELEC-TECHNICIAN (ELECTRICAL MAINT, PM, CM, RM)", mrcNo: "JG-E-EM-TE" },
-    { trade: "ELEC-TECHNICIAN (STREET LIGHTING, TESTING)", mrcNo: "JG-E-LT-TE" },
-    { trade: "ELEC-TECHNICIAN (LV SWGR MAINTENANCE)", mrcNo: "JG-E-SS-TE" },
-    { trade: "ELEC-TECHNICIAN (HV SWGR MAINT)", mrcNo: "JG-E-HS-TE" },
-    { trade: "ELEC-TECHNICIAN (SUBSTATION ELECTRICAL MAINTENANCE)", mrcNo: "JG-E-SE-TE" },
-    { trade: "ELEC-TECHNICIAN (LIGHTING MAINTENANCE)", mrcNo: "JG-E-LM-TE" }
-  ]
   return (
     <>
 
@@ -569,48 +535,20 @@ const AdminApp = () => {
               </select>
             </Col>
             <Col xl="2" className='mt-5'>
-              <input ref={searchTxtRef} placeholder='Enter contractor name' className='form-control' />
+              <input ref={searchTxtRef} placeholder='Enter jobber name' className='form-control' />
             </Col>
             <Col xl="12" className='d-flex justify-content-end'>
-             
-              <select color='secondary' onChange={handleTradeChange} style={{ width: "170px", height: "40px" }} className='mt-2 secondary rounded-1' ref={disciplinedata}>
-                <option value="">Select a discipline</option>
-                {discipline.map((discipline, index) => (
-                      <option key={index} value={discipline}>
-                        {discipline}
-                      </option>
-                    ))}
-              </select>
-
-              <select color='secondary' onChange={downloadReport} style={{ width: "170px", height: "40px" ,marginLeft:"20px"}} className='mt-2 secondary rounded-1' ref={trade}>
-                <option value="">Select a trade</option>
-                {selectedDiscipline === 'Electrical'
-                      ? ElectricalInstrumentaltrade.map((trade, index) => (
-
-                        <option key={index} value={trade.trade}>
-                          {trade.trade}
-                        </option>
-                      ))
-                      : selectedDiscipline === 'Instrumental'
-                        ? Instrumentaltrade.map((trade, index) => (
-                          <option key={index} value={trade.trade}>
-                            {trade.trade}
-                          </option>
-                        ))
-                        : null}
-              </select>
-
-              <select color='secondary' onChange={downloadReport} style={{ width: "170px", height: "40px" ,marginLeft:"20px" }} className='mt-2 secondary rounded-1' ref={reportTypeRef}>
-                <option value="">Download report</option>
-                <option value="Pdf">Pdf</option>
-                <option value="Excel">Excel</option>
-              </select> 
               <button type="button" onClick={searchUser} className="btn btn-info m-2 text-white">
                 Search
               </button>
               <button type="button" onClick={fetchData1} className="btn btn-secondary m-2 text-white">
                 Clear
               </button>
+              <select color='secondary' onChange={downloadReport} style={{ width: "170px", height: "40px" }} className='mt-2 secondary rounded-1' ref={reportTypeRef}>
+                <option value="">Download report</option>
+                <option value="Pdf">Pdf</option>
+                <option value="Excel">Excel</option>
+              </select>
             </Col>
           </Row>
 
@@ -624,7 +562,7 @@ const AdminApp = () => {
                 <th className='text-danger fw-bold fs-4'>Name</th>
                 <th className='text-danger fw-bold fs-4'>Number</th>
                 <th className='text-danger fw-bold fs-4'>Email</th>
-                <th className='text-danger fw-bold fs-4'>Name of Contractor</th>
+                <th className='text-danger fw-bold fs-4'>Name of Jobber</th>
                 <th className='text-danger fw-bold fs-4'>Grade Evaluation</th>
                 <th className='text-danger fw-bold fs-4'>Report</th>
                 <th className='text-danger fw-bold fs-4'></th>
@@ -747,7 +685,7 @@ const AdminApp = () => {
                 </td>
               </tr>
               <tr className='text-center align-items-center'>
-                {/* <td style={{ border: "2px solid black", width: "220px" }} rowSpan={6} class="box"> QR Code</td> */}
+                <td style={{ border: "2px solid black", width: "220px" }} rowSpan={6} class="box"> QR Code</td>
                 <td >
                   <div className='h-100 w-100' style={{ margin: '0', padding: '0', width: "50%" }}>
                     <table className='fw-bold custom-table table-responsive' style={{ borderCollapse: "collapse", margin: '0', padding: '0' }}>
@@ -764,7 +702,7 @@ const AdminApp = () => {
                         <td style={{ border: '1px solid black' }}>ID NUMBER:</td>
                       </tr>
                       <tr>
-                        <td style={{ border: '1px solid black' }}>CONTRACTOR NAME:</td>
+                        <td style={{ border: '1px solid black' }}>Jobber NAME:</td>
                       </tr>
                       <tr>
                         <td style={{ border: '1px solid black' }}>DATE:</td>
@@ -802,12 +740,12 @@ const AdminApp = () => {
                 </td>
                 <td style={{ border: "2px solid black", width: "220px" }} rowspan="5" class="box">
                   <img
-                    // src='{selectedUser.user_photo}'
-                    src={process.env.PUBLIC_URL + '/logo.jpg'}
+                    src={selectedUser.user_photo}
                     alt="User Profile Photo"
                     className="w-50 img-fluid img-thumbnail user-photo my-3"
-                    onLoad={generatePDF}
+                    onLoad={() => setTimeout(generatePDF, 1000)}
                   />
+
                 </td>
               </tr>
             </table>
@@ -881,7 +819,7 @@ const AdminApp = () => {
                 {/* Add more LANGUAGES KNOWN fields here */}
               </tbody>
             </table>
-            <table className="table custom-table table-responsive mt-5">
+          {selectedUser.discipline == "Electrical" ?  <table className="table custom-table table-responsive mt-5">
               <tr>
                 <th>COMPETENCY ASSESSMENT:</th>
               </tr>
@@ -1109,7 +1047,479 @@ const AdminApp = () => {
                   WORK PERMIT SYSTEM
                 </td>
               </tr>
-            </table>
+            </table> :<table className="table custom-table table-responsive mt-5">
+        <thead>
+          <tr>
+            <th>COMPETENCY ASSESSMENT:</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="temperatureMeasurement"
+                style={{ marginRight: '25px' }}
+                {...register('temperatureMeasurement')}
+              />
+              TEMPERATURE MEASUREMENT
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="pressureMeasurement"
+                style={{ marginRight: '25px' }}
+                {...register('pressureMeasurement')}
+              />
+              PRESSURE MEASUREMENT
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="levelMeasurement"
+                style={{ marginRight: '25px' }}
+                {...register('levelMeasurement')}
+              />
+              LEVEL MEASUREMENT
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="flowMeasurement"
+                style={{ marginRight: '25px' }}
+                {...register('flowMeasurement')}
+              />
+              FLOW MEASUREMENT
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="vibrationMeasurement"
+                style={{ marginRight: '25px' }}
+                {...register('vibrationMeasurement')}
+              />
+              VIBRATION MEASUREMENT
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="controlValve"
+                style={{ marginRight: '25px' }}
+                {...register('controlValve')}
+              />
+              CONTROL VALVE
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="onOffValve"
+                style={{ marginRight: '25px' }}
+                {...register('onOffValve')}
+              />
+              ON-OFF VALVE
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="switches"
+                style={{ marginRight: '25px' }}
+                {...register('switches')}
+              />
+              SWITCHES (TEMPERATURE, PRESSURE, LEVEL, AND FLOW)
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="openCloseLoopInterlock"
+                style={{ marginRight: '25px' }}
+                {...register('openCloseLoopInterlock')}
+              />
+              OPEN LOOP, CLOSE LOOP, AND INTERLOCK
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="tciCsiInstruments"
+                style={{ marginRight: '25px' }}
+                {...register('tciCsiInstruments')}
+              />
+              TCI AND CSI INSTRUMENTS
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="pid"
+                style={{ marginRight: '25px' }}
+                {...register('pid')}
+              />
+              P & ID
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="termination"
+                style={{ marginRight: '25px' }}
+                {...register('termination')}
+              />
+              TERMINATION
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="dcs"
+                style={{ marginRight: '25px' }}
+                {...register('dcs')}
+              />
+              DCS
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="plc"
+                style={{ marginRight: '25px' }}
+                {...register('plc')}
+              />
+              PLC
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="esd"
+                style={{ marginRight: '25px' }}
+                {...register('esd')}
+              />
+              ESD
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="mcms"
+                style={{ marginRight: '25px' }}
+                {...register('mcms')}
+              />
+              MCMS
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="irpMarshallingControlCabiner"
+                style={{ marginRight: '25px' }}
+                {...register('irpMarshallingControlCabiner')}
+              />
+              IRP, MARSHALLING, AND CONTROL CABINER
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="weighingSystem"
+                style={{ marginRight: '25px' }}
+                {...register('weighingSystem')}
+              />
+              WEIGHING SYSTEM
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="ppes"
+                style={{ marginRight: '25px' }}
+                {...register('ppes')}
+              />
+              PPE'S
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="analyser"
+                style={{ marginRight: '25px' }}
+                {...register('analyser')}
+              />
+              ANALYSER
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="instrumentationCables"
+                style={{ marginRight: '25px' }}
+                {...register('instrumentationCables')}
+              />
+              INSTRUMENTATION CABLES
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="atexCertification"
+                style={{ marginRight: '25px' }}
+                {...register('atexCertification')}
+              />
+              ATEX CERTIFICATION DEFINITION
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="dataSheet"
+                style={{ marginRight: '25px' }}
+                {...register('dataSheet')}
+              />
+              DATA SHEET
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="cableScheduleJbSchedule"
+                style={{ marginRight: '25px' }}
+                {...register('cableScheduleJbSchedule')}
+              />
+              CABLE SCHEDULE AND JB SCHEDULE
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="dryLoopWetLoopCheck"
+                style={{ marginRight: '25px' }}
+                {...register('dryLoopWetLoopCheck')}
+              />
+              DRY LOOP AND WET LOOP CHECK
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="llf"
+                style={{ marginRight: '25px' }}
+                {...register('llf')}
+              />
+              LLF
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="earthingGrounding"
+                style={{ marginRight: '25px' }}
+                {...register('earthingGrounding')}
+              />
+              EARTHING AND GROUNDING
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="tbraHitra"
+                style={{ marginRight: '25px' }}
+                {...register('tbraHitra')}
+              />
+              TBRA AND HITRA
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="fittings"
+                style={{ marginRight: '25px' }}
+                {...register('fittings')}
+              />
+              FITTINGS
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="maintenanceTypes"
+                style={{ marginRight: '25px' }}
+                {...register('maintenanceTypes')}
+              />
+              TYPES OF MAINTENANCE
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="smp"
+                style={{ marginRight: '25px' }}
+                {...register('smp')}
+              />
+              SMP
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="workPermitSystem"
+                style={{ marginRight: '25px' }}
+                {...register('workPermitSystem')}
+              />
+              WORK PERMIT SYSTEM
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="pstFst"
+                style={{ marginRight: '25px' }}
+                {...register('pstFst')}
+              />
+              PST AND FST
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="fireGasSystem"
+                style={{ marginRight: '25px' }}
+                {...register('fireGasSystem')}
+              />
+              FIRE AND GAS SYSTEM
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="basicSafety"
+                style={{ marginRight: '25px' }}
+                {...register('basicSafety')}
+              />
+              BASIC SAFETY
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="msds"
+                style={{ marginRight: '25px' }}
+                {...register('msds')}
+              />
+              MSDS
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="fiveS"
+                style={{ marginRight: '25px' }}
+                {...register('fiveS')}
+              />
+              5S
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="codesStandards"
+                style={{ marginRight: '25px' }}
+                {...register('codesStandards')}
+              />
+              CODES AND STANDARDS
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="nearMissUnsafeCondition"
+                style={{ marginRight: '25px' }}
+                {...register('nearMissUnsafeCondition')}
+              />
+              NEAR MISS AND UNSAFE CONDITION
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="lprzt"
+                style={{ marginRight: '25px' }}
+                {...register('lprzt')}
+              />
+              LPRZT
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="nfpa"
+                style={{ marginRight: '25px' }}
+                {...register('nfpa')}
+              />
+              NFPA
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="lfi"
+                style={{ marginRight: '25px' }}
+                {...register('lfi')}
+              />
+              LFI
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="hartAndFFSystem"
+                style={{ marginRight: '25px' }}
+                {...register('hartAndFFSystem')}
+              />
+              HART AND FF SYSTEM
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="sisAndSilBasic"
+                style={{ marginRight: '25px' }}
+                {...register('sisAndSilBasic')}
+              />
+              SIS AND SIL BASIC
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="isoBasic"
+                style={{ marginRight: '25px' }}
+                {...register('isoBasic')}
+              />
+              ISO Basic
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="emergencyResponse"
+                style={{ marginRight: '25px' }}
+                {...register('emergencyResponse')}
+              />
+              EMERGENCY RESPONSE
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="toolboxTalk"
+                style={{ marginRight: '25px' }}
+                {...register('toolboxTalk')}
+              />
+              ToolBox Talk
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                name="htm"
+                style={{ marginRight: '25px' }}
+                {...register('htm')}
+              />
+              HTM
+            </td>
+          </tr>
+        </tbody>
+      </table> }
             <table className='table custom-table table-responsive mt-5'>
               <tr>
                 <th> PERFORMANCE EVALUATION:</th>
