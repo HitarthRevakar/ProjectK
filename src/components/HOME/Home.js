@@ -239,17 +239,17 @@ function Home() {
     const storageRef = storage.ref();
 
     // const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
-    let userPhoto = document.getElementById("user_photo")
-
+    let userPhoto = document.getElementById("capturedImage")
+debugger
     // const userPhoto = formData.user_photo && formData.user_photo[0];
     let userPhotoRef
+debugger
+    if (selectedPhoto) {
+      userPhotoRef = storageRef.child(`user_photos/${selectedPhoto.name}`);
+      debugger
 
-    if (userPhoto) {
-      userPhotoRef = storageRef.child(`user_photos/${userPhoto.name}`);
-
-
-      await userPhotoRef.put(userPhoto.files[0]);
-
+      await userPhotoRef.put(selectedPhoto);
+      debugger
     } else {
       // Handle the case where formData.user_photo is null or undefined
       console.error('formData.user_photo is null or undefined');
@@ -259,6 +259,7 @@ function Home() {
     // Get the download URL of the uploaded photo
 
     const downloadURL = await userPhotoRef.getDownloadURL();
+    debugger
     // Update the formData with the download URL
     data.user_photo = downloadURL;
 
@@ -292,9 +293,13 @@ function Home() {
   const onSubmit = async (data) => {
     // Handle form submission
     console.log(data);
-
+    if(selectedPhoto){
+       handleGeneratePDF(data);
+    }else{
+      toast.error("Please Upload Photo!")
+    }
     debugger
-    handleGeneratePDF(data);
+   
     // setModal(!modal)
   };
 
@@ -312,11 +317,40 @@ function Home() {
   const webcamRef = useRef(null);
 
   const capture = () => {
-    const imageSrc = webcamRef.current.getScreenshot();
-    setSelectedPhoto(imageSrc)
-    setIsModalOpen(false);
-    // Now, you can handle the captured image as needed (e.g., upload it to a server).
-    console.log(imageSrc);
+    // const imageSrc = webcamRef.current.getScreenshot();
+    const webcamElement = webcamRef.current.video;
+    html2canvas(webcamElement)
+    .then((canvas) => {
+      // Convert the canvas to a Blob (image file)
+      canvas.toBlob((blob) => {
+        // Create a File object with the Blob and specify the image name
+        const imageFile = new File([blob], 'captured_image.jpg', {
+          type: 'image/jpeg',
+        });
+         // Create a data URL from the Blob
+         const reader = new FileReader();
+         reader.readAsDataURL(imageFile);
+ 
+         reader.onloadend = () => {
+           const dataURL = reader.result;
+ 
+           // Display the captured image in the <img> tag with id "capturedImage"
+           const capturedImage = document.getElementById('capturedImage');
+           capturedImage.src = dataURL;
+         }
+        // Now, you can handle the imageFile as needed, for example, by passing it to your function
+        // that requires the image name and image file.
+        console.log('Image File:', imageFile);
+
+        // Close the modal
+        setSelectedPhoto(imageFile)
+        setIsModalOpen(false);
+      }, 'image/jpeg');
+     
+    })
+    .catch((error) => {
+      console.error('Error capturing image:', error);
+    });
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -355,7 +389,7 @@ function Home() {
                 <td colSpan="1">
                   <div className='my-3 img-fluid ' id="photo-container">
                     {selectedPhoto ? (
-                      <img src={selectedPhoto} className='border-dark' alt="User Photo" width="160" height="160" />
+                      <img  className='border-dark' alt="User Photo" width="160" height="160" id="capturedImage"/>
                     ) : (
                       <div className='text-center align-items-center'><p>PHOTO</p></div>
 
@@ -451,7 +485,8 @@ function Home() {
                 </td>
                 <>
                   <td colSpan="2" >
-                    <div className="d-flex justify-content-around align-items-center"> <input
+                    <div className="d-flex justify-content-around align-items-center"> 
+                    {/* <input
                       id="user_photo"
                       required
                       accept="image/*"
@@ -463,7 +498,7 @@ function Home() {
                       onChange={(e) => displayUserPhoto(e)}
                     /> <span>
                         OR
-                      </span>
+                      </span> */}
                       <Button type="button" onClick={() => setIsModalOpen(true)} color="primary" >Capture Photo</Button></div>
                     <Modal
                       isOpen={isModalOpen}

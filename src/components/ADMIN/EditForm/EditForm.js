@@ -60,13 +60,16 @@ Below		0-49 */
       
       // Set the forms state with the fetched data
       setResult(result1);
-      let compentencyAssessment = JSON.parse(result1.compentencyAssessment)
+      if(result1.compentencyAssessment){
+        let compentencyAssessment = JSON.parse(result1.compentencyAssessment)
       for (const key in compentencyAssessment) {
         if (Object.hasOwnProperty.call(compentencyAssessment, key)) {
           const value = compentencyAssessment[key];
           setValue(key, value);
         }
       }
+      }
+      
       for (const key in result1) {
         if (Object.hasOwnProperty.call(result1, key)) {
           const value = result1[key];
