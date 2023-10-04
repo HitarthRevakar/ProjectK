@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import GoogleButton from 'react-google-button'
 import { useUserAuth } from '../context/UserAuthContext';
 import { firestore } from '../firebase';
-import axios from 'axios';
+
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -14,38 +14,38 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         debugger
-        axios.post('http://localhost:3000/v1/users/login', {
-            email,
-            password
-          }).then((res) => {
-           const data = res;
-           console.log(res)
+        // axios.post('http://localhost:3000/v1/users/login', {
+        //     email,
+        //     password
+        //   }).then((res) => {
+        //    const data = res;
+        //    console.log(res)
+        //     debugger
+        //   })
+        //     .catch((err) => {
+        //       console.log(err);
+        //     });
+        e.preventDefault();
+        setError("");
+        try {
+            let user = await logIn(email, password);
+            const query = firestore.collection("users")
+                .where("email", "==", email);
             debugger
-          })
-            .catch((err) => {
-              console.log(err);
-            });
-        // e.preventDefault();
-        // setError("");
-        // try {
-        //     let user = await logIn(email, password);
-        //     const query = firestore.collection("users")
-        //         .where("email", "==", email);
-        //     debugger
-        //     await query.get().then((querySnapshot) => {
-        //         querySnapshot.forEach((doc) => {
-        //             debugger
-        //             // Access and work with the filtered documents here
-        //             console.log(doc.id, " => ", doc.data());
-        //             localStorage.setItem("user", JSON.stringify({ id: doc.id, ...doc.data() }))
-        //         });
-        //     })
+            await query.get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    debugger
+                    // Access and work with the filtered documents here
+                    console.log(doc.id, " => ", doc.data());
+                    localStorage.setItem("user", JSON.stringify({ id: doc.id, ...doc.data() }))
+                });
+            })
 
-        //     debugger
-        //     navigate("/home");
-        // } catch (err) {
-        //     setError(err.message);
-        // }
+            debugger
+            navigate("/home");
+        } catch (err) {
+            setError(err.message);
+        }
     };
 
     const handleGoogleSignIn = async (e) => {

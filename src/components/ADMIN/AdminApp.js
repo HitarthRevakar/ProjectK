@@ -42,10 +42,7 @@ const AdminApp = () => {
       console.log(imageDataURL); // Print the image data URL
 
       doc.addImage(imageDataURL, 'PNG', 7, 10, 180, 240)
-      // To display the image in an HTML element (e.g., an <img> tag):
-      // const imgElement = document.createElement('img');
-      // imgElement.src = imageDataURL;
-      // document.body.appendChild(imgElement);
+    
     });
     // You can adjust the position as needed
 
@@ -66,6 +63,9 @@ const AdminApp = () => {
   let toRef = useRef()
   let gradeRef = useRef()
   let reportTypeRef = useRef()
+  let trade = useRef()
+  let disciplinedata = useRef()
+
   function jsonToTable(jsonData) {
     let table = '<table border="1">';
     let headers = Object.keys(jsonData[0]);
@@ -268,6 +268,23 @@ const AdminApp = () => {
         debugger
       }
 
+      const tradedata = trade.current.value
+      debugger
+      if (tradedata){
+        newForms = newForms.filter(
+          (form) => form.trade === tradedata
+        );
+      }
+
+      const selecteddisciplinedata = disciplinedata.current.value
+      debugger
+      if (selecteddisciplinedata)
+      {
+        newForms = newForms.filter(
+          (form) => form.discipline === selecteddisciplinedata
+        );
+      }
+
       // Update the state with filtered data
       setForms(newForms);
     } catch (error) {
@@ -339,6 +356,8 @@ const AdminApp = () => {
       fromRef.current.value = null
       toRef.current.value = null
       gradeRef.current.value = ""
+      trade.current.value =""
+      disciplinedata.current.value = ""
 
       // // add images of candidates in admin below code is code to get the images from firebase 
       // const storageRef = storage.ref();
@@ -483,7 +502,36 @@ const AdminApp = () => {
     setModal(!modal)
 
   };
+  const [selectedDiscipline, setSelectedDiscipline] = useState('');
+  const handleTradeChange = (event) => {
+    // event.preventDefault()
+    setSelectedDiscipline(event.target.value); // Update the selected trade
+  };
+  const discipline = [
+    "Electrical",
+    "Instrumental"
+  ]
+  const Instrumentaltrade = [
+    { trade: "INST-SUPERVISOR", mrcNo: "JG-I-PM-SU" },
+    { trade: "INST-TECHNICIAN", mrcNo: "JG-I-PM-TE" },
+    { trade: "INST-ELECTRICIAN", mrcNo: "JG-I-PM-EL" },
+    { trade: "INST-FITTER", mrcNo: "JG-I-PM-FT" },
 
+  ]
+  const ElectricalInstrumentaltrade = [
+    { trade: "ELEC-SUPERVISOR (ELECTRICAL MAINT, PM, CM, RM)", mrcNo: "JG-E-EM-SU" },
+    { trade: "ELEC-SUPERVISOR (STREET LIGHTING, TESTING)", mrcNo: "JG-E-LT-SU" },
+    { trade: "ELEC-SUPERVISOR (LV SWGR MAINTENANCE)", mrcNo: "JG-E-SS-SU" },
+    { trade: "ELEC-SUPERVISOR (HV SWGR MAINT)", mrcNo: "JG-E-HS-SU" },
+    { trade: "ELEC-SUPERVISOR (SUBSTATION ELECTRICAL MAINTENANCE)", mrcNo: "JG-E-SE-SU" },
+    { trade: "ELEC-SUPERVISOR (LIGHTING MAINTENANCE)", mrcNo: "JG-E-LM-SU" },
+    { trade: "ELEC-TECHNICIAN (ELECTRICAL MAINT, PM, CM, RM)", mrcNo: "JG-E-EM-TE" },
+    { trade: "ELEC-TECHNICIAN (STREET LIGHTING, TESTING)", mrcNo: "JG-E-LT-TE" },
+    { trade: "ELEC-TECHNICIAN (LV SWGR MAINTENANCE)", mrcNo: "JG-E-SS-TE" },
+    { trade: "ELEC-TECHNICIAN (HV SWGR MAINT)", mrcNo: "JG-E-HS-TE" },
+    { trade: "ELEC-TECHNICIAN (SUBSTATION ELECTRICAL MAINTENANCE)", mrcNo: "JG-E-SE-TE" },
+    { trade: "ELEC-TECHNICIAN (LIGHTING MAINTENANCE)", mrcNo: "JG-E-LM-TE" }
+  ]
   return (
     <>
 
@@ -524,17 +572,45 @@ const AdminApp = () => {
               <input ref={searchTxtRef} placeholder='Enter contractor name' className='form-control' />
             </Col>
             <Col xl="12" className='d-flex justify-content-end'>
+             
+              <select color='secondary' onChange={handleTradeChange} style={{ width: "170px", height: "40px" }} className='mt-2 secondary rounded-1' ref={disciplinedata}>
+                <option value="">Select a discipline</option>
+                {discipline.map((discipline, index) => (
+                      <option key={index} value={discipline}>
+                        {discipline}
+                      </option>
+                    ))}
+              </select>
+
+              <select color='secondary' onChange={downloadReport} style={{ width: "170px", height: "40px" ,marginLeft:"20px"}} className='mt-2 secondary rounded-1' ref={trade}>
+                <option value="">Select a trade</option>
+                {selectedDiscipline === 'Electrical'
+                      ? ElectricalInstrumentaltrade.map((trade, index) => (
+
+                        <option key={index} value={trade.trade}>
+                          {trade.trade}
+                        </option>
+                      ))
+                      : selectedDiscipline === 'Instrumental'
+                        ? Instrumentaltrade.map((trade, index) => (
+                          <option key={index} value={trade.trade}>
+                            {trade.trade}
+                          </option>
+                        ))
+                        : null}
+              </select>
+
+              <select color='secondary' onChange={downloadReport} style={{ width: "170px", height: "40px" ,marginLeft:"20px" }} className='mt-2 secondary rounded-1' ref={reportTypeRef}>
+                <option value="">Download report</option>
+                <option value="Pdf">Pdf</option>
+                <option value="Excel">Excel</option>
+              </select> 
               <button type="button" onClick={searchUser} className="btn btn-info m-2 text-white">
                 Search
               </button>
               <button type="button" onClick={fetchData1} className="btn btn-secondary m-2 text-white">
                 Clear
               </button>
-              <select color='secondary' onChange={downloadReport} style={{ width: "170px", height: "40px" }} className='mt-2 secondary rounded-1' ref={reportTypeRef}>
-                <option value="">Download report</option>
-                <option value="Pdf">Pdf</option>
-                <option value="Excel">Excel</option>
-              </select>
             </Col>
           </Row>
 

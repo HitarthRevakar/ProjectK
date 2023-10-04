@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { useUserAuth } from "../../context/UserAuthContext";
 import { useForm } from 'react-hook-form';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Row, Col } from 'reactstrap';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import firebase from "../../firebase";
@@ -12,6 +12,7 @@ import './home.css'
 import questionsSet1 from '../QuestionPaper/Electrical.json';
 import questionsSet2 from '../QuestionPaper/Instrumentation.json';
 import { firestore, storage } from '../../firebase';
+import Webcam from "react-webcam";
 
 
 
@@ -20,9 +21,9 @@ function Home() {
   const { logOut, user } = useUserAuth();
   let [userData, setUserData] = useState("")
   let userData1 = localStorage.getItem("user");
-  
+
   useEffect(() => {
-    
+
     setUserData(JSON.parse(userData1))
   }, [userData1])
 
@@ -42,7 +43,60 @@ function Home() {
     formState: { errors },
     reset
   } = useForm();
+  const [selectedDiscipline, setSelectedDiscipline] = useState('');
+  const [selectedTrade, setSelectedTrade] = useState('');
+  const [mrcNo, setMrcNo] = useState('');
 
+  const mrcNoByTrade = (event) => {
+    const selectedValue = event.target.value;
+    setSelectedTrade(selectedValue);
+
+    // Find the corresponding MRC No based on the selected trade
+    const selectedTradeObject = Instrumentaltrade.find((tradeObj) => tradeObj.trade === selectedValue);
+
+    if (selectedTradeObject) {
+      setMrcNo(selectedTradeObject.mrcNo);
+      console.log(selectedTradeObject.mrcNo)
+    } else if (!selectedTradeObject) {
+      const selectedTradeObject2 = ElectricalInstrumentaltrade.find((tradeObj2) => tradeObj2.trade === selectedValue);
+      setMrcNo(selectedTradeObject2.mrcNo);
+      console.log(selectedTradeObject2.mrcNo)
+
+    }
+    else {
+      setMrcNo('');
+    }
+  };
+
+  const handleTradeChange = (event) => {
+    // event.preventDefault()
+    setSelectedDiscipline(event.target.value); // Update the selected trade
+  };
+  const Instrumentaltrade = [
+    { trade: "INST-SUPERVISOR", mrcNo: "JG-I-PM-SU" },
+    { trade: "INST-TECHNICIAN", mrcNo: "JG-I-PM-TE" },
+    { trade: "INST-ELECTRICIAN", mrcNo: "JG-I-PM-EL" },
+    { trade: "INST-FITTER", mrcNo: "JG-I-PM-FT" },
+
+  ]
+  const ElectricalInstrumentaltrade = [
+    { trade: "ELEC-SUPERVISOR (ELECTRICAL MAINT, PM, CM, RM)", mrcNo: "JG-E-EM-SU" },
+    { trade: "ELEC-SUPERVISOR (STREET LIGHTING, TESTING)", mrcNo: "JG-E-LT-SU" },
+    { trade: "ELEC-SUPERVISOR (LV SWGR MAINTENANCE)", mrcNo: "JG-E-SS-SU" },
+    { trade: "ELEC-SUPERVISOR (HV SWGR MAINT)", mrcNo: "JG-E-HS-SU" },
+    { trade: "ELEC-SUPERVISOR (SUBSTATION ELECTRICAL MAINTENANCE)", mrcNo: "JG-E-SE-SU" },
+    { trade: "ELEC-SUPERVISOR (LIGHTING MAINTENANCE)", mrcNo: "JG-E-LM-SU" },
+    { trade: "ELEC-TECHNICIAN (ELECTRICAL MAINT, PM, CM, RM)", mrcNo: "JG-E-EM-TE" },
+    { trade: "ELEC-TECHNICIAN (STREET LIGHTING, TESTING)", mrcNo: "JG-E-LT-TE" },
+    { trade: "ELEC-TECHNICIAN (LV SWGR MAINTENANCE)", mrcNo: "JG-E-SS-TE" },
+    { trade: "ELEC-TECHNICIAN (HV SWGR MAINT)", mrcNo: "JG-E-HS-TE" },
+    { trade: "ELEC-TECHNICIAN (SUBSTATION ELECTRICAL MAINTENANCE)", mrcNo: "JG-E-SE-TE" },
+    { trade: "ELEC-TECHNICIAN (LIGHTING MAINTENANCE)", mrcNo: "JG-E-LM-TE" }
+  ]
+  const discipline = [
+    "Electrical",
+    "Instrumental"
+  ]
   const stateOptions = [
     "Andhra Pradesh",
     "Arunachal Pradesh",
@@ -108,6 +162,7 @@ function Home() {
     from_date_1: '',
     till_date_1: '',
     company_name_2: '',
+    Candidate_verified: '',
     designation_2: '',
     from_date_2: '',
     till_date_2: '',
@@ -182,27 +237,27 @@ function Home() {
     // Upload the user's photo to Firebase Storage
     setIsButtonVisible(false);
     const storageRef = storage.ref();
-    
+
     // const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
     let userPhoto = document.getElementById("user_photo")
-    
+
     // const userPhoto = formData.user_photo && formData.user_photo[0];
     let userPhotoRef
-   
+
     if (userPhoto) {
-       userPhotoRef = storageRef.child(`user_photos/${userPhoto.name}`);
-      
-       
+      userPhotoRef = storageRef.child(`user_photos/${userPhoto.name}`);
+
+
       await userPhotoRef.put(userPhoto.files[0]);
-      
+
     } else {
       // Handle the case where formData.user_photo is null or undefined
       console.error('formData.user_photo is null or undefined');
     }
-    
-    
+
+
     // Get the download URL of the uploaded photo
-    
+
     const downloadURL = await userPhotoRef.getDownloadURL();
     // Update the formData with the download URL
     data.user_photo = downloadURL;
@@ -210,7 +265,8 @@ function Home() {
     const date = new Date(); // Your date object
     const timestamp = firebase.firestore.Timestamp.fromDate(date);
     data.createdDate = timestamp
-    
+    data.mrcNo = mrcNo
+
 
     debugger
     firestore.collection('candidate-info').add(data)
@@ -223,7 +279,7 @@ function Home() {
         console.log('Document written with ID: ', docRef.id);
       })
       .catch((error) => {
-        
+
         console.error('Error adding document: ', error);
       });
 
@@ -236,7 +292,7 @@ function Home() {
   const onSubmit = async (data) => {
     // Handle form submission
     console.log(data);
-    
+
     debugger
     handleGeneratePDF(data);
     // setModal(!modal)
@@ -253,6 +309,18 @@ function Home() {
     setIndexCount(lastIndex.current);
   };
 
+  const webcamRef = useRef(null);
+
+  const capture = () => {
+    const imageSrc = webcamRef.current.getScreenshot();
+    setSelectedPhoto(imageSrc)
+    setIsModalOpen(false);
+    // Now, you can handle the captured image as needed (e.g., upload it to a server).
+    console.log(imageSrc);
+  };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+    
   return (
     <div className="container my-3">
       <div><Toaster /></div>
@@ -293,10 +361,66 @@ function Home() {
 
                     )}
                   </div>
+                  {mrcNo ? (<p className="text-danger">Mrc No.: {mrcNo}</p>) : (<></>)}
+                </td>
+
+
+
+              </tr>
+              <tr>
+                <td rowSpan="1" colSpan="1"><p className='mt-2'>DISCIPLINE :</p> </td>
+                <td rowSpan="1" colSpan="3" className="align-items-center">
+
+                  <select
+                    name="discipline"
+                    required
+                    // value={discipline}
+                    {...register('discipline', { required: true })}
+                    className={`form-control ${errors.discipline ? 'error-input' : ''}`}
+                    onChange={handleTradeChange}
+                  >
+                    <option value="">Select a discipline</option>
+                    {discipline.map((discipline, index) => (
+                      <option key={index} value={discipline}>
+                        {discipline}
+                      </option>
+                    ))}
+                  </select>
+
+                </td>
+              </tr>
+
+              <tr>
+                <td rowSpan="1" colSpan="1"><p className='mt-2'>TRADE :</p> </td>
+                <td rowSpan="1" colSpan="3" className="align-items-center">
+
+                  <select
+                    name="trade"
+                    required
+                    {...register('trade', { required: true })}
+                    className={`form-control ${errors.trade ? 'error-input' : ''}`}
+                    onChange={mrcNoByTrade}
+                  >
+                    <option value="">Select a trade</option>
+                    {selectedDiscipline === 'Electrical'
+                      ? ElectricalInstrumentaltrade.map((trade, index) => (
+
+                        <option key={index} value={trade.trade}>
+                          {trade.trade}
+                        </option>
+                      ))
+                      : selectedDiscipline === 'Instrumental'
+                        ? Instrumentaltrade.map((trade, index) => (
+                          <option key={index} value={trade.trade}>
+                            {trade.trade}
+                          </option>
+                        ))
+                        : null}
+                  </select>
                 </td>
               </tr>
               <tr>
-                <td rowSpan="1" colSpan="1"><p className='mt-2'>CONTRACTOR NAME :</p> </td>
+                <td rowSpan="1" colSpan="1"><p className='mt-2'>Jobber Name :</p> </td>
                 <td rowSpan="1" colSpan="3" className="align-items-center">
                   <input
                     type="text"
@@ -305,34 +429,6 @@ function Home() {
                     {...register('contractor_name', { required: true })}
                     className={`form-control ${errors.contractor_name ? 'error-input' : ''
                       }`}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td rowSpan="1" colSpan="1"><p className='mt-2'>TRADE :</p> </td>
-                <td rowSpan="1" colSpan="3" className="align-items-center">
-                  <input
-                    type="text"
-                    name="trade"
-                 
-                  {...register('trade', { required: true })}
-                  className={`form-control ${
-                    errors.trade ? 'error-input' : ''
-                  }`}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td rowSpan="1" colSpan="1"><p className='mt-2'>DISCIPLINE :</p> </td>
-                <td rowSpan="1" colSpan="3" className="align-items-center">
-                  <input
-                    type="text"
-                    name="discipline"
-                    // className='form-control'
-                  {...register('discipline', { required: true })}
-                  className={`form-control ${
-                    errors.discipline ? 'error-input' : ''
-                  }`}
                   />
                 </td>
               </tr>
@@ -354,21 +450,61 @@ function Home() {
                   />
                 </td>
                 <>
-                  <td colSpan="1">UPLOAD PHOTO:</td>
-                  <td colSpan="1">
-                    <input
-                    id="user_photo"
+                  <td colSpan="2" >
+                    <div className="d-flex justify-content-around align-items-center"> <input
+                      id="user_photo"
                       required
                       accept="image/*"
                       type="file"
                       name="user_photo"
                       {...register('user_photo', { required: true })}
-                      className={`form-control ${errors.user_photo ? 'error-input' : ''
+                      className={`form-control w-50 ${errors.user_photo ? 'error-input' : ''
                         }`}
                       onChange={(e) => displayUserPhoto(e)}
-                    />
-                  </td></>
+                    /> <span>
+                        OR
+                      </span>
+                      <Button type="button" onClick={() => setIsModalOpen(true)} color="primary" >Capture Photo</Button></div>
+                    <Modal
+                      isOpen={isModalOpen}
+                      onRequestClose={() => setIsModalOpen(false)}
+                      contentLabel="Webcam Capture Modal"
+                      className="w-75"
+                    >
+                      <div >
+                        <Row className="d-flex  justify-content-center">
+                          <Webcam
+                          style={{height:"500px",width:"500px" }}
+                          audio={false}
+                          ref={webcamRef}
+                          screenshotFormat="image/jpeg"
+                        />
+                        </Row>
+                        <Col className="d-flex justify-content-center mb-5">
+                        <Button color="success" className="me-5" onClick={capture}>Capture Photo</Button>
+                        <Button color="danger" onClick={() => setIsModalOpen(false)}>Close</Button>
+                        </Col>
+                        
+                      </div>
+                    </Modal>
+
+                  </td>
+
+
+
+                </>
+
               </tr>
+              {/* <tr>
+                <div>
+                  <Webcam
+                    audio={false}
+                    ref={webcamRef}
+                    screenshotFormat="image/jpeg"
+                  />
+                  <button onClick={capture}>Capture Photo</button>
+                </div></tr> */}
+
               {/* Add more PERSONAL DETAILS fields here */}
 
               {/* CONTACT INFORMATION */}
@@ -788,9 +924,9 @@ function Home() {
                         const designation = getValues(`designation_${index}`);
                         const from_date = getValues(`from_date_${index}`);
                         const till_date = getValues(`till_date_${index}`);
-                        
+
                         if (companyName && designation && from_date) {
-                          
+
                           handleAddIndex();
                         }
                       }}
@@ -813,6 +949,13 @@ function Home() {
             <tr>
               <td>FOR OFFICE USE:</td>
               <td>CANDIDATE VERIFIED AND SCREENED BY:</td>
+              <td>
+                <input
+                  type="text"
+                  name='Candidate_verified'
+                  {...register('Candidate_verified')}
+                />
+              </td>
             </tr>
           </tbody>
         </table>
