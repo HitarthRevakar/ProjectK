@@ -1,247 +1,410 @@
-[
-    {
-      "question": "Transformer breaths in when",
-      "a": "Load Increases",
-      "b": "Load Decreases",
-      "c": "Load remains constant",
-      "d": "None of the above"
-    },
-    {
-      "question": "The hum in a transformer is mainly attributed to",
-      "a": "Load Changes",
-      "b": "Oil in the transformer",
-      "c": "Magnetostriction",
-      "d": "Mechanical vibrations"
-    },
-    {
-      "question": "The dielectric strength of transformer oil is expected to be",
-      "a": "1 KVs",
-      "b": "33 KV",
-      "c": "100 KV",
-      "d": "330 KV"
-    },
-    {
-      "question": "The dielectric strength of transformer oil is expected to be",
-      "a": "1 KVs",
-      "b": "33 KV",
-      "c": "100 KV",
-      "d": "330 KV"
-    },
-    {
-      "question": "The basic function of a transformer is to change",
-      "a": "The level of the voltage",
-      "b": "The power levels",
-      "c": "The power factor",
-      "d": "The frequency"
-    },
-    {
-      "question": "The efficiency of a power transformer is around",
-      "a": "50%",
-      "b": "60%",
-      "c": "80%",
-      "d": "95%"
-    },
-    {
-      "question": "GENERALLY IN INDUSTRIES WHICH DUTY TYPE INDUCTION MOTOR ARE IN USE?",
-      "a": "S 3",
-      "b": "S 2",
-      "c": "S1",
-      "d": "S0"
-    },
-    {
-      "question": "An induction motor is identical to",
-      "a": "d.c compound motor",
-      "b": "d.c series motor",
-      "c": "Synchronous motor",
-      "d": "Asynchronous motor"
-    },
-    {
-      "question": "The number of slip rings on a squirrel cage induction motor is usually",
-      "a": "Two",
-      "b": "Three",
-      "c": "Four",
-      "d": "None"
-    },
-    {
-      "question": "The starting torque of a 3 phase squirrel cage induction motor is",
-      "a": "Twice the full load torque",
-      "b": "1.5 times the full load torque",
-      "c": "Equal to full load torque",
-      "d": "Any of the above"
-    },
-    {
-      "question": "Star-delta starting of motors is not possible in case of",
-      "a": "Single phase motor",
-      "b": "Variable speed motors",
-      "c": "Low horse power motors",
-      "d": "High speed motors"
-    },
-    {
-      "question": "REF Protection is use for",
-      "a": "HT motor",
-      "b": "LT motor",
-      "c": "Transformer",
-      "d": "DC motor"
-    },
-    {
-      "question": "WHICH IS THE CORRECT FORMULA TO FIND NEUTRAL CURRENT?",
-      "a": "R square - Y square + b square + R*Y - Y*b - R*b",
-      "b": "R square + Y square + b square + R*Y - Y*b - R*b",
-      "c": "R square + Y square + b square + R*Y + Y*b - R*b",
-      "d": "R square + Y square + b square - R*Y - Y*b - R*b"
-    },
-    {
-      "question": "IN STAR CONNECTION WHICH ARE CORRECT?",
-      "a": "VL= V ph",
-      "b": "VL = ✓3 Vph",
-      "c": "VL=1.1 V ph",
-      "d": "VL = ✓2 Vph"
-    },
-    {
-      "question": "HOW WE CALCULATE THREE PHASE SQ MOTOR SPEED?",
-      "a": "Ns = 120f/2P",
-      "b": "Ns = 120f/P",
-      "c": "Ns = 120fv/P",
-      "d": "Ns-Na = 120f/P"
-    },
-    {
-      "question": "TRANSFORMER RATING IS ALWAYS IN",
-      "a": "KVA",
-      "b": "KW",
-      "c": "KVAR",
-      "d": "No one correct"
-    },
-    {
-      "question": "Hazardous area zone zero which elect equipment can be used",
-      "a": "EXD",
-      "b": "EX-N",
-      "c": "Safe",
-      "d": "No elect Equipment allowed"
-    },
-    {
-      "question": "WHICH MOTOR WORK ON BOTH AC AND DC?",
-      "a": "SQ Motor",
-      "b": "Slip ring motor",
-      "c": "DC Shunt motor",
-      "d": "Universal Motor"
-    },
-    {
-      "question": "Which gas is explosive &amp; in Gas group –IIC",
-      "a": "Nitrogen",
-      "b": "Oxygen",
-      "c": "Ethane",
-      "d": "Hydrogen"
-    },
-    {
-      "question": "What is the function of a transformer?",
-      "a": "Transformer is used to step down or up the AC voltages and currents",
-      "b": "Transformer is used to step down or up the DC voltages and currents",
-      "c": "Transformer converts DC to AC voltages",
-      "d": "Transformer converts AC to DC voltages"
-    },
-    {
-      "question": "Which is correct formula for single phase AC Power?",
-      "a": "P=1.734 *V*I*pf",
-      "b": "P=V*I*P. F",
-      "c": "P=V*I",
-      "d": "None of above"
-    },
-    {
-      "question": "Power factor is always in lagging in",
-      "a": "Capacitor Load",
-      "b": "Inductive Load",
-      "c": "Capacitor Load & Inductive Load",
-      "d": "Resistive load"
-    },
-    {
-      "question": "What is the working principle of DC motor?",
-      "a": "Fleming’s right hand rule",
-      "b": "Fleming’s left hand rule",
-      "c": "Maxwell’s second law",
-      "d": "Maxwell’s third law"
-    },
-    {
-      "question": "What is the current transformer?",
-      "a": "transformer used with an a.c. voltmeter",
-      "b": "transformer used with an a.c. ammeter",
-      "c": "transformer used with an d.c. voltmeter",
-      "d": "transformer used with an d.c. ammeter"
-    },
-    {
-      "question": "WHAT IS MINIMUM IR VALUE IS ACCEPTABLE FOR LT MOTOR?",
-      "a": "2K Ohm",
-      "b": "4 K ohm",
-      "c": "2 M ohm",
-      "d": "4 G ohm"
-    },
-    {
-      "question": "What is MSDS?",
-      "a": "Material safety data sheet",
-      "b": "Material safety danger sheet",
-      "c": "Material show data sheet",
-      "d": "All of above"
-    },
-    {
-      "question": "How many kg lift the material by manual material handling?",
-      "a": "30 kg",
-      "b": "35 kg",
-      "c": "25 kg",
-      "d": "18 kg"
-    },
-    {
-      "question": "From where start work at height activity",
-      "a": "2m",
-      "b": "1.8m",
-      "c": "1.5m",
-      "d": "1.2m"
-    },
-    {
-      "question": "What is work at height hazards?",
-      "a": "Fall of person",
-      "b": "Fall of material",
-      "c": "Collapse temporary platform",
-      "d": "All of the above"
-    },
-    {
-      "question": "When Scaffolding material certified?",
-      "a": "2 years",
-      "b": "3 years",
-      "c": "6 years",
-      "d": "1 years"
-    },
-    {
-      "question": "Fire extinguish method?",
-      "a": "Smothering",
-      "b": "Starvation",
-      "c": "Cooling",
-      "d": "All of the above"
-    },
-    {
-      "question": "What is class B confined space?",
-      "a": "Present of Inert gas",
-      "b": "Presence of toxic or flammable",
-      "c": "Non process equipment",
-      "d": "Deep above 1.2 meter"
-    },
-    {
-      "question": "IN SUBSTATION WHICH TYPE OF FIRE EXTINGUISHER ARE USED?",
-      "a": "Dry chemical powder",
-      "b": "CO2",
-      "c": "Both type",
-      "d": "None of above"
-    },
-    {
-      "question": "Line of fire example?",
-      "a": "",
-      "b": "",
-      "c": "",
-      "d": ""
-    },
-    {
-      "question": "What is Instrument department LOTO Color?",
-      "a": "Blue",
-      "b": "Red",
-      "c": "Yellow",
-      "d": "Black"
-    }
-  ]
+[{
+  "question": "Which of the following does not change in an ordinary transformer?",
+  "a": "Frequency",
+  "b": "Voltage",
+  "c": "Current",
+  "d": "Any of the above"
+},
+{
+  "question": "The dielectric strength of transformer oil is expected to be",
+  "a": "1 KV",
+  "b": "33 KV",
+  "c": "100 KV",
+  "d": "330 KV"
+},
+{
+  "question": "Transformer breathes in when",
+  "a": "Load Increases",
+  "b": "Load Decreases",
+  "c": "Load remains constant",
+  "d": "None of the above"
+},
+{
+  "question": "Which of the following is not a part of transformer installation?",
+  "a": "Conservator",
+  "b": "Breather",
+  "c": "Buchholz relay",
+  "d": "Exciter"
+},
+{
+  "question": "When secondary of a current transformer is open-circuited its iron core will be",
+  "a": "Hot because of heavy iron losses taking place in it due to high flux density",
+  "b": "Hot because primary will carry heavy current",
+  "c": "Cool as there is no secondary current",
+  "d": "None of above will happen"
+},
+{
+  "question": "The hum in a transformer is mainly attributed to",
+  "a": "Load Changes",
+  "b": "Oil in the transformer",
+  "c": "Magnetostriction",
+  "d": "Mechanical vibrations"
+},
+{
+  "question": "The basic function of a transformer is to change",
+  "a": "The level of the voltage",
+  "b": "The power levels",
+  "c": "The power factor",
+  "d": "The frequency"
+},
+{
+  "question": "The efficiency of a power transformer is around",
+  "a": "50%",
+  "b": "60%",
+  "c": "80%",
+  "d": "95%"
+},
+{
+  "question": "In a transformer, electrical power is transferred from primary to secondary",
+  "a": "Through air",
+  "b": "By magnetic flux",
+  "c": "Through insulating medium",
+  "d": "None of these"
+},
+{
+  "question": "The two windings of a transformer are",
+  "a": "Conductively linked",
+  "b": "Inductively linked",
+  "c": "Not linked at all",
+  "d": "Electrically linked"
+},
+{
+  "question": "The low voltage winding of a 400/230 V single phase 50 Hz transformer is to be connected to a 25 Hz supply. In order to keep the magnetization current at the same level in both the cases the voltage at 25Hz should be",
+  "a": "230V",
+  "b": "460V",
+  "c": "115V",
+  "d": "65V"
+},
+{
+  "question": "It is advisable to avoid line starting of induction motor and use starter because",
+  "a": "It will run in reverse direction",
+  "b": "It will pick up very high speed and may go out of step",
+  "c": "Motor takes five to seven times its full load current",
+  "d": "Starting torque is very high"
+},
+{
+  "question": "An induction motor is identical to",
+  "a": "D.C compound motor",
+  "b": "D.C series motor",
+  "c": "Synchronous motor",
+  "d": "Asynchronous motor"
+},
+{
+  "question": "5 H.P., 50Hz, 3-phase, 440 V, induction motors are available for the following r.p.m. Which motor will be the costliest?",
+  "a": "730 RPM",
+  "b": "960 RPM",
+  "c": "1440 RPM",
+  "d": "2880 RPM"
+},
+{
+  "question": "For driving high inertia loads best type of induction motor suggested is",
+  "a": "Slip ring type",
+  "b": "Squirrel-cage type",
+  "c": "Both 1&2",
+  "d": "None of the above"
+},
+{
+  "question": "The number of slip rings on a squirrel cage induction motor is usually",
+  "a": "Two",
+  "b": "Three",
+  "c": "Four",
+  "d": "None"
+},
+{
+  "question": "Star-delta starting of motors is not possible in case of",
+  "a": "Single phase motor",
+  "b": "Variable speed motors",
+  "c": "Low horse power motors",
+  "d": "High speed motors"
+},
+{
+  "question": "The starting torque of a 3 phase squirrel cage induction motor is",
+  "a": "Twice the full load torque",
+  "b": "1.5 times the full load torque",
+  "c": "Equal to full load torque",
+  "d": "Any of the above"
+},
+{
+  "question": "The thickness of metallic shielding on cables is usually",
+  "a": "0.04mm",
+  "b": "0.2 to 0.4 mm",
+  "c": "3 to 5 mm",
+  "d": "40 to 60 mm"
+},
+{
+  "question": "As the speed of an alternator increases",
+  "a": "Frequency increases",
+  "b": "Frequency decreases",
+  "c": "Frequency remains constant but power factor decreases",
+  "d": "None of the above"
+},
+{
+  "question": "If the input to the prime mover of an alternator is kept constant but the excitation is changed then the",
+  "a": "Reactive component of the output is changed",
+  "b": "Active component of the output is changed",
+  "c": "Power factor of load remains constant",
+  "d": "None of the Above"
+},
+{
+  "question": "For a two pole, 50 Hz, 3 phase synchronous motor the speed of rotating magnetic field is",
+  "a": "1000 RPM",
+  "b": "2000 RPM",
+  "c": "3000 RPM",
+  "d": "3500 RPM"
+},
+{
+  "question": "If the field of the synchronous motor is overexcited then its power factor will be",
+  "a": "Lagging",
+  "b": "Leading",
+  "c": "Unity",
+  "d": "Zero"
+},
+{
+  "question": "In traction which motor are in service?",
+  "a": "DC shunt",
+  "b": "DC series",
+  "c": "AC three phase SQ",
+  "d": "AC three phase slip ring"
+},
+{
+  "question": "REF Protection is used for",
+  "a": "HT motor",
+  "b": "LT motor",
+  "c": "Transformer",
+  "d": "DC motor"
+},
+{
+  "question": "WHICH IS CORRECT FORMULA FOR THREE PHASE POWER?",
+  "a": "P = V*I",
+  "b": "P = KVA*R",
+  "c": "P = ✓2 *V*I",
+  "d": "P = ✓3*V*I* PF"
+},
+{
+  "question": "WHICH IS CORRECT FORMULA TO FIND NEUTRAL CURRENT?",
+  "a": "R square - Y square + B square + R*Y. -Y*B -R*B",
+  "b": "R square + Y square + B square + R*Y. -Y*B -R*B",
+  "c": "R square + Y square + B square +R*Y. +Y*B -R*B",
+  "d": "R square + Y square + B square - R*Y. -Y*B -R*B"
+},
+{
+  "question": "IN THREE PHASE BALANCE LOAD THE VALUE OF NEUTRAL CURRENT IS",
+  "a": "0 Amp",
+  "b": "1 Amp",
+  "c": "2 Amps",
+  "d": "None of above"
+},
+{
+  "question": "IN STAR CONNECTION WHICH ARE CORRECT?",
+  "a": "VL= Vph",
+  "b": "VL = ✓3 Vph",
+  "c": "VL=1.1 Vph",
+  "d": "VL = ✓2 Vph"
+},
+{
+  "question": "IN DELTA CONNECTION WHICH ARE CORRECT",
+  "a": "VL= Vph",
+  "b": "VL = ✓3 V ph",
+  "c": "VL=1.1 V ph",
+  "d": "VL = ✓2 V ph"
+},
+{
+  "question": "TRANSFORMER IS WORKING ON FOLLOWING LAW",
+  "a": "Mutual Induction",
+  "b": "Self Induction",
+  "c": "Both Mutual Induction & Self",
+  "d": "None one"
+},
+{
+  "question": "HOW WE CALCULATE THREE PHASE SQ MOTOR SPEED?",
+  "a": "Ns = 120f/2P",
+  "b": "Ns = 120f/P",
+  "c": "Ns = 120fv/P",
+  "d": "Ns-Na = 120f/P"
+},
+{
+  "question": "WHAT IS SYNCHRONOUS SPEED OF THREE PHASE SQ MOTOR HAVING SIX POLES?",
+  "a": "3000RPM",
+  "b": "1500RPM",
+  "c": "1200RPM",
+  "d": "1000RPM"
+},
+{
+  "question": "FOR 6.6 KV FEEDER DE ENERGIZATION WHICH K/CM2 ARC SUIT TO BE USE?",
+  "a": "2",
+  "b": "4",
+  "c": "8",
+  "d": "20"
+},
+{
+  "question": "WHAT IS MINIMUM IR VALUE IS ACCEPTABLE FOR LT MOTOR?",
+  "a": "2K Ohm",
+  "b": "4 K ohm",
+  "c": "2 M ohm",
+  "d": "4 G ohm"
+},
+{
+  "question": "GENERALLY IN INDUSTRIES WHICH DUTY TYPE INDUCTION MOTOR ARE IN USE?",
+  "a": "S 3",
+  "b": "S 2",
+  "c": "S1",
+  "d": "S0"
+},
+{
+  "question": "IN CASE OF SERIES CIRCUIT WHICH IS CORRECT ONE.",
+  "a": "Current is different",
+  "b": "Current is same",
+  "c": "Current & voltage is different",
+  "d": "No one correct"
+},
+{
+  "question": "TRANSFORMER RATING IS ALWAYS IN",
+  "a": "KVA",
+  "b": "KW",
+  "c": "KVAR",
+  "d": "No one correct"
+},
+{
+  "question": "HOUSE WIRING AND INDUSTRIAL LIGHTING CIRCUIT ARE IN",
+  "a": "Series",
+  "b": "Parallel",
+  "c": "Both Series & Parallel",
+  "d": "No one correct"
+},
+{
+  "question": "WHICH MOTOR WORK ON BOTH AC AND DC?",
+  "a": "SQ Motor",
+  "b": "Slip ring motor",
+  "c": "DC Shunt motor",
+  "d": "Universal Motor"
+},
+{
+  "question": "POWER TRANSFORMER NO LOAD LOSS IS",
+  "a": "15 %",
+  "b": "20%",
+  "c": "2 %",
+  "d": "8%"
+},
+{
+  "question": "POWER TRANSFORMER MAXIMUM EFFICACY IS AT",
+  "a": "No load",
+  "b": "20% Load",
+  "c": "100% load",
+  "d": "50% Load"
+},
+{
+  "question": "Induction motor gives higher efficiency at",
+  "a": "No load",
+  "b": "20% Load",
+  "c": "100% load",
+  "d": "50% Load"
+},
+{
+  "question": "Which gas is explosive & in Gas group –IIC",
+  "a": "Nitrogen",
+  "b": "Oxygen",
+  "c": "Ethane",
+  "d": "Hydrogen"
+},
+{
+  "question": "Hazardous area zone zero which elect equipment can be used",
+  "a": "EXD",
+  "b": "EX-N",
+  "c": "Safe",
+  "d": "No elect Equipment allowed"
+},
+{
+  "question": "In case of confined space how much voltage hand lamp allowed",
+  "a": "24V",
+  "b": "48V",
+  "c": "110V",
+  "d": "230V"
+},
+{
+  "question": "What is the current transformer?",
+  "a": "Transformer used with an A.C. voltmeter",
+  "b": "Transformer used with an A.C. ammeter",
+  "c": "Transformer used with an D.C. voltmeter",
+  "d": "Transformer used with an D.C. ammeter"
+},
+{
+  "question": "What is the function of a transformer?",
+  "a": "Transformer is used to step down or up the AC voltages and currents",
+  "b": "Transformer is used to step down or up the DC voltages and currents",
+  "c": "Transformer converts DC to AC voltages",
+  "d": "Transformer converts AC to DC voltages"
+},
+{
+  "question": "Which Electrical power cannot storage?",
+  "a": "AC",
+  "b": "DC",
+  "c": "AC & DC",
+  "d": "None of Above"
+},
+{
+  "question": "Which is correct formula for single phase AC Power?",
+  "a": "P=1.734 *V*I*pf",
+  "b": "P=V*I*P. F",
+  "c": "P=V*I",
+  "d": "None of above"
+},
+{
+  "question": "Power factor is always in unity in",
+  "a": "Capacitor Load",
+  "b": "Inductive Load",
+  "c": "Capacitor Load & Inductive Load",
+  "d": "Resistive load"
+},
+{
+  "question": "Power factor is always in lagging in",
+  "a": "Capacitor Load",
+  "b": "Inductive Load",
+  "c": "Capacitor Load & Inductive Load",
+  "d": "Resistive load"
+},
+{
+  "question": "Power factor is always in Leading in",
+  "a": "Capacitor Load",
+  "b": "Inductive Load",
+  "c": "Capacitor Load & Inductive Load",
+  "d": "Resistive load"
+},
+{
+  "question": "Transformer is work on which principle?",
+  "a": "Self Induction",
+  "b": "Mutual Induction",
+  "c": "Both Self & Mutual",
+  "d": "None of above"
+},
+{
+  "question": "What is the working principle of DC motor?",
+  "a": "Flemings right hand rule",
+  "b": "Flemings left hand rule",
+  "c": "Maxwells second law",
+  "d": "Maxwells third law"
+},
+{
+  "question": "Speed control of an ac motor can be achieved by varying the input frequency",
+  "a": "True",
+  "b": "False"
+},
+{
+  "question": "AC motors do not have brushes",
+  "a": "True",
+  "b": "False"
+},
+{
+  "question": "Which is correct formula for single phase AC Power?",
+  "a": "P=1.734 *V*I*pf",
+  "b": "P=V*I*P. F",
+  "c": "P = V*I",
+  "d": "None of above"
+},
+{
+  "question": "Transformer is work on which principle?",
+  "a": "Self Induction",
+  "b": "Mutual Induction",
+  "c": "Both Self & Mutual",
+  "d": "None of above"
+}
+]

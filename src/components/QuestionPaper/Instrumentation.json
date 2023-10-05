@@ -1,254 +1,314 @@
 [
-    {
-      "question": "Which device is not measuring the pressure of Gas and liquid?",
-      "a": "Proximity sensor",
-      "b": "Pressure sensor",
-      "c": "Pressure Gauge",
-      "d": "DP Transmitter"
-    },
-    {
-      "question": "Which sensor measures the pressure relative to perfect vacuum?",
-      "a": "Absolute pressure sensor",
-      "b": "Gauge pressure sensor",
-      "c": "Vacuum pressure sensor",
-      "d": "Differential pressure sensor"
-    },
-    {
-      "question": "Which pressure standard is used for High pressure range Instrument calibration?",
-      "a": "Dead-weight tester",
-      "b": "Manometer",
-      "c": "Pressure switches",
-      "d": "Strain gauge pressure sensor"
-    },
-    {
-      "question": "Pressure measured relative to perfect vacuum is termed as",
-      "a": "Absolute Pressure Measurement",
-      "b": "Differential Pressure Measurement",
-      "c": "Gauge Pressure Measurement",
-      "d": "Both Absolute and Differential"
-    },
-    {
-      "question": "For Measurement of Liquid Flow Tapping will be",
-      "a": "Above pipe line",
-      "b": "Below pipe line or 45-degree angle",
-      "c": "Above pipe line or 45-degree angle",
-      "d": "Above pipe line or 90-degree angle"
-    },
-    {
-      "question": "Give the Types of Thermocouple",
-      "a": "",
-      "b": "",
-      "c": "",
-      "d": ""
-    },
-    {
-      "question": "Give the Name of type of Control valve",
-      "a": "",
-      "b": "",
-      "c": "",
-      "d": ""
-    },
-    {
-      "question": "Which is the Input and Output for process control",
-      "a": "AI- Analogue Input",
-      "b": "AO-Analogue output",
-      "c": "DI- Digital Input",
-      "d": "DO-Digital output"
-    },
-    {
-      "question": "Which instrument to be used for low pressure calibration?",
-      "a": "mV source",
-      "b": "mA Source",
-      "c": "Pneumatics Hand pump",
-      "d": "Temperature Bath"
-    },
-    {
-      "question": "What is the output of Thermocouple",
-      "a": "1 to 5 DC volt",
-      "b": "1 to 5 AC volt",
-      "c": "mV DC",
-      "d": "4 to 20 Ma"      
-    },
-    {
-      "question": "What is the document required for work on any Job?",
-      "a": "Work Permit",
-      "b": "RA-Risk Assessment Sheet",
-      "c": "Tools and Testing Instruments",
-      "d": "All of the Above"
-    },
-    {
-      "question": "Which devices measures gases or liquid?",
-      "a": "Proximity sensor",
-      "b": "Pressure sensor",
-      "c": "Temperature sensor",
-      "d": "Touch sensor"
-    },
-    {
-      "question": "Which pressure standard is used for gauge?",
-      "a": "Dead weight tester",
-      "b": "Manometer",
-      "c": "Pressure switches",
-      "d": "Strain gauge pressure sensor"
-    },
-    {
-      "question": "A device for determining die value or magnitude of a quantity or variable",
-      "a": "sensor",
-      "b": "transducer",
-      "c": "instrument",
-      "d": "indicator"
-    },
-    {
-      "question": "Errors due to assignable causes are called",
-      "a": "static errors",
-      "b": "calibration errors",
-      "c": "random errors",
-      "d": "systematic errors"
-    },
-    {
-      "question": "Pick up the appropriate word for A pointer moving over a scale",
-      "a": "instrument",
-      "b": "indicator",
-      "c": "transducer",
-      "d": "recorder"
-    },
-    {
-      "question": "For studying detailed variations with time, one uses",
-      "a": "indicator",
-      "b": "digital indicator",
-      "c": "integrator",
-      "d": "analogue indicator"
-    },
-    {
-      "question": "The ratio of output signal or response of the instrument'” to a change in input or measured Variable is called",
-      "a": "sensitivity",
-      "b": "precision",
-      "c": "amplification",
-      "d": "resolution"
-    },
-    {
-      "question": "It responds directly to the measured quantity, producing a related motion or signal",
-      "a": "sensing element",
-      "b": "transducer",
-      "c": "transmitter",
-      "d": "measuring device"
-    },
-    {
-      "question": "Give Definition and Formula of Pressure",
-      "a": "",
-      "b": "",
-      "c": "",
-      "d": ""
-    },
-    {
-      "question": "Give the Name Types of Control Valve Actuator",
-      "a": "",
-      "b": "",
-      "c": "",
-      "d": ""
-    },
-    {
-      "question": "Give the Name of Mandatory PPE -Personal Protective Equipment",
-      "a": "",
-      "b": "",
-      "c": "",
-      "d": ""
-    },
-    {
-      "question": "Which type of job cannot work in Cold work permit?",
-      "a": "Instrument Installation",
-      "b": "Loop Checking",
-      "c": "Grinding",
-      "d": "Field Calibration"
-    },
-    {
-      "question": "The sensitivity of reading of manometer can be increased by",
-      "a": "inclining the manometer tube",
-      "b": "using low specific gravity fluid",
-      "c": "application of optical magnification",
-      "d": "all of the above"
-    },
-    {
-      "question": "Give formula between Atmosphere Pressure, Absolute pressure and Gauge pressure",
-      "a": "",
-      "b": "",
-      "c": "",
-      "d": ""
-    },
-    {
-      "question": "From where start work at height activity",
-      "a": "2m",
-      "b": "1.8m",
-      "c": "1.5m",
-      "d": "1.2m"
-    },
-    {
-      "question": "When Scaffolding material certified?",
-      "a": "2 years",
-      "b": "3 years",
-      "c": "6 years",
-      "d": "1 years"
-    },
-    {
-      "question": "What is class B confined space?",
-      "a": "Present of Inert gas",
-      "b": "Presence of toxic or flammable",
-      "c": "Non process equipment",
-      "d": "Deep above 1.2 meter"
-    },
-    {
-      "question": "What is full from of CSM?",
-      "a": "Contractor safety management",
-      "b": "Central shift manager",
-      "c": "Contractor site manager",
-      "d": "None of above"
-    },
-    {
-      "question": "Who approved high risk permit?",
-      "a": "SS",
-      "b": "SFE",
-      "c": "Site president/ Sector chief",
-      "d": "All of the above"
-    },
-    {
-      "question": "What is hierarchy of control measure in HITRA",
-      "a": "Elimination",
-      "b": "Substitution",
-      "c": "Engineering control",
-      "d": "Isolation"
-    },
-    {
-      "question": "What is work at height hazards?",
-      "a": "Fall of person",
-      "b": "Fall of material",
-      "c": "Collapse temporary platform",
-      "d": "All of the above"
-    },
-    {
-      "question": "Full body harness manufacturing validity?",
-      "a": "5 years",
-      "b": "2 years",
-      "c": "3 years",
-      "d": "None of the above"
-    },
-    {
-      "question": "Types of fire extinguisher?",
-      "a": "Foam",
-      "b": "Co2",
-      "c": "DCP",
-      "d": "None of the above"
-    },
-    {
-      "question": "O2 level in confined space?",
-      "a": "23.5",
-      "b": "19",
-      "c": "21",
-      "d": "20-22"
-    }
-    
-
-
-
-
-
-
+  {
+    "question": "Which type of job cannot work in Cold work permit?",
+    "a": "Instrument Installation",
+    "b": "Loop Checking",
+    "c": "Grinding",
+    "d": "Field Calibration"
+  },
+  {
+    "question": "Which device is not measuring the pressure of Gas and liquid?",
+    "a": "Proximity sensor",
+    "b": "Pressure sensor",
+    "c": "Pressure Gauge",
+    "d": "DP Transmitter"
+  },
+  {
+    "question": "Which sensor measures the pressure relative to perfect vacuum?",
+    "a": "Absolute pressure sensor",
+    "b": "Gauge pressure sensor",
+    "c": "Vacuum pressure sensor",
+    "d": "Differential pressure sensor"
+  },
+  {
+    "question": "Which sensor measure the pressure relative to atmospheric pressure?",
+    "a": "Absolute pressure sensor",
+    "b": "Gauge pressure sensor",
+    "c": "Vacuum pressure sensor",
+    "d": "Differential pressure sensor"
+  },
+  {
+    "question": "Which instrument to be used for low pressure calibration?",
+    "a": "mV source",
+    "b": "mA Source",
+    "c": "Pneumatics Hand pump",
+    "d": "Temperature Bath"
+  },
+  {
+    "question": "Which pressure standard is used for High-pressure range Instrument calibration?",
+    "a": "Dead-weight tester",
+    "b": "Manometer",
+    "c": "Pressure switches",
+    "d": "Strain gauge pressure sensor"
+  },
+  {
+    "question": "Pressure measured relative to perfect vacuum is termed as",
+    "a": "Absolute Pressure Measurement",
+    "b": "Differential Pressure Measurement",
+    "c": "Gauge Pressure Measurement",
+    "d": "Both Absolute and Differential"
+  },
+  {
+    "question": "In which pressure measurement, pressure of two distinct positions are compared?",
+    "a": "Absolute Pressure Measurement",
+    "b": "Differential Pressure Measurement",
+    "c": "Gauge Pressure Measurement",
+    "d": "Both Absolute and Differential"
+  },
+  {
+    "question": "Find the Calculation for 0 to 100 % input of 0 to 5000 mmWC of 0 to 1000 Ton/Hour flow Rate",
+    "a": "INPUT% INPUT",
+    "b": "DIFF.PRESSURE",
+    "c": "OUTPUT",
+    "d": "FLOW RATE % OUTPUT INDICATION OF FLOW RATE TON/HR OUPUT mA"
+  },
+  {
+    "question": "Which are types of Pressure Sensor",
+    "a": "Bourdon Tube",
+    "b": "Bellows",
+    "c": "Diaphragm",
+    "d": "Capsule",
+    "e": "All of the above"
+  },
+  {
+    "question": "Give the type of Orifice plate"
+  },
+  {
+    "question": "Give the formula between Atmosphere Pressure, Absolute pressure, and Gauge pressure"
+  },
+  {
+    "question": "For Measurement of Liquid Flow Tapping will be",
+    "a": "Above pipe line",
+    "b": "Below pipe line or 45-degree angle",
+    "c": "Above pipe line or 45-degree angle",
+    "d": "Above pipe line or 90-degree angle"
+  },
+  {
+    "question": "Give the Types of Thermocouple"
+  },
+  {
+    "question": "Give the Name of Mandatory PPE - Personal Protective Equipment"
+  },
+  {
+    "question": "Give the Types of RTD and draw all types of RTD’S"
+  },
+  {
+    "question": "Give the Name of the type of Control valve"
+  },
+  {
+    "question": "Give the Name Types of Control Valve Actuator"
+  },
+  {
+    "question": "Explain the Zero Suppression of Close Tank Level measurement with Diagram"
+  },
+  {
+    "question": "Explain the step of Gas flow transmitter Installation with Diagram"
+  },
+  {
+    "question": "Which type of job cannot work in Line break work permit?",
+    "a": "Open & Cleaning of Instrument Impulse line",
+    "b": "Control Valve Dropping",
+    "c": "Welding Job",
+    "d": "Field Instrument replacement"
+  },
+  {
+    "question": "Which is the Input and Output for process control",
+    "a": "AI- Analogue Input",
+    "b": "AO-Analogue output",
+    "c": "DI- Digital Input",
+    "d": "DO-Digital output",
+    "e": "All of the Above"
+  },
+  {
+    "question": "What is the document required for work on any Job?",
+    "a": "Work Permit",
+    "b": "RA-Risk Assessment Sheet",
+    "c": "PPE-Personal protective equipment",
+    "d": "Tools and Testing Instruments",
+    "e": "All of the Above"
+  },
+  {
+    "question": "In which pressure for Flow measurement and Level measurement two distinct positions are compared?",
+    "a": "Absolute Pressure Measurement",
+    "b": "Differential Pressure Measurement",
+    "c": "Gauge Pressure Measurement",
+    "d": "Both Absolute and Differential"
+  },
+  {
+    "question": "Find the Calculation for 0 to 100 % input of 0 to 7000 mmWC range of 0 to 1000 Ton/Hour flow Rate",
+    "a": "INPUT% INPUT",
+    "b": "DIFF.PRESSURE",
+    "c": "OUTPUT",
+    "d": "FLOW RATE % OUTPUT INDICATION OF FLOW RATE TON/HR OUPUT mA"
+  },
+  {
+    "question": "Find the Calculation for the DP input of 0 to 1000 mmWC range of 0 to 100 % input for Display 0 to 10000 Ton/Hour flow Rate",
+    "a": "INPUT% INPUT",
+    "b": "DIFF.PRESSURE",
+    "c": "OUTPUT",
+    "d": "FLOW RATE % OUTPUT INDICATION OF FLOW RATE TON/HR OUPUT mA"
+  },
+  {
+    "question": "Explain the Zero Elevation of open tank Level measurement with Diagram"
+  },
+  {
+    "question": "A device for determining the value or magnitude of a quantity or variable",
+    "a": "sensor",
+    "b": "transducer",
+    "c": "gauge",
+    "d": "instrument",
+    "e": "indicator"
+  },
+  {
+    "question": "Determining moisture in steam by measuring the temperature in a throttling calorimeter is an example of",
+    "a": "direct measurement",
+    "b": "indirect measurement",
+    "c": "measurement by comparison",
+    "d": "measurement by calibration",
+    "e": "automatic measurement"
+  },
+  {
+    "question": "The closeness with which the reading of an instrument approaches the true value of the variable being measured is called",
+    "a": "accuracy",
+    "b": "precision",
+    "c": "sensitivity",
+    "d": "resolution",
+    "e": "discrimination"
+  },
+  {
+    "question": "Errors due to assignable causes are called",
+    "a": "static errors",
+    "b": "systematic errors",
+    "c": "calibration errors",
+    "d": "random errors",
+    "e": "known errors"
+  },
+  {
+    "question": "Pick up the appropriate word for a pointer moving over a scale",
+    "a": "instrument",
+    "b": "indicator",
+    "c": "transducer",
+    "d": "gauge",
+    "e": "recorder"
+  },
+  {
+    "question": "Pick up the appropriate word for a reading obtained from the motion of a pointer on a scale",
+    "a": "analogue",
+    "b": "digital",
+    "c": "display",
+    "d": "indicator",
+    "e": "instrument"
+  },
+  {
+    "question": "Pick up the appropriate word for the reading displayed as a number, a series of holes on a punched card, or a sequence of pulses on magnetic tape",
+    "a": "pulse train",
+    "b": "digital",
+    "c": "analogue",
+    "d": "numeral",
+    "e": "recording"
+  },
+  {
+    "question": "For studying detailed variations with time, one uses",
+    "a": "indicator",
+    "b": "digital indicator",
+    "c": "recorder",
+    "d": "integrator",
+    "e": "analogue indicator"
+  },
+  {
+    "question": "The condition of how much successive readings differ from one another for a fixed value of the variable is called",
+    "a": "accuracy",
+    "b": "error",
+    "c": "sensitivity",
+    "d": "resolution",
+    "e": "precision"
+  },
+  {
+    "question": "The ratio of output signal or response of the instrument to a change in input or measured variable is called",
+    "a": "sensitivity",
+    "b": "precision",
+    "c": "resolution",
+    "d": "threshold",
+    "e": "accuracy"
+  },
+  {
+    "question": "The smallest change in the measured value to which the instrument will respond is called",
+    "a": "accuracy",
+    "b": "precision",
+    "c": "amplification",
+    "d": "resolution",
+    "e": "sensitivity"
+  },
+  {
+    "question": "It responds directly to the measured quantity, producing a related motion or signal",
+    "a": "sensing element",
+    "b": "transducer",
+    "c": "transmitter",
+    "d": "indicator",
+    "e": "measuring device"
+  },
+  {
+    "question": "Which of the following is used to count the number of brass items passing on a conveyor line, when no contact is permitted with the object",
+    "a": "event counter",
+    "b": "mechanical counter",
+    "c": "magnetic pick up",
+    "d": "photoelectric cell",
+    "e": "electronic counter"
+  },
+  {
+    "question": "Which of the following does not pertain to a timing device",
+    "a": "charging of a condenser",
+    "b": "flow of oil through a dash pot",
+    "c": "release of air through a nozzle",
+    "d": "flow of sand through an opening",
+    "e": "piezoelectric crystal"
+  },
+  {
+    "question": "Motion of fast-moving systems may be timed and studied by means of a",
+    "a": "stroboscope",
+    "b": "piezoelectric crystal",
+    "c": "electronic timer",
+    "d": "chronometer",
+    "e": "photovoltaic cell"
+  },
+  {
+    "question": "In which device does the input motion change the inductive coupling between primary and secondary coils",
+    "a": "potentiometer",
+    "b": "synchro",
+    "c": "collimator",
+    "d": "protractor",
+    "e": "dial gauge"
+  },
+  {
+    "question": "Which effect is useful in measuring rapidly varying forces",
+    "a": "piezoelectric",
+    "b": "strain gauge",
+    "c": "photovoltaic",
+    "d": "pneumatic gauging",
+    "e": "change of capacitance"
+  },
+  {
+    "question": "Pressure measuring devices are not based on",
+    "a": "measure of an equivalent height of a liquid column",
+    "b": "measure of the force exerted on a fixed area",
+    "c": "measure of some change in electrical or physical characteristics of the fluid",
+    "d": "area measurement by polar plan meter",
+    "e": "all of the above"
+  },
+  {
+    "question": "Which of the following may be measured by the deflection of an elastic element, by balancing against a known force, by the acceleration produced in an object of known mass",
+    "a": "force",
+    "b": "pressure",
+    "c": "temperature",
+    "d": "level",
+    "e": "displacement"
+  },
+  {
+    "question": "The sensitivity of the reading of a manometer can be increased by",
+    "a": "inclining the manometer tube",
+    "b": "using low specific gravity fluid",
+    "c": "application of optical magnification",
+    "d": "use of level sensing device",
+    "e": "all of the above"
+  }
 ]

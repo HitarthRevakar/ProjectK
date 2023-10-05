@@ -7,10 +7,13 @@ import '../ADMIN/Admin.css';
 import { Row, Col } from 'reactstrap'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import * as XLSX from 'xlsx';
+import logo from './EditForm/logo.jpg'
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { BsDownload } from "react-icons/bs";
-
+import questionsSet1 from '../QuestionPaper/Electrical.json'
+import questionsSet3 from '../QuestionPaper/Safety.json'
+import questionsSet2 from '../QuestionPaper/Instrumentation.json';
 import { useForm } from 'react-hook-form';
 const AdminApp = () => {
   const {
@@ -18,7 +21,7 @@ const AdminApp = () => {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm()
+  } = useForm();
   const navigate = useNavigate();
   const [forms, setForms] = useState([]);
   const [modal, setModal] = useState(false);
@@ -28,9 +31,133 @@ const AdminApp = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggle1 = () => setDropdownOpen((prevState) => !prevState);
-  const handleStartEvaluationClick = (formId) => {
+  const handleStartEvaluationClick = async (formId, form) => {
     debugger
     onSubmit();
+    
+       
+      // Upload the user's photo to Firebase Storage
+  
+      // const storageRef = storage.ref();
+      // const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
+      debugger
+      // if (...selectedUser?.discipline) {
+        debugger
+        try {
+  
+          const pdf = new jsPDF({
+            unit: 'mm',
+            format: 'a4',
+          });
+       
+
+          // Add user information to the header
+          const canvas = await html2canvas(imageRef.current);
+
+          const imageSrc = canvas.toDataURL('image/png');
+          pdf.addImage(imageSrc, 'PNG', 10, 10, 190, 40);
+
+          
+          pdf.setFont('helvetica', 'bold');
+          pdf.setFontSize(10);
+
+          pdf.text(`Discipline:`, 65, 45)
+          pdf.setFontSize(20);
+          pdf.text(` ${form?.discipline}`, 80, 45); 
+          pdf.setFontSize(10);
+          pdf.setFont('helvetica');
+          pdf.text(`User Name: ${form?.candidate_name}`, 10, 60); // Adjust the position as needed
+          pdf.text(`ID Number: ${form?.id_number}`, 10, 70); // Adjust the position as needed
+          // Adjust the position as needed
+          pdf.text(`MRC Number: ${form?.mrcNo}`, 10, 80); // Adjust the position as needed
+        
+
+          debugger
+          const questions = form.discipline === 'Electrical' ? shuffleArray(questionsSet1) : shuffleArray(questionsSet2);
+          let currentYPosition = 90;  // Initialize Y-coordinate for the new page
+          debugger
+     
+          questions.forEach((q, index) => {
+            // Check if we need to add a new page
+            if (currentYPosition > 270) { // Check if Y-coordinate is beyond page's limit
+              pdf.addPage();
+              currentYPosition = 50; // Reset Y-coordinate for the new page
+            }
+            // testing
+            pdf.text(`Question ${index + 1}: ${q.question}`, 10, currentYPosition);
+            currentYPosition += 10;
+            if (q.a || q.b || q.c || q.d) {
+              pdf.text(`A) ${q.a}`, 10, currentYPosition);
+              currentYPosition += 10;
+  
+              pdf.text(`B) ${q.b}`, 10, currentYPosition);
+              currentYPosition += 10;
+  
+              pdf.text(`C) ${q.c}`, 10, currentYPosition);
+              currentYPosition += 10;
+              pdf.text(`D) ${q.d}`, 10, currentYPosition);
+              currentYPosition += 20;  // Add more space before the next question
+            } else {
+              pdf.text(`Ans:`, 10, currentYPosition)
+              currentYPosition += 60
+            }
+  
+  
+  
+          });
+          
+          pdf.setFontSize(30);
+          pdf.addPage()
+          currentYPosition = 30
+          pdf.text(`Safety Questions`, 60, currentYPosition); 
+          currentYPosition += 30
+
+          pdf.setFontSize(10);
+          const shuffledQuestions1 = [...questionsSet3];
+    for (let i = shuffledQuestions1.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledQuestions1[i], shuffledQuestions1[j]] = [shuffledQuestions1[j], shuffledQuestions1[i]];
+    }
+    const selectedQuestions1 = shuffledQuestions1.slice(0, 25);
+    selectedQuestions1.forEach((q, index) => {
+            // Check if we need to add a new page
+            if (currentYPosition > 270) { // Check if Y-coordinate is beyond page's limit
+              pdf.addPage();
+              currentYPosition = 50; // Reset Y-coordinate for the new page
+            }
+            // testing
+            pdf.text(`Question ${index + 1}: ${q.question}`, 10, currentYPosition);
+            currentYPosition += 10;
+            if (q.a || q.b || q.c || q.d) {
+              pdf.text(`A) ${q.a}`, 10, currentYPosition);
+              currentYPosition += 10;
+  
+              pdf.text(`B) ${q.b}`, 10, currentYPosition);
+              currentYPosition += 10;
+  
+              pdf.text(`C) ${q.c}`, 10, currentYPosition);
+              currentYPosition += 10;
+              pdf.text(`D) ${q.d}`, 10, currentYPosition);
+              currentYPosition += 20;  // Add more space before the next question
+            } else {
+              pdf.text(`Ans:`, 10, currentYPosition)
+              currentYPosition += 60
+            }
+  
+  
+  
+          });
+          pdf.save('generated.pdf');
+          // debugger
+          // setSubmitted(false)
+        } catch (error) {
+          console.error('An error occurred:', error);
+          alert('An error occurred while generating the PDF. Please try again.');
+        }
+     
+  
+  
+  
     setCurrentFormId(formId); 
 
     // setTimeout(() => {
@@ -70,7 +197,8 @@ const AdminApp = () => {
 
 
     }, 2000);
-  }
+  };
+  let [evaluationStarted, setEvaluationStarted] = useState(false)
   let [testtypeError, setTesttypeError] = useState("")
   let imageRef = useRef();
   const [submitted, setSubmitted] = useState(false)
@@ -408,15 +536,19 @@ const AdminApp = () => {
     setSelectedOption(e.target.value);
   };
 
-  const shuffleArray = (array) => {
-    const shuffledArray = [...array];
-    for (let i = shuffledArray.length - 1; i > 0; i--) {
+  const shuffleArray = (questions) => {
+    const shuffledQuestions = [...questions];
+    for (let i = shuffledQuestions.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+      [shuffledQuestions[i], shuffledQuestions[j]] = [shuffledQuestions[j], shuffledQuestions[i]];
     }
-    return shuffledArray;
-  };
+    
 
+    // Select the first `35` questions from the shuffled array
+    const selectedQuestions = shuffledQuestions.slice(0, 35);
+    
+    return [...selectedQuestions];
+};
 
   // const handleGeneratePDF = async () => {
   //   // Upload the user's photo to Firebase Storage
@@ -643,7 +775,7 @@ const AdminApp = () => {
 
                   <td>
                     {!form.marksId ?
-                      <><button type="button" className="btn btn-primary" ref={imageRef} onClick={() => handleStartEvaluationClick(form.id) }>
+                      <><button type="button" className="btn btn-primary" onClick={(e) =>{setEvaluationStarted(true); handleStartEvaluationClick(form.id, form);} }>
                         {/* <Link to={`/edit/${form.id}`} style={{ color: 'white', textDecoration: 'none' }}> */}
                         Start Evaluation
                         {/* </Link> */}
@@ -728,7 +860,7 @@ const AdminApp = () => {
               <tbody>
                 <tr className='text-center align-items-center' style={{ height: "140px", backgroundColor: "white" }}>
                   <td style={{ border: "2px solid black" }} className="" colSpan="1">
-                    <img src={process.env.PUBLIC_URL + '/logo.jpg'} style={{ border: "none" }} className='mt-2' alt="Logo" />
+                    <img src={'../../../../public/logo.jpg'} style={{ border: "none" }} className='mt-2' alt="Logo" />
                   </td>
                   <td style={{ fontFamily: "Times New Roman", fontWeight: "bolder", color: "#0060B0" }} colSpan="2" className='mt-1 pt-2 align-items-center'>
                     <div className='align-items-center mt-5 '><h4 className='fw-bold'>TECHNO CONCEPTS INSTRUMENTS PRIVATE LIMITED VALIDATION CENTER, JAMNAGAR</h4>  </div>
@@ -877,7 +1009,7 @@ const AdminApp = () => {
                 {/* Add more LANGUAGES KNOWN fields here */}
               </tbody>
             </table>
-            {selectedUser.discipline == "Electrical" ?  <table className="table custom-table table-responsive mt-5">
+            {selectedUser.discipline == "Electrical" ?  <table className="table custom-table table-responsive mt-5 text-left">
               <tr>
                 <th>COMPETENCY ASSESSMENT:</th>
               </tr>
@@ -1640,7 +1772,18 @@ const AdminApp = () => {
           </div>
         </div> : <></>}
       </div>
-
+      {true ? <table ref={imageRef}   style={{ border: "2px solid black", marginTop:"555px" }} className="table table-striped custom-table table-responsive">
+                            <tbody>
+                                <tr className='text-center align-items-center' style={{ height: "140px", backgroundColor: "white" }}>
+                                    <td style={{ border: "2px solid black" }} className="" colSpan="1">
+                                        <img src={logo} style={{ border: "none" }} className='mt-2' alt="Logo" />
+                                    </td>
+                                    <td style={{ fontFamily: "Times New Roman", fontWeight: "bolder", color: "#0060B0" }} colSpan="2" className='mt-1 pt-2 align-items-center'>
+                                        <div className='align-items-center mt-5 '><h3 className='fw-bold'>TECHNO CONCEPTS INSTRUMENTS PRIVATE LIMITED VALIDATION CENTER, JAMNAGAR</h3>  </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table> : <></>}
     </>
 
 

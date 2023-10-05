@@ -12,6 +12,8 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { BsDownload } from "react-icons/bs";
 import questionsSet1 from '../../QuestionPaper/Electrical.json'
+import questionsSet3 from '../../QuestionPaper/Safety.json'
+
 import questionsSet2 from '../../QuestionPaper/Instrumentation.json';
 // import { saveAs } from 'file-saver'; // For downloading files
 // import { pdf } from '@react-pdf/renderer'; // For PDF generation
@@ -41,14 +43,7 @@ Below		0-49 */
   // let imageRef = useRef();
 
 
-  const shuffleArray = (array) => {
-    const shuffledArray = [...array];
-    for (let i = shuffledArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
-    }
-    return shuffledArray;
-  };
+
   useEffect(() => {
     let userId = id;
     const resultRef = firestore.collection('candidate-info')
@@ -65,76 +60,7 @@ Below		0-49 */
       setResult(result1);
 
 
-      if(result1?.totalMarks == null){
-       
-          // Upload the user's photo to Firebase Storage
-      
-          // const storageRef = storage.ref();
-          // const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
-          debugger
-          // if (...selectedUser?.discipline) {
-            debugger
-            try {
-      
-              const pdf = new jsPDF({
-                unit: 'mm',
-                format: 'a4',
-              });
-              pdf.setFontSize(10);
-              pdf.setFontSize(10);
-
-              // Add user information to the header
-              pdf.text(`User Name: ${result1?.candidate_name}`, 10, 10); // Adjust the position as needed
-              pdf.text(`ID Number: ${result1?.id_number}`, 10, 20); // Adjust the position as needed
-              pdf.text(`Discipline: ${result1?.discipline}`, 10, 30); // Adjust the position as needed
-              pdf.text(`MRC Number: ${result1?.mrcNo}`, 10, 40); // Adjust the position as needed
-             
-              debugger
-              const questions = result1?.discipline === 'Electrical' ? shuffleArray(questionsSet1) : shuffleArray(questionsSet2);
-              let currentYPosition = 50;  // Initialize Y-coordinate for the new page
-              debugger
-              questions.forEach((q, index) => {
-                // Check if we need to add a new page
-                if (currentYPosition > 270) { // Check if Y-coordinate is beyond page's limit
-                  pdf.addPage();
-                  currentYPosition = 50; // Reset Y-coordinate for the new page
-                }
-                // testing
-                pdf.text(`Question ${index + 1}: ${q.question}`, 10, currentYPosition);
-                currentYPosition += 10;
-                if (q.a || q.b || q.c || q.d) {
-                  pdf.text(`A) ${q.a}`, 10, currentYPosition);
-                  currentYPosition += 10;
-      
-                  pdf.text(`B) ${q.b}`, 10, currentYPosition);
-                  currentYPosition += 10;
-      
-                  pdf.text(`C) ${q.c}`, 10, currentYPosition);
-                  currentYPosition += 10;
-                  pdf.text(`D) ${q.d}`, 10, currentYPosition);
-                  currentYPosition += 20;  // Add more space before the next question
-                } else {
-                  pdf.text(`Ans:`, 10, currentYPosition)
-                  currentYPosition += 60
-                }
-      
-      
-      
-              });
-      
-              pdf.save('generated.pdf');
-              // debugger
-              // setSubmitted(false)
-            } catch (error) {
-              console.error('An error occurred:', error);
-              alert('An error occurred while generating the PDF. Please try again.');
-            }
-         
-      
-      
-      }else{
-
-      }
+     
 
       if(result1.compentencyAssessment){
         let compentencyAssessment = JSON.parse(result1.compentencyAssessment)

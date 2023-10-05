@@ -1,0 +1,309 @@
+[
+    {
+      "question": "Which is mandatory Personal protective equipments?",
+      "a": "Hard Helmet, Safety Goggles, Earplug, Hand gloves, IFR, Safety Shoes",
+      "b": "Online BA/ SCBA, Cartage mask",
+      "c": "Aluminum Suit, PVC suit",
+      "d": "All of the above"
+    },
+    {
+      "question": "What is full from of CSM?",
+      "a": "Contractor safety management",
+      "b": "Central shift manager",
+      "c": "Contractor site manager",
+      "d": "None of above"
+    },
+    {
+      "question": "How many training in reliance as per CSM?",
+      "a": "L-1 Site Induction training",
+      "b": "L-2 Plant specific training",
+      "c": "L-3 Job specific training",
+      "d": "L-4 Site specific safety procedure",
+      "e": "All of the above"
+    },
+    {
+      "question": "What is LPRZT Rules?"
+    },
+    {
+      "question": "What is job specific personal protective equipment’s?",
+      "a": "Hard Helmet, Safety Goggles, Earplug, Hand gloves, IFR, Safety Shoes",
+      "b": "According to job (like face shield, leather hand, BA set, arc suit, PVC suit,)",
+      "c": "All of the above"
+    },
+    {
+      "question": "What are 8 things to remember before entering the plant?"
+    },
+    {
+      "question": "How many types of permits are there?",
+      "a": "Cold work",
+      "b": "Hot work",
+      "c": "Line break",
+      "d": "Confined space",
+      "e": "Confined space Inert",
+      "f": "All of the above"
+    },
+    {
+      "question": "Who approves high risk permits?",
+      "a": "SS",
+      "b": "SFE",
+      "c": "Site president/ Sector chief",
+      "d": "All of the above"
+    },
+    {
+      "question": "What is the full form of ERCP?",
+      "a": "Emergency response control plan",
+      "b": "Emergency rescue central plan",
+      "c": "Emergency response control policy",
+      "d": "None of the Above"
+    },
+    {
+      "question": "How many emergency levels are there and what are they?"
+    },
+    {
+      "question": "What is MSDS?",
+      "a": "Material safety data sheet",
+      "b": "Material safety danger sheet",
+      "c": "Material show data sheet",
+      "d": "All of above"
+    },
+    {
+      "question": "How many types of material handling?",
+      "a": "Mechanical handling",
+      "b": "Manual handling",
+      "c": "All of above"
+    },
+    {
+      "question": "How many kilograms can be lifted by manual material handling?",
+      "a": "30 kg",
+      "b": "35 kg",
+      "c": "25 kg",
+      "d": "18 kg"
+    },
+    {
+      "question": "How many types of hazards are there?"
+    },
+    {
+      "question": "What documents are required for mechanical material handling?"
+    },
+    {
+      "question": "How many levels are there in HITRA?"
+    },
+    {
+      "question": "What is the color code of HITRA?",
+      "a": "White",
+      "b": "Torques",
+      "c": "Blue",
+      "d": "Purple",
+      "e": "All of the Above"
+    },
+    {
+      "question": "What is the hierarchy of control measures in HITRA?",
+      "a": "Elimination",
+      "b": "Substitution",
+      "c": "Engineering control",
+      "d": "Administrative",
+      "e": "Isolation",
+      "f": "PPES"
+    },
+    {
+      "question": "What are the types of scaffold?",
+      "a": "Independent",
+      "b": "Budge cage",
+      "c": "Hanging",
+      "d": "Cantilever",
+      "e": "Mobile",
+      "f": "All of the above"
+    },
+    {
+      "question": "From where does work at height activity start?",
+      "a": "2m",
+      "b": "1.8m",
+      "c": "1.5m",
+      "d": "1.2m"
+    },
+    {
+      "question": "What are the work at height hazards?",
+      "a": "Fall of person",
+      "b": "Fall of material",
+      "c": "Collapse temporary platform",
+      "d": "All of the above"
+    },
+    {
+      "question": "What are the control devices for work at height?"
+    },
+    {
+      "question": "What is the full body harness manufacturing validity?",
+      "a": "5 years",
+      "b": "2 years",
+      "c": "3 years",
+      "d": "None of the above"
+    },
+    {
+      "question": "What is the full body harness IS code?",
+      "a": "3521",
+      "b": "3696",
+      "c": "4206",
+      "d": "None of the above"
+    },
+    {
+      "question": "When is scaffolding material certified?",
+      "a": "2 years",
+      "b": "3 years",
+      "c": "6 years",
+      "d": "1 year"
+    },
+    {
+      "question": "What are the classifications of fire?"
+    },
+    {
+      "question": "What are the types of fire extinguishers?",
+      "a": "Foam",
+      "b": "Co2",
+      "c": "DCP",
+      "d": "Water",
+      "e": "All of the above"
+    },
+    {
+      "question": "What are the fire extinguishing methods?",
+      "a": "Smothering",
+      "b": "Starvation",
+      "c": "Cooling",
+      "d": "All of the above"
+    },
+    {
+      "question": "What is the fire triangle?"
+    },
+    {
+      "question": "How many types of fire hose are there?",
+      "a": "White for contractor",
+      "b": "Red for fire department",
+      "c": "Yellow for operation",
+      "d": "All of above"
+    },
+    {
+      "question": "What is class B confined space?",
+      "a": "Presence of Inert gas",
+      "b": "Presence of toxic or flammable",
+      "c": "Non-process equipment",
+      "d": "Deep above 1.2 meters"
+    },
+    {
+      "question": "What hazards are present inside confined space?",
+      "a": "O2 deficiency",
+      "b": "Presence of toxic or flammable",
+      "c": "Limit access for entry and exit",
+      "d": "Electrocution",
+      "e": "All of above"
+    },
+    {
+      "question": "Which documents are required for confined space activity?",
+      "a": "Permit, Energy Isolation certificate, Gas monitoring register",
+      "b": "Emergency rescue plan",
+      "c": "Entry and exit register",
+      "d": "Contingency & job plan checklist",
+      "e": "All of the above"
+    },
+    {
+      "question": "What is the O2 level in confined space?"
+    },
+    {
+      "question": "How many volts are inside confined space?"
+    },
+    {
+      "question": "What is the Instrument department LOTO Color?",
+      "a": "Blue",
+      "b": "Red",
+      "c": "Yellow",
+      "d": "Black"
+    },
+    {
+      "question": "How many types of LOTO Tags are there?"
+    },
+    {
+      "question": "Who is authorized to make LOTO?"
+    },
+    {
+      "question": "What are 5 HTM at JMD site?"
+    },
+    {
+      "question": "What PPEs will be used during any HTM handling?"
+    },
+    {
+      "question": "How many types of emergency sirens are there at JMD site?",
+      "a": "Major fire /flammable gas release",
+      "b": "Toxic release",
+      "c": "Air raid warning",
+      "d": "All clear/ Testing",
+      "e": "All of the above"
+    },
+    {
+      "question": "What is the line break definition?",
+      "a": "Breaking contaminate",
+      "b": "Choking /de choking",
+      "c": "Opening of plug",
+      "d": "Valve dropping / box up",
+      "e": "All of the above"
+    },
+    {
+      "question": "What will be used while working on steam or hot line?",
+      "a": "PVC suit",
+      "b": "Aluminum suit",
+      "c": "Heat resistance / splash suit with full face mask",
+      "d": "None of the above"
+    },
+    {
+      "question": "While line break activity, should material be drained?",
+      "a": "OWS",
+      "b": "Bucket tray",
+      "c": "CBD",
+      "d": "All of the above"
+    },
+    {
+      "question": "What are some examples of line of fire?"
+    },
+    {
+      "question": "What are the types of excavation?",
+      "a": "Sloping",
+      "b": "Shoring",
+      "c": "Trench",
+      "d": "Dredging",
+      "e": "All of above"
+    },
+    {
+      "question": "How many departments give clearance for excavation?",
+      "a": "Mechanical",
+      "b": "Instrument",
+      "c": "IT department",
+      "d": "Fire department",
+      "e": "Electrical department",
+      "f": "All of the above"
+    },
+    {
+      "question": "How many days is the validity of excavation clearance?",
+      "a": "90 days",
+      "b": "120 days",
+      "c": "60 days",
+      "d": "180 days"
+    },
+    {
+      "question": "What is near miss & unsafe condition?"
+    },
+    {
+      "question": "Write the full form of the following:"
+    },
+    {
+      "question": "In a substation, which type of fire extinguisher is used?",
+      "a": "Dry chemical powder",
+      "b": "CO2",
+      "c": "Both type",
+      "d": "None of above"
+    },
+    {
+      "question": "In case of emergency medical service, which contact number to be used?",
+      "a": "100",
+      "b": "101",
+      "c": "111",
+      "d": "200"
+    }
+  ]
+  
