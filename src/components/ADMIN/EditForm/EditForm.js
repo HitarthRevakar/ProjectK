@@ -81,22 +81,23 @@ Below		0-49 */
                 format: 'a4',
               });
               pdf.setFontSize(10);
-      
-              // Assuming imageRef.current is correctly defined
-      
-      
-              // const canvas = await html2canvas(imageRef.current);
-      
+              pdf.setFontSize(10);
+
+              // Add user information to the header
+              pdf.text(`User Name: ${result1?.candidate_name}`, 10, 10); // Adjust the position as needed
+              pdf.text(`ID Number: ${result1?.id_number}`, 10, 20); // Adjust the position as needed
+              pdf.text(`Discipline: ${result1?.discipline}`, 10, 30); // Adjust the position as needed
+              pdf.text(`MRC Number: ${result1?.mrcNo}`, 10, 40); // Adjust the position as needed
              
               debugger
               const questions = result1?.discipline === 'Electrical' ? shuffleArray(questionsSet1) : shuffleArray(questionsSet2);
-              let currentYPosition = 10;  // Initialize Y-coordinate for the new page
+              let currentYPosition = 50;  // Initialize Y-coordinate for the new page
               debugger
               questions.forEach((q, index) => {
                 // Check if we need to add a new page
                 if (currentYPosition > 270) { // Check if Y-coordinate is beyond page's limit
                   pdf.addPage();
-                  currentYPosition = 10; // Reset Y-coordinate for the new page
+                  currentYPosition = 50; // Reset Y-coordinate for the new page
                 }
                 // testing
                 pdf.text(`Question ${index + 1}: ${q.question}`, 10, currentYPosition);
@@ -128,9 +129,7 @@ Below		0-49 */
               console.error('An error occurred:', error);
               alert('An error occurred while generating the PDF. Please try again.');
             }
-          // } else {
-          //   setTesttypeError("Please select a examination type to continue!")
-          // }
+         
       
       
       }else{
