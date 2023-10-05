@@ -10,8 +10,7 @@ import * as XLSX from 'xlsx';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { BsDownload } from "react-icons/bs";
-import questionsSet1 from '../QuestionPaper/Electrical.json';
-import questionsSet2 from '../QuestionPaper/Instrumentation.json';
+
 import { useForm } from 'react-hook-form';
 const AdminApp = () => {
   const {
@@ -32,8 +31,18 @@ const AdminApp = () => {
   const handleStartEvaluationClick = (formId) => {
     debugger
     onSubmit();
-    setCurrentFormId(formId); // Set the current form ID in the state
-    setModal(true); // Open the modal
+    setCurrentFormId(formId); 
+
+    // setTimeout(() => {
+      
+
+    // handleGeneratePDF();
+
+    // }, 5000);
+    
+    navigate(`/edit/${formId}`);
+    // Set the current form ID in the state
+    // setModal(true); // Open the modal
   };
   let userReportRef = useRef()
   async function generatePDF() {
@@ -409,101 +418,73 @@ const AdminApp = () => {
   };
 
 
-  const handleGeneratePDF = async () => {
-    // Upload the user's photo to Firebase Storage
+  // const handleGeneratePDF = async () => {
+  //   // Upload the user's photo to Firebase Storage
 
-    // const storageRef = storage.ref();
-    // const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
-    debugger
-    if (selectedOption) {
-      try {
+  //   // const storageRef = storage.ref();
+  //   // const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
+  //   debugger
+  //   // if (...selectedUser?.discipline) {
+  //     debugger
+  //     try {
 
-        // await userPhotoRef.put(formData.user_photo[0]);
+  //       const pdf = new jsPDF({
+  //         unit: 'mm',
+  //         format: 'a4',
+  //       });
+  //       pdf.setFontSize(10);
 
-        // // Get the download URL of the uploaded photo
-        // const downloadURL = await userPhotoRef.getDownloadURL();
-        // console.log('Download URL:', downloadURL);
-
-        // // Update the formData with the download URL
-        // formData.user_photo = downloadURL;
-
-
-        // firestore.collection('candidate-info').add(formData)
-        //   .then((docRef) => {
-        //     debugger
-        //     toggle();
-        //     console.log('Document written with ID: ', docRef.id);
-        //   })
-        //   .catch((error) => {
-        //     debugger
-        //     console.error('Error adding document: ', error);
-        //   });
+  //       // Assuming imageRef.current is correctly defined
 
 
-        // Create a new jsPDF instance
-        const pdf = new jsPDF({
-          unit: 'mm',
-          format: 'a4',
-        });
-        pdf.setFontSize(10);
+  //       const canvas = await html2canvas(imageRef.current);
 
-        // Assuming imageRef.current is correctly defined
+       
+  //       debugger
+  //       const questions = selectedUser?.discipline === 'Electrical' ? shuffleArray(questionsSet1) : shuffleArray(questionsSet2);
+  //       let currentYPosition = 10;  // Initialize Y-coordinate for the new page
+  //       debugger
+  //       questions.forEach((q, index) => {
+  //         // Check if we need to add a new page
+  //         if (currentYPosition > 270) { // Check if Y-coordinate is beyond page's limit
+  //           pdf.addPage();
+  //           currentYPosition = 10; // Reset Y-coordinate for the new page
+  //         }
+  //         // testing
+  //         pdf.text(`Question ${index + 1}: ${q.question}`, 10, currentYPosition);
+  //         currentYPosition += 10;
+  //         if (q.a || q.b || q.c || q.d) {
+  //           pdf.text(`A) ${q.a}`, 10, currentYPosition);
+  //           currentYPosition += 10;
 
+  //           pdf.text(`B) ${q.b}`, 10, currentYPosition);
+  //           currentYPosition += 10;
 
-        const canvas = await html2canvas(imageRef.current);
-
-        // const imageSrc = canvas.toDataURL('image/png');
-        // pdf.addImage(imageSrc, 'PNG', 10, 10, 190, 270);
-
-        // // Add a new page for the questions
-        // pdf.addPage();
-
-        // Assuming question is correctly defined and selectedOption is set
-        debugger
-        const questions = selectedOption === 'electrical' ? shuffleArray(questionsSet1) : shuffleArray(questionsSet2);
-        let currentYPosition = 10;  // Initialize Y-coordinate for the new page
-
-        questions.forEach((q, index) => {
-          // Check if we need to add a new page
-          if (currentYPosition > 270) { // Check if Y-coordinate is beyond page's limit
-            pdf.addPage();
-            currentYPosition = 10; // Reset Y-coordinate for the new page
-          }
-          // testing
-          pdf.text(`Question ${index + 1}: ${q.question}`, 10, currentYPosition);
-          currentYPosition += 10;
-          if (q.a || q.b || q.c || q.d) {
-            pdf.text(`A) ${q.a}`, 10, currentYPosition);
-            currentYPosition += 10;
-
-            pdf.text(`B) ${q.b}`, 10, currentYPosition);
-            currentYPosition += 10;
-
-            pdf.text(`C) ${q.c}`, 10, currentYPosition);
-            currentYPosition += 10;
-            pdf.text(`D) ${q.d}`, 10, currentYPosition);
-            currentYPosition += 20;  // Add more space before the next question
-          } else {
-            pdf.text(`Ans:`, 10, currentYPosition)
-            currentYPosition += 60
-          }
+  //           pdf.text(`C) ${q.c}`, 10, currentYPosition);
+  //           currentYPosition += 10;
+  //           pdf.text(`D) ${q.d}`, 10, currentYPosition);
+  //           currentYPosition += 20;  // Add more space before the next question
+  //         } else {
+  //           pdf.text(`Ans:`, 10, currentYPosition)
+  //           currentYPosition += 60
+  //         }
 
 
 
-        });
+  //       });
 
-        pdf.save('generated.pdf');
-        debugger
-        setSubmitted(false)
-      } catch (error) {
-        console.error('An error occurred:', error);
-        alert('An error occurred while generating the PDF. Please try again.');
-      }
-    } else {
-      setTesttypeError("Please select a examination type to continue!")
-    }
+  //       pdf.save('generated.pdf');
+  //       debugger
+  //       setSubmitted(false)
+  //     } catch (error) {
+  //       console.error('An error occurred:', error);
+  //       alert('An error occurred while generating the PDF. Please try again.');
+  //     }
+  //   // } else {
+  //   //   setTesttypeError("Please select a examination type to continue!")
+  //   // }
 
-  };
+  // };
 
   // for submit buton
   const toggle = () => setModal(!modal);
@@ -512,7 +493,7 @@ const AdminApp = () => {
     // Handle form submission
     console.log(data);
     // setFormData(data)
-    setModal(!modal)
+    // setModal(!modal)
 
   };
   const [selectedDiscipline, setSelectedDiscipline] = useState('');
@@ -662,11 +643,12 @@ const AdminApp = () => {
 
                   <td>
                     {!form.marksId ?
-                      <><button type="button" className="btn btn-primary" ref={imageRef} onClick={() => handleStartEvaluationClick(form.id)}>
+                      <><button type="button" className="btn btn-primary" ref={imageRef} onClick={() => handleStartEvaluationClick(form.id) }>
                         {/* <Link to={`/edit/${form.id}`} style={{ color: 'white', textDecoration: 'none' }}> */}
                         Start Evaluation
                         {/* </Link> */}
-                      </button><Modal isOpen={modal} toggle={toggle}>
+                      </button>
+                      {/* <Modal isOpen={modal} toggle={toggle}>
                           <ModalHeader toggle={toggle}>MCQ Examination Test</ModalHeader>
                           <ModalBody>
                             <p className='mb-3'>
@@ -722,7 +704,8 @@ const AdminApp = () => {
                               Cancel
                             </Button>
                           </ModalFooter>
-                        </Modal></>
+                        </Modal> */}
+                        </>
                       : <>
                         <button type="button" className="btn btn-success">
                           <Link to={`/edit/${form.id}`} style={{ color: 'white', textDecoration: 'none' }}>

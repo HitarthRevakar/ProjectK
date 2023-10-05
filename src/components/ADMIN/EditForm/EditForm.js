@@ -7,6 +7,12 @@ import toast, { Toaster } from 'react-hot-toast';
 import { async } from "q";
 import firebase from 'firebase/compat/app';
 import { Hourglass } from 'react-loader-spinner'
+import * as XLSX from 'xlsx';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import { BsDownload } from "react-icons/bs";
+import questionsSet1 from '../../QuestionPaper/Electrical.json'
+import questionsSet2 from '../../QuestionPaper/Instrumentation.json';
 // import { saveAs } from 'file-saver'; // For downloading files
 // import { pdf } from '@react-pdf/renderer'; // For PDF generation
 // import XLSX from 'xlsx'; // For Excel generation
@@ -32,22 +38,19 @@ Below		0-49 */
     formState: { errors },
   } = useForm();
   const [formData, setFormData] = useState({});
+  // let imageRef = useRef();
 
+
+  const shuffleArray = (array) => {
+    const shuffledArray = [...array];
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+    }
+    return shuffledArray;
+  };
   useEffect(() => {
     let userId = id;
-    
-    // const resultRef1 = firestore.collection('candidate-info')
-    // let result1 ;
-    // async function fetchResult1() {
-    //   const snapshot = await resultRef1.get();
-    //   const formsData = snapshot.docs.map((doc) => ({
-    //     id: doc.id, // Document ID
-    //     ...doc.data(), // Data inside the document
-    //   })); 
-    //    result1 = formsData.find(user => user.userId == id)
-
-    // }
-    // fetchResult1();
     const resultRef = firestore.collection('candidate-info')
     async function fetchResult() {
       const snapshot = await resultRef.get();
@@ -57,9 +60,83 @@ Below		0-49 */
       }));
       const result1 = formsData.find(user => user.id == id)
 
-      
+      debugger
       // Set the forms state with the fetched data
       setResult(result1);
+
+
+      if(result1?.totalMarks == null){
+       
+          // Upload the user's photo to Firebase Storage
+      
+          // const storageRef = storage.ref();
+          // const userPhotoRef = storageRef.child(`user_photos/${formData.user_photo[0].name}`);
+          debugger
+          // if (...selectedUser?.discipline) {
+            debugger
+            try {
+      
+              const pdf = new jsPDF({
+                unit: 'mm',
+                format: 'a4',
+              });
+              pdf.setFontSize(10);
+      
+              // Assuming imageRef.current is correctly defined
+      
+      
+              // const canvas = await html2canvas(imageRef.current);
+      
+             
+              debugger
+              const questions = result1?.discipline === 'Electrical' ? shuffleArray(questionsSet1) : shuffleArray(questionsSet2);
+              let currentYPosition = 10;  // Initialize Y-coordinate for the new page
+              debugger
+              questions.forEach((q, index) => {
+                // Check if we need to add a new page
+                if (currentYPosition > 270) { // Check if Y-coordinate is beyond page's limit
+                  pdf.addPage();
+                  currentYPosition = 10; // Reset Y-coordinate for the new page
+                }
+                // testing
+                pdf.text(`Question ${index + 1}: ${q.question}`, 10, currentYPosition);
+                currentYPosition += 10;
+                if (q.a || q.b || q.c || q.d) {
+                  pdf.text(`A) ${q.a}`, 10, currentYPosition);
+                  currentYPosition += 10;
+      
+                  pdf.text(`B) ${q.b}`, 10, currentYPosition);
+                  currentYPosition += 10;
+      
+                  pdf.text(`C) ${q.c}`, 10, currentYPosition);
+                  currentYPosition += 10;
+                  pdf.text(`D) ${q.d}`, 10, currentYPosition);
+                  currentYPosition += 20;  // Add more space before the next question
+                } else {
+                  pdf.text(`Ans:`, 10, currentYPosition)
+                  currentYPosition += 60
+                }
+      
+      
+      
+              });
+      
+              pdf.save('generated.pdf');
+              // debugger
+              // setSubmitted(false)
+            } catch (error) {
+              console.error('An error occurred:', error);
+              alert('An error occurred while generating the PDF. Please try again.');
+            }
+          // } else {
+          //   setTesttypeError("Please select a examination type to continue!")
+          // }
+      
+      
+      }else{
+
+      }
+
       if(result1.compentencyAssessment){
         let compentencyAssessment = JSON.parse(result1.compentencyAssessment)
       for (const key in compentencyAssessment) {

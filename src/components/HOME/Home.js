@@ -454,6 +454,24 @@ debugger
                 </td>
               </tr>
               <tr>
+                <td rowSpan="1" colSpan="1"><p className='mt-2'>Employee Type:</p> </td>
+                <td rowSpan="1" colSpan="3" className="align-items-center">
+
+                  <select
+                    name="emp_type"
+                    required
+                    {...register('emp_type', { required: true })}
+                    // className={`form-control ${errors.trade ? 'error-input' : ''}`}
+                    // onChange={mrcNoByTrade}
+                  >
+                    <option value="">Select employee type</option>
+                    <option value="full_time">Full Time</option>
+                    <option value="shut_down">Shut Down</option>
+
+                  </select>
+                </td>
+              </tr>
+              <tr>
                 <td rowSpan="1" colSpan="1"><p className='mt-2'>Jobber Name :</p> </td>
                 <td rowSpan="1" colSpan="3" className="align-items-center">
                   <input
