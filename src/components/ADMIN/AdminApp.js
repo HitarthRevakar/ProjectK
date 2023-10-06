@@ -61,20 +61,19 @@ const AdminApp = () => {
           pdf.setFont('helvetica', 'bold');
           pdf.setFontSize(10);
 
-          pdf.text(`Discipline:`, 65, 45)
-          pdf.setFontSize(20);
-          pdf.text(` ${form?.discipline}`, 80, 45); 
+         
+          pdf.text(`Name: ${form?.candidate_name}`, 55, 40);
+          pdf.text(`Id No:${form?.id_number}`, 55, 45)
           pdf.setFontSize(10);
-          pdf.setFont('helvetica');
-          pdf.text(`User Name: ${form?.candidate_name}`, 10, 60); // Adjust the position as needed
-          pdf.text(`ID Number: ${form?.id_number}`, 10, 70); // Adjust the position as needed
           // Adjust the position as needed
-          pdf.text(`MRC Number: ${form?.mrcNo}`, 10, 80); // Adjust the position as needed
+          pdf.text(`Discipline: ${form?.discipline}`, 150, 40); // Adjust the position as needed
+          // Adjust the position as needed
+          pdf.text(`MRC Number: ${form?.mrcNo}`, 150, 45); // Adjust the position as needed
         
 
           debugger
           const questions = form.discipline === 'Electrical' ? shuffleArray(questionsSet1) : shuffleArray(questionsSet2);
-          let currentYPosition = 90;  // Initialize Y-coordinate for the new page
+          let currentYPosition = 60;  // Initialize Y-coordinate for the new page
           debugger
      
           questions.forEach((q, index) => {
@@ -680,6 +679,18 @@ const AdminApp = () => {
 
       <div className='my-4 '>
         <div className="container mb-5">
+        <table ref={imageRef}   style={{ border: "2px solid black" }} className="table table-striped custom-table table-responsive">
+                            <tbody>
+                                <tr className='text-center align-items-center' style={{ height: "140px", backgroundColor: "white" }}>
+                                    <td style={{ border: "2px solid black" }} className="" colSpan="1">
+                                        <img src={logo} style={{ border: "none" }} className='mt-2' alt="Logo" />
+                                    </td>
+                                    <td style={{ fontFamily: "Times New Roman", fontWeight: "bolder", color: "#0060B0" }} colSpan="2" className='mt-1 pt-2 align-items-center'>
+                                        <div className='align-items-center mt-4 ms-5 '><h3 className='fw-bold'>TECHNO CONCEPTS INSTRUMENTS PRIVATE LIMITED VALIDATION CENTER, JAMNAGAR</h3>  </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
           <Row>
             <div className='text-center my-4'>
               <h1>List of Users</h1>
@@ -1858,18 +1869,7 @@ const AdminApp = () => {
           </div>
         </div> : <></>}
       </div>
-      {true ? <table ref={imageRef}   style={{ border: "2px solid black", marginTop:"555px" }} className="table table-striped custom-table table-responsive">
-                            <tbody>
-                                <tr className='text-center align-items-center' style={{ height: "140px", backgroundColor: "white" }}>
-                                    <td style={{ border: "2px solid black" }} className="" colSpan="1">
-                                        <img src={logo} style={{ border: "none" }} className='mt-2' alt="Logo" />
-                                    </td>
-                                    <td style={{ fontFamily: "Times New Roman", fontWeight: "bolder", color: "#0060B0" }} colSpan="2" className='mt-1 pt-2 align-items-center'>
-                                        <div className='align-items-center mt-5 '><h3 className='fw-bold'>TECHNO CONCEPTS INSTRUMENTS PRIVATE LIMITED VALIDATION CENTER, JAMNAGAR</h3>  </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table> : <></>}
+      
     </>
 
 
