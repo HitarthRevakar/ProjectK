@@ -60,18 +60,18 @@ Below		0-49 */
       setResult(result1);
 
 
-     
 
-      if(result1.compentencyAssessment){
+
+      if (result1.compentencyAssessment) {
         let compentencyAssessment = JSON.parse(result1.compentencyAssessment)
-      for (const key in compentencyAssessment) {
-        if (Object.hasOwnProperty.call(compentencyAssessment, key)) {
-          const value = compentencyAssessment[key];
-          setValue(key, value);
+        for (const key in compentencyAssessment) {
+          if (Object.hasOwnProperty.call(compentencyAssessment, key)) {
+            const value = compentencyAssessment[key];
+            setValue(key, value);
+          }
         }
       }
-      }
-      
+
       for (const key in result1) {
         if (Object.hasOwnProperty.call(result1, key)) {
           const value = result1[key];
@@ -79,7 +79,7 @@ Below		0-49 */
         }
       }
       // setValue(result)
-      
+
     }
     fetchResult();
 
@@ -135,12 +135,12 @@ Below		0-49 */
   let navigate = useNavigate()
 
   const onSubmit = async (data) => {
-   
+
     const date = new Date(); // Your date object
     const timestamp = firebase.firestore.Timestamp.fromDate(date);
 
     setLoading(true)
-    ;
+      ;
     // Update Firestore
     data.userId = id;
     const querySnapshot = await firestore
@@ -160,7 +160,7 @@ Below		0-49 */
       const writtenPhotoUrl = await writtenPhotoRef.getDownloadURL();
 
       files.written_photo = writtenPhotoUrl;
-      
+
     }
     if (data.oral_video[0]) {
       const oral_videoref = storageRef.child(`oral_video/${data.oral_video[0].name}`);
@@ -186,7 +186,7 @@ Below		0-49 */
       data.lastEvaluatedDate = timestamp
       const firestore = firebase.firestore();
       try {
-        
+
         delete data.written_photo;
         delete data.oral_video;
         delete data.practical_photo
@@ -198,29 +198,31 @@ Below		0-49 */
           // Add other file URLs here
         }).then(async (docRef) => {
           let compentencyAssessment = ""
-          if(result?.discipline == "Electrical"){
-               compentencyAssessment = JSON.stringify({
-            pmOfLtMotors: data.pmOfLtMotors,
-            pmOfSwitchGear: data.pmOfSwitchGear,
-            pmOfPP: data.pmOfPP,
-            pmOfHtMotors: data.pmOfHtMotors,
-            cmOfSwitchGear: data.cmOfSwitchGear,
-            pmOfLdb: data.pmOfLdb,
-            cmOfLtMotors: data.cmOfLtMotors,
-            pmOfPowerTransformer: data.pmOfPowerTransformer,
-            meggering: data.meggering,
-            cmOfHtMotors: data.cmOfHtMotors,
-            cmOfPowerTransformer: data.cmOfPowerTransformer,
-            basicSafety: data.basicSafety,
-            pmOfEarthPit: data.pmOfEarthPit,
-            glandingAndTermination: data.glandingAndTermination,
-            tbraAndHitra: data.tbraAndHitra,
-            cableLaying: data.cableLaying,
-            emergencyResponse: data.emergencyResponse,
-            toolBoxTalk: data.toolBoxTalk,
-            rolesAndResponsibilities: data.rolesAndResponsibilities,
-            lprzt: data.lprzt,
-            workPermitSystem: data.workPermitSystem})
+          if (result?.discipline == "Electrical") {
+
+            compentencyAssessment = JSON.stringify({
+              pmOfLtMotors: data.pmOfLtMotors,
+              pmOfSwitchGear: data.pmOfSwitchGear,
+              pmOfPP: data.pmOfPP,
+              pmOfHtMotors: data.pmOfHtMotors,
+              cmOfSwitchGear: data.cmOfSwitchGear,
+              pmOfLdb: data.pmOfLdb,
+              cmOfLtMotors: data.cmOfLtMotors,
+              pmOfPowerTransformer: data.pmOfPowerTransformer,
+              meggering: data.meggering,
+              cmOfHtMotors: data.cmOfHtMotors,
+              cmOfPowerTransformer: data.cmOfPowerTransformer,
+              basicSafety: data.basicSafety,
+              pmOfEarthPit: data.pmOfEarthPit,
+              glandingAndTermination: data.glandingAndTermination,
+              tbraAndHitra: data.tbraAndHitra,
+              cableLaying: data.cableLaying,
+              emergencyResponse: data.emergencyResponse,
+              toolBoxTalk: data.toolBoxTalk,
+              rolesAndResponsibilities: data.rolesAndResponsibilities,
+              lprzt: data.lprzt,
+              workPermitSystem: data.workPermitSystem
+            })
           } else {
             compentencyAssessment = JSON.stringify({
               temperatureMeasurement: data.temperatureMeasurement,
@@ -270,9 +272,9 @@ Below		0-49 */
               toolboxTalk: data.toolboxTalk,
               htm: data.htm,
             });
-            
+
           }
-        
+
           toast.success('Data added Successfully!');
           console.log('Document written with ID: ', docRef.id);
           const querySnapshot = firestore
@@ -291,7 +293,14 @@ Below		0-49 */
             behaviourMarks: data.behaviour,
             totalMarks: data.total,
             compentencyAssessment,
-           ...files
+            ass_by: data.ass_by,
+            manager: data.manager,
+            specialized_in: data.specialized_in,
+            candidate_can_work_individually: data.candidate_can_work_individually,
+            konowledge_in_ass: data.konowledge_in_ass,
+            candidate_can_work_in_group: data.candidate_can_work_in_group,
+            candidate_not_work: data.candidate_not_work,
+            ...files
           };
           debugger
           querySnapshot
@@ -307,7 +316,7 @@ Below		0-49 */
             });
         });
         setLoading(false)
-        
+
         console.log('Data added to Firestore successfully');
       } catch (error) {
         console.error('Error adding data to Firestore', error);
@@ -320,7 +329,7 @@ Below		0-49 */
 
     if (!querySnapshot.empty) {
       data.lastEvaluatedDate = timestamp
-      
+
       // If a document exists, update it
       const docRef = querySnapshot.docs[0];
       // Assuming there's only one matching document
@@ -332,82 +341,83 @@ Below		0-49 */
       let compentencyAssessment
       const querySnapshot1 = firestore
         .collection('candidate-info').doc(id);
-        if(result?.discipline == "Electrical"){
-          compentencyAssessment = JSON.stringify({
-       pmOfLtMotors: data.pmOfLtMotors,
-       pmOfSwitchGear: data.pmOfSwitchGear,
-       pmOfPP: data.pmOfPP,
-       pmOfHtMotors: data.pmOfHtMotors,
-       cmOfSwitchGear: data.cmOfSwitchGear,
-       pmOfLdb: data.pmOfLdb,
-       cmOfLtMotors: data.cmOfLtMotors,
-       pmOfPowerTransformer: data.pmOfPowerTransformer,
-       meggering: data.meggering,
-       cmOfHtMotors: data.cmOfHtMotors,
-       cmOfPowerTransformer: data.cmOfPowerTransformer,
-       basicSafety: data.basicSafety,
-       pmOfEarthPit: data.pmOfEarthPit,
-       glandingAndTermination: data.glandingAndTermination,
-       tbraAndHitra: data.tbraAndHitra,
-       cableLaying: data.cableLaying,
-       emergencyResponse: data.emergencyResponse,
-       toolBoxTalk: data.toolBoxTalk,
-       rolesAndResponsibilities: data.rolesAndResponsibilities,
-       lprzt: data.lprzt,
-       workPermitSystem: data.workPermitSystem})
-     } else {
-      debugger
-       compentencyAssessment = JSON.stringify({
-         temperatureMeasurement: data.temperatureMeasurement,
-         pressureMeasurement: data.pressureMeasurement,
-         levelMeasurement: data.levelMeasurement,
-         flowMeasurement: data.flowMeasurement,
-         vibrationMeasurement: data.vibrationMeasurement,
-         controlValve: data.controlValve,
-         onOffValve: data.onOffValve,
-         switches: data.switches,
-         openCloseLoopInterlock: data.openCloseLoopInterlock,
-         tciCsiInstruments: data.tciCsiInstruments,
-         pid: data.pid,
-         termination: data.termination,
-         dcs: data.dcs,
-         plc: data.plc,
-         esd: data.esd,
-         mcms: data.mcms,
-         irpMarshallingControlCabiner: data.irpMarshallingControlCabiner,
-         weighingSystem: data.weighingSystem,
-         ppes: data.ppes,
-         analyser: data.analyser,
-         instrumentationCables: data.instrumentationCables,
-         atexCertification: data.atexCertification,
-         dataSheet: data.dataSheet,
-         cableScheduleJbSchedule: data.cableScheduleJbSchedule,
-         dryLoopWetLoopCheck: data.dryLoopWetLoopCheck,
-         llf: data.llf,
-         earthingGrounding: data.earthingGrounding,
-         tbraHitra: data.tbraHitra,
-         fittings: data.fittings,
-         maintenanceTypes: data.maintenanceTypes,
-         smp: data.smp,
-         workPermitSystem: data.workPermitSystem,
-         pstFst: data.pstFst,
-         fireGasSystem: data.fireGasSystem,
-         basicSafety: data.basicSafetyEmergencyResponse,
-         msds: data.lfi,
-         fiveS: data.fiveS,
-         codesStandards: data.codesStandards,
-         nearMissUnsafeCondition: data.nearMissUnsafeCondition,
-         lprzt: data.lprzt,
-         hartAndFFSystem: data.hartAndFFSystem,
-         sisAndSilBasic: data.sisAndSilBasic,
-         isoBasic: data.isoBasic,
-         emergencyResponse: data.emergencyResponse,
-         toolboxTalk: data.toolboxTalk,
-         htm: data.htm,
-       });
-       
-     }
-   
+      if (result?.discipline == "Electrical") {
+        compentencyAssessment = JSON.stringify({
+          pmOfLtMotors: data.pmOfLtMotors,
+          pmOfSwitchGear: data.pmOfSwitchGear,
+          pmOfPP: data.pmOfPP,
+          pmOfHtMotors: data.pmOfHtMotors,
+          cmOfSwitchGear: data.cmOfSwitchGear,
+          pmOfLdb: data.pmOfLdb,
+          cmOfLtMotors: data.cmOfLtMotors,
+          pmOfPowerTransformer: data.pmOfPowerTransformer,
+          meggering: data.meggering,
+          cmOfHtMotors: data.cmOfHtMotors,
+          cmOfPowerTransformer: data.cmOfPowerTransformer,
+          basicSafety: data.basicSafety,
+          pmOfEarthPit: data.pmOfEarthPit,
+          glandingAndTermination: data.glandingAndTermination,
+          tbraAndHitra: data.tbraAndHitra,
+          cableLaying: data.cableLaying,
+          emergencyResponse: data.emergencyResponse,
+          toolBoxTalk: data.toolBoxTalk,
+          rolesAndResponsibilities: data.rolesAndResponsibilities,
+          lprzt: data.lprzt,
+          workPermitSystem: data.workPermitSystem
+        })
+      } else {
+        debugger
+        compentencyAssessment = JSON.stringify({
+          temperatureMeasurement: data.temperatureMeasurement,
+          pressureMeasurement: data.pressureMeasurement,
+          levelMeasurement: data.levelMeasurement,
+          flowMeasurement: data.flowMeasurement,
+          vibrationMeasurement: data.vibrationMeasurement,
+          controlValve: data.controlValve,
+          onOffValve: data.onOffValve,
+          switches: data.switches,
+          openCloseLoopInterlock: data.openCloseLoopInterlock,
+          tciCsiInstruments: data.tciCsiInstruments,
+          pid: data.pid,
+          termination: data.termination,
+          dcs: data.dcs,
+          plc: data.plc,
+          esd: data.esd,
+          mcms: data.mcms,
+          irpMarshallingControlCabiner: data.irpMarshallingControlCabiner,
+          weighingSystem: data.weighingSystem,
+          ppes: data.ppes,
+          analyser: data.analyser,
+          instrumentationCables: data.instrumentationCables,
+          atexCertification: data.atexCertification,
+          dataSheet: data.dataSheet,
+          cableScheduleJbSchedule: data.cableScheduleJbSchedule,
+          dryLoopWetLoopCheck: data.dryLoopWetLoopCheck,
+          llf: data.llf,
+          earthingGrounding: data.earthingGrounding,
+          tbraHitra: data.tbraHitra,
+          fittings: data.fittings,
+          maintenanceTypes: data.maintenanceTypes,
+          smp: data.smp,
+          workPermitSystem: data.workPermitSystem,
+          pstFst: data.pstFst,
+          fireGasSystem: data.fireGasSystem,
+          basicSafety: data.basicSafetyEmergencyResponse,
+          msds: data.lfi,
+          fiveS: data.fiveS,
+          codesStandards: data.codesStandards,
+          nearMissUnsafeCondition: data.nearMissUnsafeCondition,
+          lprzt: data.lprzt,
+          hartAndFFSystem: data.hartAndFFSystem,
+          sisAndSilBasic: data.sisAndSilBasic,
+          isoBasic: data.isoBasic,
+          emergencyResponse: data.emergencyResponse,
+          toolboxTalk: data.toolboxTalk,
+          htm: data.htm,
+        });
+
+      }
+
       // let formData1 = formData;
       // formData1.marksId = docRef.id
       const newData = {
@@ -429,7 +439,14 @@ Below		0-49 */
         totalMarks: data.total,
         written_photo: result.written_photo,
         oral_video: result.oral_video,
-        practical_photo: result.practical_photo
+        practical_photo: result.practical_photo,
+        ass_by: data.ass_by,
+        manager: data.manager,
+        specialized_in: data.specialized_in,
+        candidate_can_work_individually: data.candidate_can_work_individually,
+        konowledge_in_ass: data.konowledge_in_ass,
+        candidate_can_work_in_group: data.candidate_can_work_in_group,
+        candidate_not_work: data.candidate_not_work,
         // Add more fields as needed
       };
       querySnapshot1
@@ -444,9 +461,9 @@ Below		0-49 */
           console.error('Error updating document: ', error);
         });
 
-      
+
       toast.success('Data updated Successfully!');
-      
+
       setTimeout(() => {
         navigate('/admin')
       }, 2000);
@@ -479,7 +496,11 @@ Below		0-49 */
     setValue('practical', result?.practicalMarks);
     setValue('total', result?.totalMarks);
     setValue('behaviour', result?.behaviourMarks);
-    
+    setValue('specialized_in', result?.specialized_in);
+    setValue('ass_by', result?.ass_by);
+    setValue('manager', result?.manager);
+
+
 
     if (result?.totalMarks) {
 
@@ -517,7 +538,7 @@ Below		0-49 */
   // };
 
   function calculateTotal() {
-    
+
     // Define your fields by their 'name' attributes
     let written1 =
       parseFloat(document.querySelector("input[name='written']").value) || 0;
@@ -547,7 +568,7 @@ Below		0-49 */
     } else if (percentage < 50) {
       setEvaluation("Below")
     }
-    
+
     setValue('total', total1)
     // Update the total fields
     document.querySelector("input[name='total']").value = total1;
@@ -853,754 +874,754 @@ Below		0-49 */
             </div>
             <div>
               {result?.discipline == "Electrical" ?
-              <table className="table custom-table table-responsive mt-5">
-                <tr>
-                  <th>COMPETENCY ASSESSMENT:</th>
-                </tr>
-                <tr colSpan="3">
-                  <td colSpan="1" scope="col">
-                    <input
-                      type="checkbox"
-                      name="pmOfLtMotors"
-                      style={{ marginRight: '25px' }}
-                      {...register('pmOfLtMotors')}
+                <table className="table custom-table table-responsive mt-5">
+                  <tr>
+                    <th>COMPETENCY ASSESSMENT:</th>
+                  </tr>
+                  <tr colSpan="3">
+                    <td colSpan="1" scope="col">
+                      <input
+                        type="checkbox"
+                        name="pmOfLtMotors"
+                        style={{ marginRight: '25px' }}
+                        {...register('pmOfLtMotors')}
 
-                    // checked={result && result.pmOfLtMotors === true}
-                    // onChange={(e) => setResult({ ...result, pmOfLtMotors: e.target.checked })}
-                    />
-                    PM OF LT MOTORS
-                  </td>
-                  <td scope="col">
-                    <input
-                      type="checkbox"
-                      name="pmOfSwitchGear"
-                      style={{ marginRight: '25px' }}
-                      {...register('pmOfSwitchGear')}
+                      // checked={result && result.pmOfLtMotors === true}
+                      // onChange={(e) => setResult({ ...result, pmOfLtMotors: e.target.checked })}
+                      />
+                      PM OF LT MOTORS
+                    </td>
+                    <td scope="col">
+                      <input
+                        type="checkbox"
+                        name="pmOfSwitchGear"
+                        style={{ marginRight: '25px' }}
+                        {...register('pmOfSwitchGear')}
 
-                    // checked={result && result.pmOfSwitchGear === true}
-                    // onChange={(e) => setResult({ ...result, pmOfSwitchGear: e.target.checked })}
+                      // checked={result && result.pmOfSwitchGear === true}
+                      // onChange={(e) => setResult({ ...result, pmOfSwitchGear: e.target.checked })}
 
-                    />
-                    PM OF SWITCH GEAR
-                  </td>
-                  <td scope="col">
-                    <input
-                      type="checkbox"
-                      name="pmOfPP"
-                      style={{ marginRight: '25px' }}
-                      {...register('pmOfPP')}
+                      />
+                      PM OF SWITCH GEAR
+                    </td>
+                    <td scope="col">
+                      <input
+                        type="checkbox"
+                        name="pmOfPP"
+                        style={{ marginRight: '25px' }}
+                        {...register('pmOfPP')}
 
-                    // checked={result && result.pmOfPP === true}
-                    // onChange={(e) => setResult({ ...result, pmOfPP: e.target.checked })}
+                      // checked={result && result.pmOfPP === true}
+                      // onChange={(e) => setResult({ ...result, pmOfPP: e.target.checked })}
 
-                    />
-                    PM OF PP
-                  </td>
-                </tr>
-                <tr>
-                  <td scope="row">
-                    <input
-                      type="checkbox"
-                      name="pmOfHtMotors"
-                      style={{ marginRight: '25px' }}
-                      {...register('pmOfHtMotors')}
+                      />
+                      PM OF PP
+                    </td>
+                  </tr>
+                  <tr>
+                    <td scope="row">
+                      <input
+                        type="checkbox"
+                        name="pmOfHtMotors"
+                        style={{ marginRight: '25px' }}
+                        {...register('pmOfHtMotors')}
 
-                    // checked={result && result.pmOfHtMotors === true}
-                    // onChange={(e) => setResult({ ...result, pmOfHtMotors: e.target.checked })}
-                    />
-                    PM OF HT MOTORS
-                  </td>
-                  <td scope="row">
-                    <input
-                      type="checkbox"
-                      name="cmOfSwitchGear"
-                      style={{ marginRight: '25px' }}
-                      {...register('cmOfSwitchGear')}
+                      // checked={result && result.pmOfHtMotors === true}
+                      // onChange={(e) => setResult({ ...result, pmOfHtMotors: e.target.checked })}
+                      />
+                      PM OF HT MOTORS
+                    </td>
+                    <td scope="row">
+                      <input
+                        type="checkbox"
+                        name="cmOfSwitchGear"
+                        style={{ marginRight: '25px' }}
+                        {...register('cmOfSwitchGear')}
 
-                    // checked={result && result.cmOfSwitchGear === true}
-                    // onChange={(e) => setResult({ ...result, cmOfSwitchGear: e.target.checked })}
-                    />
-                    CM OF SWITCH GEAR
-                  </td>
-                  <td scope="row">
-                    <input
-                      type="checkbox"
-                      name="pmOfLdb"
-                      style={{ marginRight: '25px' }}
-                      {...register('pmOfLdb')}
+                      // checked={result && result.cmOfSwitchGear === true}
+                      // onChange={(e) => setResult({ ...result, cmOfSwitchGear: e.target.checked })}
+                      />
+                      CM OF SWITCH GEAR
+                    </td>
+                    <td scope="row">
+                      <input
+                        type="checkbox"
+                        name="pmOfLdb"
+                        style={{ marginRight: '25px' }}
+                        {...register('pmOfLdb')}
 
-                    // checked={result && result.pmOfLdb === true}
-                    // onChange={(e) => setResult({ ...result, pmOfLdb: e.target.checked })}
-                    />
-                    PM OF LDB
-                  </td>
-                </tr>
-                <tr>
-                  <td scope="row">
-                    <input
-                      type="checkbox"
-                      name="cmOfLtMotors"
-                      style={{ marginRight: '25px' }}
-                      {...register('cmOfLtMotors')}
+                      // checked={result && result.pmOfLdb === true}
+                      // onChange={(e) => setResult({ ...result, pmOfLdb: e.target.checked })}
+                      />
+                      PM OF LDB
+                    </td>
+                  </tr>
+                  <tr>
+                    <td scope="row">
+                      <input
+                        type="checkbox"
+                        name="cmOfLtMotors"
+                        style={{ marginRight: '25px' }}
+                        {...register('cmOfLtMotors')}
 
-                    // checked={result && result.cmOfLtMotors === true}
-                    // onChange={(e) => setResult({ ...result, cmOfLtMotors: e.target.checked })}
-                    />
-                    CM OF LT MOTORS
-                  </td>
-                  <td scope="row">
-                    <input
-                      type="checkbox"
-                      name="pmOfPowerTransformer"
-                      style={{ marginRight: '25px' }}
-                      {...register('pmOfPowerTransformer')}
+                      // checked={result && result.cmOfLtMotors === true}
+                      // onChange={(e) => setResult({ ...result, cmOfLtMotors: e.target.checked })}
+                      />
+                      CM OF LT MOTORS
+                    </td>
+                    <td scope="row">
+                      <input
+                        type="checkbox"
+                        name="pmOfPowerTransformer"
+                        style={{ marginRight: '25px' }}
+                        {...register('pmOfPowerTransformer')}
 
-                    // checked={result && result.pmOfPowerTransformer === true}
-                    // onChange={(e) => setResult({ ...result, pmOfPowerTransformer: e.target.checked })}
-                    />
-                    PM OF POWER TRANSFORMER
-                  </td>
-                  <td scope="row">
-                    <input
-                      type="checkbox"
-                      name="meggering"
-                      style={{ marginRight: '25px' }}
-                      {...register('meggering')}
+                      // checked={result && result.pmOfPowerTransformer === true}
+                      // onChange={(e) => setResult({ ...result, pmOfPowerTransformer: e.target.checked })}
+                      />
+                      PM OF POWER TRANSFORMER
+                    </td>
+                    <td scope="row">
+                      <input
+                        type="checkbox"
+                        name="meggering"
+                        style={{ marginRight: '25px' }}
+                        {...register('meggering')}
 
-                    // checked={result && result.meggering === true}
-                    // onChange={(e) => setResult({ ...result, meggering: e.target.checked })}
-                    />
-                    MEGGERING
-                  </td>
-                </tr>
-                <tr>
-                  <td scope="row">
-                    <input
-                      type="checkbox"
-                      name="cmOfHtMotors"
-                      style={{ marginRight: '25px' }}
-                      {...register('cmOfHtMotors')}
+                      // checked={result && result.meggering === true}
+                      // onChange={(e) => setResult({ ...result, meggering: e.target.checked })}
+                      />
+                      MEGGERING
+                    </td>
+                  </tr>
+                  <tr>
+                    <td scope="row">
+                      <input
+                        type="checkbox"
+                        name="cmOfHtMotors"
+                        style={{ marginRight: '25px' }}
+                        {...register('cmOfHtMotors')}
 
-                    // checked={result && result.cmOfHtMotors === true}
-                    // onChange={(e) => setResult({ ...result, cmOfHtMotors: e.target.checked })}
-                    />
-                    CM OF HT MOTORS
-                  </td>
-                  <td scope="row">
-                    <input
-                      type="checkbox"
-                      name="cmOfPowerTransformer"
-                      style={{ marginRight: '25px' }}
-                      {...register('cmOfPowerTransformer')}
+                      // checked={result && result.cmOfHtMotors === true}
+                      // onChange={(e) => setResult({ ...result, cmOfHtMotors: e.target.checked })}
+                      />
+                      CM OF HT MOTORS
+                    </td>
+                    <td scope="row">
+                      <input
+                        type="checkbox"
+                        name="cmOfPowerTransformer"
+                        style={{ marginRight: '25px' }}
+                        {...register('cmOfPowerTransformer')}
 
-                    // checked={result && result.cmOfPowerTransformer === true}
-                    // onChange={(e) => setResult({ ...result, cmOfPowerTransformer: e.target.checked })}
-                    />
-                    CM OF POWER TRANSFORMER
-                  </td>
-                  <td scope="row">
-                    <input
-                      type="checkbox"
-                      name="basicSafety"
-                      style={{ marginRight: '25px' }}
-                      {...register('basicSafety')}
+                      // checked={result && result.cmOfPowerTransformer === true}
+                      // onChange={(e) => setResult({ ...result, cmOfPowerTransformer: e.target.checked })}
+                      />
+                      CM OF POWER TRANSFORMER
+                    </td>
+                    <td scope="row">
+                      <input
+                        type="checkbox"
+                        name="basicSafety"
+                        style={{ marginRight: '25px' }}
+                        {...register('basicSafety')}
 
-                    // checked={result && result.basicSafety === true}
-                    // onChange={(e) => setResult({ ...result, basicSafety: e.target.checked })}
-                    />
-                    BASIC SAFETY
-                  </td>
-                </tr>
-                <tr>
-                  <td scope="row">
-                    <input
-                      type="checkbox"
-                      name="pmOfEarthPit"
-                      style={{ marginRight: '25px' }}
-                      {...register('pmOfEarthPit')}
+                      // checked={result && result.basicSafety === true}
+                      // onChange={(e) => setResult({ ...result, basicSafety: e.target.checked })}
+                      />
+                      BASIC SAFETY
+                    </td>
+                  </tr>
+                  <tr>
+                    <td scope="row">
+                      <input
+                        type="checkbox"
+                        name="pmOfEarthPit"
+                        style={{ marginRight: '25px' }}
+                        {...register('pmOfEarthPit')}
 
-                    // checked={result && result.pmOfEarthPit === true}
-                    // onChange={(e) => setResult({ ...result, pmOfEarthPit: e.target.checked })}
-                    />
-                    PM OF EARTH PIT
-                  </td>
-                  <td scope="row">
-                    <input
-                      type="checkbox"
-                      name="glandingAndTermination"
-                      style={{ marginRight: '25px' }}
-                      {...register('glandingAndTermination')}
+                      // checked={result && result.pmOfEarthPit === true}
+                      // onChange={(e) => setResult({ ...result, pmOfEarthPit: e.target.checked })}
+                      />
+                      PM OF EARTH PIT
+                    </td>
+                    <td scope="row">
+                      <input
+                        type="checkbox"
+                        name="glandingAndTermination"
+                        style={{ marginRight: '25px' }}
+                        {...register('glandingAndTermination')}
 
-                    // checked={result && result.glandingAndTermination === true}
-                    // onChange={(e) => setResult({ ...result, glandingAndTermination: e.target.checked })}
-                    />
-                    GLANDING AND TERMINATION
-                  </td>
-                  <td scope="row">
-                    <input
-                      type="checkbox"
-                      name="tbraAndHitra"
-                      style={{ marginRight: '25px' }}
-                      {...register('tbraAndHitra')}
+                      // checked={result && result.glandingAndTermination === true}
+                      // onChange={(e) => setResult({ ...result, glandingAndTermination: e.target.checked })}
+                      />
+                      GLANDING AND TERMINATION
+                    </td>
+                    <td scope="row">
+                      <input
+                        type="checkbox"
+                        name="tbraAndHitra"
+                        style={{ marginRight: '25px' }}
+                        {...register('tbraAndHitra')}
 
-                    // checked={result && result.tbraAndHitra === true}
-                    // onChange={(e) => setResult({ ...result, tbraAndHitra: e.target.checked })}
-                    />
-                    TBRA AND HITRA
-                  </td>
-                </tr>
-                <tr>
-                  <td scope="row">
-                    <input
-                      type="checkbox"
-                      name="cableLaying"
-                      style={{ marginRight: '25px' }}
-                      {...register('cableLaying')}
+                      // checked={result && result.tbraAndHitra === true}
+                      // onChange={(e) => setResult({ ...result, tbraAndHitra: e.target.checked })}
+                      />
+                      TBRA AND HITRA
+                    </td>
+                  </tr>
+                  <tr>
+                    <td scope="row">
+                      <input
+                        type="checkbox"
+                        name="cableLaying"
+                        style={{ marginRight: '25px' }}
+                        {...register('cableLaying')}
 
-                    // checked={result && result.cableLaying === true}
-                    // onChange={(e) => setResult({ ...result, cableLaying: e.target.checked })}
-                    />
-                    CABLE LAYING
-                  </td>
-                  <td scope="row">
-                    <input
-                      type="checkbox"
-                      name="emergencyResponse"
-                      style={{ marginRight: '25px' }}
-                      {...register('emergencyResponse')}
+                      // checked={result && result.cableLaying === true}
+                      // onChange={(e) => setResult({ ...result, cableLaying: e.target.checked })}
+                      />
+                      CABLE LAYING
+                    </td>
+                    <td scope="row">
+                      <input
+                        type="checkbox"
+                        name="emergencyResponse"
+                        style={{ marginRight: '25px' }}
+                        {...register('emergencyResponse')}
 
-                    // checked={result && result.emergencyResponse === true}
-                    // onChange={(e) => setResult({ ...result, emergencyResponse: e.target.checked })}
-                    />
-                    EMERGENCY RESPONSE
-                  </td>
-                  <td scope="row">
-                    <input
-                      type="checkbox"
-                      name="toolBoxTalk"
-                      style={{ marginRight: '25px' }}
-                      {...register('toolBoxTalk')}
+                      // checked={result && result.emergencyResponse === true}
+                      // onChange={(e) => setResult({ ...result, emergencyResponse: e.target.checked })}
+                      />
+                      EMERGENCY RESPONSE
+                    </td>
+                    <td scope="row">
+                      <input
+                        type="checkbox"
+                        name="toolBoxTalk"
+                        style={{ marginRight: '25px' }}
+                        {...register('toolBoxTalk')}
 
-                    // checked={result && result.toolBoxTalk === true}
-                    // onChange={(e) => setResult({ ...result, toolBoxTalk: e.target.checked })}
-                    />
-                    TOOL BOX TALK
-                  </td>
-                </tr>
-                <tr>
-                  <td scope="row">
-                    <input
-                      type="checkbox"
-                      name="rolesAndResponsibilities"
-                      style={{ marginRight: '25px' }}
-                      {...register('rolesAndResponsibilities')}
+                      // checked={result && result.toolBoxTalk === true}
+                      // onChange={(e) => setResult({ ...result, toolBoxTalk: e.target.checked })}
+                      />
+                      TOOL BOX TALK
+                    </td>
+                  </tr>
+                  <tr>
+                    <td scope="row">
+                      <input
+                        type="checkbox"
+                        name="rolesAndResponsibilities"
+                        style={{ marginRight: '25px' }}
+                        {...register('rolesAndResponsibilities')}
 
-                    // checked={result && result.rolesAndResponsibilities === true}
-                    // onChange={(e) => setResult({ ...result, rolesAndResponsibilities: e.target.checked })}
-                    />
-                    ROLES AND RESPONSIBILITIES
-                  </td>
-                  <td scope="row">
-                    <input
-                      type="checkbox"
-                      name="lprzt"
-                      style={{ marginRight: '25px' }}
-                      {...register('lprzt')}
+                      // checked={result && result.rolesAndResponsibilities === true}
+                      // onChange={(e) => setResult({ ...result, rolesAndResponsibilities: e.target.checked })}
+                      />
+                      ROLES AND RESPONSIBILITIES
+                    </td>
+                    <td scope="row">
+                      <input
+                        type="checkbox"
+                        name="lprzt"
+                        style={{ marginRight: '25px' }}
+                        {...register('lprzt')}
 
-                    // checked={result && result.lprzt === true}
-                    // onChange={(e) => setResult({ ...result, lprzt: e.target.checked })}
-                    />
-                    LPRZT
-                  </td>
-                  <td scope="row">
-                    <input
-                      type="checkbox"
-                      name="workPermitSystem"
-                      style={{ marginRight: '25px' }}
-                      {...register('workPermitSystem')}
+                      // checked={result && result.lprzt === true}
+                      // onChange={(e) => setResult({ ...result, lprzt: e.target.checked })}
+                      />
+                      LPRZT
+                    </td>
+                    <td scope="row">
+                      <input
+                        type="checkbox"
+                        name="workPermitSystem"
+                        style={{ marginRight: '25px' }}
+                        {...register('workPermitSystem')}
 
-                    // checked={result && result.workPermitSystem === true}
-                    // onChange={(e) => setResult({ ...result, workPermitSystem: e.target.checked })}
-                    />
-                    WORK PERMIT SYSTEM
-                  </td>
-                </tr>
-              </table>
-              : <table className="table custom-table table-responsive mt-5">
-        <thead>
-          <tr>
-            <th>COMPETENCY ASSESSMENT:</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <input
-                type="checkbox"
-                name="temperatureMeasurement"
-                style={{ marginRight: '25px' }}
-                {...register('temperatureMeasurement')}
-              />
-              TEMPERATURE MEASUREMENT
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="pressureMeasurement"
-                style={{ marginRight: '25px' }}
-                {...register('pressureMeasurement')}
-              />
-              PRESSURE MEASUREMENT
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="levelMeasurement"
-                style={{ marginRight: '25px' }}
-                {...register('levelMeasurement')}
-              />
-              LEVEL MEASUREMENT
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input
-                type="checkbox"
-                name="flowMeasurement"
-                style={{ marginRight: '25px' }}
-                {...register('flowMeasurement')}
-              />
-              FLOW MEASUREMENT
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="vibrationMeasurement"
-                style={{ marginRight: '25px' }}
-                {...register('vibrationMeasurement')}
-              />
-              VIBRATION MEASUREMENT
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="controlValve"
-                style={{ marginRight: '25px' }}
-                {...register('controlValve')}
-              />
-              CONTROL VALVE
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input
-                type="checkbox"
-                name="onOffValve"
-                style={{ marginRight: '25px' }}
-                {...register('onOffValve')}
-              />
-              ON-OFF VALVE
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="switches"
-                style={{ marginRight: '25px' }}
-                {...register('switches')}
-              />
-              SWITCHES (TEMPERATURE, PRESSURE, LEVEL, AND FLOW)
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="openCloseLoopInterlock"
-                style={{ marginRight: '25px' }}
-                {...register('openCloseLoopInterlock')}
-              />
-              OPEN LOOP, CLOSE LOOP, AND INTERLOCK
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input
-                type="checkbox"
-                name="tciCsiInstruments"
-                style={{ marginRight: '25px' }}
-                {...register('tciCsiInstruments')}
-              />
-              TCI AND CSI INSTRUMENTS
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="pid"
-                style={{ marginRight: '25px' }}
-                {...register('pid')}
-              />
-              P & ID
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="termination"
-                style={{ marginRight: '25px' }}
-                {...register('termination')}
-              />
-              TERMINATION
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input
-                type="checkbox"
-                name="dcs"
-                style={{ marginRight: '25px' }}
-                {...register('dcs')}
-              />
-              DCS
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="plc"
-                style={{ marginRight: '25px' }}
-                {...register('plc')}
-              />
-              PLC
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="esd"
-                style={{ marginRight: '25px' }}
-                {...register('esd')}
-              />
-              ESD
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input
-                type="checkbox"
-                name="mcms"
-                style={{ marginRight: '25px' }}
-                {...register('mcms')}
-              />
-              MCMS
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="irpMarshallingControlCabiner"
-                style={{ marginRight: '25px' }}
-                {...register('irpMarshallingControlCabiner')}
-              />
-              IRP, MARSHALLING, AND CONTROL CABINER
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="weighingSystem"
-                style={{ marginRight: '25px' }}
-                {...register('weighingSystem')}
-              />
-              WEIGHING SYSTEM
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input
-                type="checkbox"
-                name="ppes"
-                style={{ marginRight: '25px' }}
-                {...register('ppes')}
-              />
-              PPE'S
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="analyser"
-                style={{ marginRight: '25px' }}
-                {...register('analyser')}
-              />
-              ANALYSER
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="instrumentationCables"
-                style={{ marginRight: '25px' }}
-                {...register('instrumentationCables')}
-              />
-              INSTRUMENTATION CABLES
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input
-                type="checkbox"
-                name="atexCertification"
-                style={{ marginRight: '25px' }}
-                {...register('atexCertification')}
-              />
-              ATEX CERTIFICATION DEFINITION
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="dataSheet"
-                style={{ marginRight: '25px' }}
-                {...register('dataSheet')}
-              />
-              DATA SHEET
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="cableScheduleJbSchedule"
-                style={{ marginRight: '25px' }}
-                {...register('cableScheduleJbSchedule')}
-              />
-              CABLE SCHEDULE AND JB SCHEDULE
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input
-                type="checkbox"
-                name="dryLoopWetLoopCheck"
-                style={{ marginRight: '25px' }}
-                {...register('dryLoopWetLoopCheck')}
-              />
-              DRY LOOP AND WET LOOP CHECK
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="llf"
-                style={{ marginRight: '25px' }}
-                {...register('llf')}
-              />
-              LLF
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="earthingGrounding"
-                style={{ marginRight: '25px' }}
-                {...register('earthingGrounding')}
-              />
-              EARTHING AND GROUNDING
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input
-                type="checkbox"
-                name="tbraHitra"
-                style={{ marginRight: '25px' }}
-                {...register('tbraHitra')}
-              />
-              TBRA AND HITRA
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="fittings"
-                style={{ marginRight: '25px' }}
-                {...register('fittings')}
-              />
-              FITTINGS
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="maintenanceTypes"
-                style={{ marginRight: '25px' }}
-                {...register('maintenanceTypes')}
-              />
-              TYPES OF MAINTENANCE
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input
-                type="checkbox"
-                name="smp"
-                style={{ marginRight: '25px' }}
-                {...register('smp')}
-              />
-              SMP
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="workPermitSystem"
-                style={{ marginRight: '25px' }}
-                {...register('workPermitSystem')}
-              />
-              WORK PERMIT SYSTEM
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="pstFst"
-                style={{ marginRight: '25px' }}
-                {...register('pstFst')}
-              />
-              PST AND FST
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input
-                type="checkbox"
-                name="fireGasSystem"
-                style={{ marginRight: '25px' }}
-                {...register('fireGasSystem')}
-              />
-              FIRE AND GAS SYSTEM
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="basicSafety"
-                style={{ marginRight: '25px' }}
-                {...register('basicSafety')}
-              />
-              BASIC SAFETY
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="msds"
-                style={{ marginRight: '25px' }}
-                {...register('msds')}
-              />
-              MSDS
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input
-                type="checkbox"
-                name="fiveS"
-                style={{ marginRight: '25px' }}
-                {...register('fiveS')}
-              />
-              5S
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="codesStandards"
-                style={{ marginRight: '25px' }}
-                {...register('codesStandards')}
-              />
-              CODES AND STANDARDS
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="nearMissUnsafeCondition"
-                style={{ marginRight: '25px' }}
-                {...register('nearMissUnsafeCondition')}
-              />
-              NEAR MISS AND UNSAFE CONDITION
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input
-                type="checkbox"
-                name="lprzt"
-                style={{ marginRight: '25px' }}
-                {...register('lprzt')}
-              />
-              LPRZT
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="nfpa"
-                style={{ marginRight: '25px' }}
-                {...register('nfpa')}
-              />
-              NFPA
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="lfi"
-                style={{ marginRight: '25px' }}
-                {...register('lfi')}
-              />
-              LFI
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input
-                type="checkbox"
-                name="hartAndFFSystem"
-                style={{ marginRight: '25px' }}
-                {...register('hartAndFFSystem')}
-              />
-              HART AND FF SYSTEM
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="sisAndSilBasic"
-                style={{ marginRight: '25px' }}
-                {...register('sisAndSilBasic')}
-              />
-              SIS AND SIL BASIC
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="isoBasic"
-                style={{ marginRight: '25px' }}
-                {...register('isoBasic')}
-              />
-              ISO Basic
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input
-                type="checkbox"
-                name="emergencyResponse"
-                style={{ marginRight: '25px' }}
-                {...register('emergencyResponse')}
-              />
-              EMERGENCY RESPONSE
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="toolboxTalk"
-                style={{ marginRight: '25px' }}
-                {...register('toolboxTalk')}
-              />
-              ToolBox Talk
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                name="htm"
-                style={{ marginRight: '25px' }}
-                {...register('htm')}
-              />
-              HTM
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                      // checked={result && result.workPermitSystem === true}
+                      // onChange={(e) => setResult({ ...result, workPermitSystem: e.target.checked })}
+                      />
+                      WORK PERMIT SYSTEM
+                    </td>
+                  </tr>
+                </table>
+                : <table className="table custom-table table-responsive mt-5">
+                  <thead>
+                    <tr>
+                      <th>COMPETENCY ASSESSMENT:</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="temperatureMeasurement"
+                          style={{ marginRight: '25px' }}
+                          {...register('temperatureMeasurement')}
+                        />
+                        TEMPERATURE MEASUREMENT
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="pressureMeasurement"
+                          style={{ marginRight: '25px' }}
+                          {...register('pressureMeasurement')}
+                        />
+                        PRESSURE MEASUREMENT
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="levelMeasurement"
+                          style={{ marginRight: '25px' }}
+                          {...register('levelMeasurement')}
+                        />
+                        LEVEL MEASUREMENT
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="flowMeasurement"
+                          style={{ marginRight: '25px' }}
+                          {...register('flowMeasurement')}
+                        />
+                        FLOW MEASUREMENT
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="vibrationMeasurement"
+                          style={{ marginRight: '25px' }}
+                          {...register('vibrationMeasurement')}
+                        />
+                        VIBRATION MEASUREMENT
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="controlValve"
+                          style={{ marginRight: '25px' }}
+                          {...register('controlValve')}
+                        />
+                        CONTROL VALVE
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="onOffValve"
+                          style={{ marginRight: '25px' }}
+                          {...register('onOffValve')}
+                        />
+                        ON-OFF VALVE
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="switches"
+                          style={{ marginRight: '25px' }}
+                          {...register('switches')}
+                        />
+                        SWITCHES (TEMPERATURE, PRESSURE, LEVEL, AND FLOW)
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="openCloseLoopInterlock"
+                          style={{ marginRight: '25px' }}
+                          {...register('openCloseLoopInterlock')}
+                        />
+                        OPEN LOOP, CLOSE LOOP, AND INTERLOCK
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="tciCsiInstruments"
+                          style={{ marginRight: '25px' }}
+                          {...register('tciCsiInstruments')}
+                        />
+                        TCI AND CSI INSTRUMENTS
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="pid"
+                          style={{ marginRight: '25px' }}
+                          {...register('pid')}
+                        />
+                        P & ID
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="termination"
+                          style={{ marginRight: '25px' }}
+                          {...register('termination')}
+                        />
+                        TERMINATION
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="dcs"
+                          style={{ marginRight: '25px' }}
+                          {...register('dcs')}
+                        />
+                        DCS
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="plc"
+                          style={{ marginRight: '25px' }}
+                          {...register('plc')}
+                        />
+                        PLC
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="esd"
+                          style={{ marginRight: '25px' }}
+                          {...register('esd')}
+                        />
+                        ESD
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="mcms"
+                          style={{ marginRight: '25px' }}
+                          {...register('mcms')}
+                        />
+                        MCMS
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="irpMarshallingControlCabiner"
+                          style={{ marginRight: '25px' }}
+                          {...register('irpMarshallingControlCabiner')}
+                        />
+                        IRP, MARSHALLING, AND CONTROL CABINER
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="weighingSystem"
+                          style={{ marginRight: '25px' }}
+                          {...register('weighingSystem')}
+                        />
+                        WEIGHING SYSTEM
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="ppes"
+                          style={{ marginRight: '25px' }}
+                          {...register('ppes')}
+                        />
+                        PPE'S
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="analyser"
+                          style={{ marginRight: '25px' }}
+                          {...register('analyser')}
+                        />
+                        ANALYSER
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="instrumentationCables"
+                          style={{ marginRight: '25px' }}
+                          {...register('instrumentationCables')}
+                        />
+                        INSTRUMENTATION CABLES
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="atexCertification"
+                          style={{ marginRight: '25px' }}
+                          {...register('atexCertification')}
+                        />
+                        ATEX CERTIFICATION DEFINITION
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="dataSheet"
+                          style={{ marginRight: '25px' }}
+                          {...register('dataSheet')}
+                        />
+                        DATA SHEET
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="cableScheduleJbSchedule"
+                          style={{ marginRight: '25px' }}
+                          {...register('cableScheduleJbSchedule')}
+                        />
+                        CABLE SCHEDULE AND JB SCHEDULE
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="dryLoopWetLoopCheck"
+                          style={{ marginRight: '25px' }}
+                          {...register('dryLoopWetLoopCheck')}
+                        />
+                        DRY LOOP AND WET LOOP CHECK
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="llf"
+                          style={{ marginRight: '25px' }}
+                          {...register('llf')}
+                        />
+                        LLF
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="earthingGrounding"
+                          style={{ marginRight: '25px' }}
+                          {...register('earthingGrounding')}
+                        />
+                        EARTHING AND GROUNDING
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="tbraHitra"
+                          style={{ marginRight: '25px' }}
+                          {...register('tbraHitra')}
+                        />
+                        TBRA AND HITRA
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="fittings"
+                          style={{ marginRight: '25px' }}
+                          {...register('fittings')}
+                        />
+                        FITTINGS
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="maintenanceTypes"
+                          style={{ marginRight: '25px' }}
+                          {...register('maintenanceTypes')}
+                        />
+                        TYPES OF MAINTENANCE
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="smp"
+                          style={{ marginRight: '25px' }}
+                          {...register('smp')}
+                        />
+                        SMP
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="workPermitSystem"
+                          style={{ marginRight: '25px' }}
+                          {...register('workPermitSystem')}
+                        />
+                        WORK PERMIT SYSTEM
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="pstFst"
+                          style={{ marginRight: '25px' }}
+                          {...register('pstFst')}
+                        />
+                        PST AND FST
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="fireGasSystem"
+                          style={{ marginRight: '25px' }}
+                          {...register('fireGasSystem')}
+                        />
+                        FIRE AND GAS SYSTEM
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="basicSafety"
+                          style={{ marginRight: '25px' }}
+                          {...register('basicSafety')}
+                        />
+                        BASIC SAFETY
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="msds"
+                          style={{ marginRight: '25px' }}
+                          {...register('msds')}
+                        />
+                        MSDS
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="fiveS"
+                          style={{ marginRight: '25px' }}
+                          {...register('fiveS')}
+                        />
+                        5S
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="codesStandards"
+                          style={{ marginRight: '25px' }}
+                          {...register('codesStandards')}
+                        />
+                        CODES AND STANDARDS
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="nearMissUnsafeCondition"
+                          style={{ marginRight: '25px' }}
+                          {...register('nearMissUnsafeCondition')}
+                        />
+                        NEAR MISS AND UNSAFE CONDITION
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="lprzt"
+                          style={{ marginRight: '25px' }}
+                          {...register('lprzt')}
+                        />
+                        LPRZT
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="nfpa"
+                          style={{ marginRight: '25px' }}
+                          {...register('nfpa')}
+                        />
+                        NFPA
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="lfi"
+                          style={{ marginRight: '25px' }}
+                          {...register('lfi')}
+                        />
+                        LFI
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="hartAndFFSystem"
+                          style={{ marginRight: '25px' }}
+                          {...register('hartAndFFSystem')}
+                        />
+                        HART AND FF SYSTEM
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="sisAndSilBasic"
+                          style={{ marginRight: '25px' }}
+                          {...register('sisAndSilBasic')}
+                        />
+                        SIS AND SIL BASIC
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="isoBasic"
+                          style={{ marginRight: '25px' }}
+                          {...register('isoBasic')}
+                        />
+                        ISO Basic
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="emergencyResponse"
+                          style={{ marginRight: '25px' }}
+                          {...register('emergencyResponse')}
+                        />
+                        EMERGENCY RESPONSE
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="toolboxTalk"
+                          style={{ marginRight: '25px' }}
+                          {...register('toolboxTalk')}
+                        />
+                        ToolBox Talk
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="htm"
+                          style={{ marginRight: '25px' }}
+                          {...register('htm')}
+                        />
+                        HTM
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
 
-}
+              }
 
             </div>
             <div>
@@ -1641,6 +1662,115 @@ Below		0-49 */
                     </tr>
                   </tbody>
 
+                </table>
+                <h4>CANDIDATE VALIDATION AND ASSESSMENT REPORT:</h4>
+                <table className='table custom-table  text-center' style={{ border: "2px black solid" }}>
+                  <thead>
+                    <tr>
+                      <th>DESCRIPTION</th>
+                      <th>REMARKS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        KNOWLEDGE IN ASSESSMENT MENTIONED
+                      </td>
+
+                      <input
+                        type="checkbox"
+                        name="konowledge_in_ass"
+                        style={{ marginRight: '25px' }}
+                        {...register('konowledge_in_ass')}
+                      />
+
+                    </tr>
+                    <tr>
+                      <td>
+                        CANDIDATE CAN WORK INDIVIDUALLY AND IMPROVEMENT IN THEORETICAL KNOWLEDGE IS REQUIRED
+                      </td>
+
+                      <input
+                        type="checkbox"
+                        name="candidate_can_work_individually"
+                        style={{ marginRight: '25px' }}
+                        {...register('candidate_can_work_individually')}
+                      />
+
+                    </tr>
+                    <tr>
+                      <td>
+                        CANDIDATE CAN WORK IN GROUP AS HE LACKS BOTH THEORETICAL AND PRACTICAL KNOWLEDGE
+                      </td>
+
+                      <input
+                        type="checkbox"
+                        name="candidate_can_work_in_group"
+                        style={{ marginRight: '25px' }}
+                        {...register('candidate_can_work_in_group')}
+                      />
+
+                    </tr>
+                    <tr>
+                      <td>
+                        CANDIDATE NOT FIT FOR WORK
+                      </td>
+
+                      <input
+                        type="checkbox"
+                        name="candidate_not_work"
+
+                        style={{ marginRight: '25px' }}
+                        {...register('candidate_not_work')}
+                      />
+
+                    </tr>
+                  </tbody>
+                </table>
+
+
+                <table>
+                  <tr>
+                    <th colSpan={1}>CANDIDATE<br></br>
+                      SPECIALIZED IN:</th>
+                    <td>
+                      <input
+                        type="text"
+                        name="specialized_in"
+                        style={{ marginRight: '25px' }}
+                        {...register('specialized_in')}
+                      />
+
+                    </td></tr>
+                </table>
+
+                <table>
+                  <tr>
+
+                    <td>
+                      ASSESSED BY:
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name="ass_by"
+                        style={{ marginRight: '25px' }}
+                        {...register('ass_by')}
+                      />
+                    </td>
+                    <td>
+                      MANAGER:
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name="manager"
+                        style={{ marginRight: '25px' }}
+                        {...register('manager')}
+                      />
+                    </td>
+
+                  </tr>
                 </table>
               </div>
             </div>

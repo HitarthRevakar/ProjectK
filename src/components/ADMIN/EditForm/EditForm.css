@@ -7,7 +7,8 @@
 
 .user-photo{
     max-width: 180px !important;
-    margin: auto;
+    margin: 0 auto;
+
 }
 
 .marksTable tr, th, td{

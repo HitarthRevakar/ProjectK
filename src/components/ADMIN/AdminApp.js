@@ -207,6 +207,8 @@ const AdminApp = () => {
   let toRef = useRef()
   let gradeRef = useRef()
   let reportTypeRef = useRef()
+  let EpTypeRef = useRef()
+
   let trade = useRef()
   let disciplinedata = useRef()
 
@@ -239,13 +241,22 @@ const AdminApp = () => {
   useEffect(() => {
     if(selectedUser?.compentencyAssessment){
       let compentencyAssessment = JSON.parse(selectedUser.compentencyAssessment)
+      debugger
       for (const key in compentencyAssessment) {
         if (Object.hasOwnProperty.call(compentencyAssessment, key)) {
           const value = compentencyAssessment[key];
           setValue(key, value);
         }
       }
+     
     }
+    if(selectedUser){ 
+      for (const key in selectedUser) {
+      if (Object.hasOwnProperty.call(selectedUser, key)) {
+        const value = selectedUser[key];
+        setValue(key, value);
+      }
+    }}
    
   }, [selectedUser])
 
@@ -434,7 +445,13 @@ const AdminApp = () => {
           (form) => form.discipline === selecteddisciplinedata
         );
       }
-
+      const EpTypeRefdata = EpTypeRef.current.value
+      if (EpTypeRefdata)
+      {
+        newForms = newForms.filter(
+          (form) => form.emp_type === EpTypeRefdata
+        );
+      }
       // Update the state with filtered data
       setForms(newForms);
     } catch (error) {
@@ -725,7 +742,11 @@ const AdminApp = () => {
                         ))
                         : null}
               </select>
-
+              <select color='secondary' onChange={downloadReport} style={{ width: "170px", height: "40px" ,marginLeft:"20px" }} className='mt-2 secondary rounded-1' ref={EpTypeRef}>
+                <option value="">Employee type</option>
+                <option value="full_time">Full Time</option>
+                <option value="shut_down">Shut Down</option>
+              </select>
               <select color='secondary' onChange={downloadReport} style={{ width: "170px", height: "40px" ,marginLeft:"20px" }} className='mt-2 secondary rounded-1' ref={reportTypeRef}>
                 <option value="">Download report</option>
                 <option value="Pdf">Pdf</option>
@@ -860,7 +881,7 @@ const AdminApp = () => {
               <tbody>
                 <tr className='text-center align-items-center' style={{ height: "140px", backgroundColor: "white" }}>
                   <td style={{ border: "2px solid black" }} className="" colSpan="1">
-                    <img src={'../../../../public/logo.jpg'} style={{ border: "none" }} className='mt-2' alt="Logo" />
+                    <img src={process.env.PUBLIC_URL + '/logo.jpg'} style={{ border: "none" }} className='mt-2' alt="Logo" />
                   </td>
                   <td style={{ fontFamily: "Times New Roman", fontWeight: "bolder", color: "#0060B0" }} colSpan="2" className='mt-1 pt-2 align-items-center'>
                     <div className='align-items-center mt-5 '><h4 className='fw-bold'>TECHNO CONCEPTS INSTRUMENTS PRIVATE LIMITED VALIDATION CENTER, JAMNAGAR</h4>  </div>
@@ -928,12 +949,12 @@ const AdminApp = () => {
                     </table>
                   </div>
                 </td>
-                <td style={{ border: "2px solid black", width: "220px" }} rowspan="5" class="box">
+                <td  style={{ border: "2px solid black", width: "220px" }} rowspan="5" class="box">
                   <img
                     // src='{selectedUser.user_photo}'
                     src={process.env.PUBLIC_URL + '/logo.jpg'}
                     alt="User Profile Photo"
-                    className="w-50 img-fluid img-thumbnail user-photo my-3"
+                    className="w-50 img-fluid img-thumbnail user-photo my-3 ms-5"
                     onLoad={generatePDF}
                   />
                 </td>
@@ -1019,7 +1040,7 @@ const AdminApp = () => {
                     type="checkbox"
                     name="pmOfLtMotors"
                     style={{ marginRight: '25px' }}
-                    // {...register('pmOfLtMotors')}
+                    {...register('pmOfLtMotors')}
                     checked={selectedUser.pmOfLtMotors}
                   />
                   PM OF LT MOTORS
@@ -1029,7 +1050,7 @@ const AdminApp = () => {
                     type="checkbox"
                     name="pmOfSwitchGear"
                     style={{ marginRight: '25px' }}
-                    // {...register('pmOfSwitchGear')}
+                    {...register('pmOfSwitchGear')}
                     checked={selectedUser.pmOfSwitchGear}
                   />
                   PM OF SWITCH GEAR
@@ -1039,7 +1060,7 @@ const AdminApp = () => {
                     type="checkbox"
                     name="pmOfPP"
                     style={{ marginRight: '25px' }}
-                    // {...register('pmOfPP')}
+                    {...register('pmOfPP')}
                     checked={selectedUser.pmOfPP}
                   />
                   PM OF PP
@@ -1051,7 +1072,7 @@ const AdminApp = () => {
                     type="checkbox"
                     name="pmOfHtMotors"
                     style={{ marginRight: '25px' }}
-                    // {...register('pmOfHtMotors')}
+                    {...register('pmOfHtMotors')}
                     checked={selectedUser.pmOfHtMotors}
                   />
                   PM OF HT MOTORS
@@ -1061,7 +1082,7 @@ const AdminApp = () => {
                     type="checkbox"
                     name="cmOfSwitchGear"
                     style={{ marginRight: '25px' }}
-                    // {...register('cmOfSwitchGear')}
+                    {...register('cmOfSwitchGear')}
                     checked={selectedUser.cmOfSwitchGear}
                   />
                   CM OF SWITCH GEAR
@@ -1071,7 +1092,7 @@ const AdminApp = () => {
                     type="checkbox"
                     name="pmOfLdb"
                     style={{ marginRight: '25px' }}
-                    // {...register('pmOfLdb')}
+                    {...register('pmOfLdb')}
                     checked={selectedUser.pmOfLdb}
                   />
                   PM OF LDB
@@ -1083,7 +1104,7 @@ const AdminApp = () => {
                     type="checkbox"
                     name="cmOfLtMotors"
                     style={{ marginRight: '25px' }}
-                    // {...register('cmOfLtMotors')}
+                    {...register('cmOfLtMotors')}
                     checked={selectedUser.cmOfLtMotors}
                   />
                   CM OF LT MOTORS
@@ -1093,7 +1114,7 @@ const AdminApp = () => {
                     type="checkbox"
                     name="pmOfPowerTransformer"
                     style={{ marginRight: '25px' }}
-                    // {...register('pmOfPowerTransformer')}
+                    {...register('pmOfPowerTransformer')}
                     checked={selectedUser.pmOfPowerTransformer}
                   />
                   PM OF POWER TRANSFORMER
@@ -1103,7 +1124,7 @@ const AdminApp = () => {
                     type="checkbox"
                     name="meggering"
                     style={{ marginRight: '25px' }}
-                    // {...register('meggering')}
+                    {...register('meggering')}
                     checked={selectedUser.meggering}
                   />
                   MEGGERING
@@ -1115,7 +1136,7 @@ const AdminApp = () => {
                     type="checkbox"
                     name="cmOfHtMotors"
                     style={{ marginRight: '25px' }}
-                    // {...register('cmOfHtMotors')}
+                    {...register('cmOfHtMotors')}
                     checked={selectedUser.cmOfHtMotors}
                   />
                   CM OF HT MOTORS
@@ -1125,7 +1146,7 @@ const AdminApp = () => {
                     type="checkbox"
                     name="cmOfPowerTransformer"
                     style={{ marginRight: '25px' }}
-                    // {...register('cmOfPowerTransformer')}
+                    {...register('cmOfPowerTransformer')}
                     checked={selectedUser.cmOfPowerTransformer}
                   />
                   CM OF POWER TRANSFORMER
@@ -1135,7 +1156,7 @@ const AdminApp = () => {
                     type="checkbox"
                     name="basicSafety"
                     style={{ marginRight: '25px' }}
-                    // {...register('basicSafety')}
+                    {...register('basicSafety')}
                     checked={selectedUser.basicSafety}
                   />
                   BASIC SAFETY
@@ -1147,7 +1168,7 @@ const AdminApp = () => {
                     type="checkbox"
                     name="pmOfEarthPit"
                     style={{ marginRight: '25px' }}
-                    // {...register('pmOfEarthPit')}
+                    {...register('pmOfEarthPit')}
                     checked={selectedUser.pmOfEarthPit}
                   />
                   PM OF EARTH PIT
@@ -1157,7 +1178,7 @@ const AdminApp = () => {
                     type="checkbox"
                     name="glandingAndTermination"
                     style={{ marginRight: '25px' }}
-                    // {...register('glandingAndTermination')}
+                    {...register('glandingAndTermination')}
                     checked={selectedUser.glandingAndTermination}
                   />
                   GLANDING AND TERMINATION
@@ -1167,7 +1188,7 @@ const AdminApp = () => {
                     type="checkbox"
                     name="tbraAndHitra"
                     style={{ marginRight: '25px' }}
-                    // {...register('tbraAndHitra')}
+                    {...register('tbraAndHitra')}
                     checked={selectedUser.tbraAndHitra}
                   />
                   TBRA AND HITRA
@@ -1179,7 +1200,7 @@ const AdminApp = () => {
                     type="checkbox"
                     name="cableLaying"
                     style={{ marginRight: '25px' }}
-                    // {...register('cableLaying')}
+                    {...register('cableLaying')}
                     checked={selectedUser.cableLaying}
                   />
                   CABLE LAYING
@@ -1189,7 +1210,7 @@ const AdminApp = () => {
                     type="checkbox"
                     name="emergencyResponse"
                     style={{ marginRight: '25px' }}
-                    // {...register('emergencyResponse')}
+                    {...register('emergencyResponse')}
                     checked={selectedUser.emergencyResponse}
                   />
                   EMERGENCY RESPONSE
@@ -1199,7 +1220,7 @@ const AdminApp = () => {
                     type="checkbox"
                     name="toolBoxTalk"
                     style={{ marginRight: '25px' }}
-                    // {...register('toolBoxTalk')}
+                    {...register('toolBoxTalk')}
                     checked={selectedUser.toolBoxTalk}
                   />
                   TOOL BOX TALK
@@ -1211,7 +1232,7 @@ const AdminApp = () => {
                     type="checkbox"
                     name="rolesAndResponsibilities"
                     style={{ marginRight: '25px' }}
-                    // {...register('rolesAndResponsibilities')}
+                    {...register('rolesAndResponsibilities')}
                     checked={selectedUser.rolesAndResponsibilities}
                   />
                   ROLES AND RESPONSIBILITIES
@@ -1726,49 +1747,114 @@ const AdminApp = () => {
               </tr>
             </table>
 
-            <table className='table custom-table table-responsive text-center mt-5' style={{ border: "2px black solid", }}>
-              <thead>
-                <tr>
-                  <th>DESCRIPTION</th>
-                  <th>REMARKS</th>
+            <table className='table custom-table  text-center' style={{ border: "2px black solid" }}>
+                  <thead>
+                    <tr>
+                      <th>DESCRIPTION</th>
+                      <th>REMARKS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        KNOWLEDGE IN ASSESSMENT MENTIONED
+                      </td>
 
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    KNOWLEDGE IN ASSESMENT MENTIONED
-                  </td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>
-                    CANDIDATE CAN WORK INDIVIDUALLY AND IMPROVEMENT IN THEORATICAL KNOWLEDGE IS
-                    REUIRED
-                  </td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>
-                    CANDIDATE CAN WORK IN GROUP AS HE LACKS BOTH THEORATICAL AND PRACTICAL KNOWLEDGE
-                  </td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>
-                    CANDIDATE NOT FIT FOR WORK
-                  </td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
+                      <input
+                        type="checkbox"
+                        name="konowledge_in_ass"
+                        style={{ marginRight: '25px' }}
+                        {...register('konowledge_in_ass')}
+                      />
 
-            <table>
-              <tr>
-                <th colSpan={1}>CANDIDATE<br></br>
-                  SPECIALIZED IN:</th>
-                <td></td></tr>
-            </table>
+                    </tr>
+                    <tr>
+                      <td>
+                        CANDIDATE CAN WORK INDIVIDUALLY AND IMPROVEMENT IN THEORETICAL KNOWLEDGE IS REQUIRED
+                      </td>
+
+                      <input
+                        type="checkbox"
+                        name="candidate_can_work_individually"
+                        style={{ marginRight: '25px' }}
+                        {...register('candidate_can_work_individually')}
+                      />
+
+                    </tr>
+                    <tr>
+                      <td>
+                        CANDIDATE CAN WORK IN GROUP AS HE LACKS BOTH THEORETICAL AND PRACTICAL KNOWLEDGE
+                      </td>
+
+                      <input
+                        type="checkbox"
+                        name="candidate_can_work_in_group"
+                        style={{ marginRight: '25px' }}
+                        {...register('candidate_can_work_in_group')}
+                      />
+
+                    </tr>
+                    <tr>
+                      <td>
+                        CANDIDATE NOT FIT FOR WORK
+                      </td>
+
+                      <input
+                        type="checkbox"
+                        name="candidate_not_work"
+
+                        style={{ marginRight: '25px' }}
+                        {...register('candidate_not_work')}
+                      />
+
+                    </tr>
+                  </tbody>
+                </table>
+
+
+                <table>
+                  <tr>
+                    <th colSpan={1}>CANDIDATE<br></br>
+                      SPECIALIZED IN:</th>
+                    <td>
+                      <input
+                        type="text"
+                        name="specialized_in"
+                        style={{ marginRight: '25px' }}
+                        {...register('specialized_in')}
+                      />
+
+                    </td></tr>
+                </table>
+
+                <table>
+                  <tr>
+
+                    <td>
+                      ASSESSED BY:
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name="ass_by"
+                        style={{ marginRight: '25px' }}
+                        {...register('ass_by')}
+                      />
+                    </td>
+                    <td>
+                      MANAGER:
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name="manager"
+                        style={{ marginRight: '25px' }}
+                        {...register('manager')}
+                      />
+                    </td>
+
+                  </tr>
+                </table>
           </div>
         </div> : <></>}
       </div>
